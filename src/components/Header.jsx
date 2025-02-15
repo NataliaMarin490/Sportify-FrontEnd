@@ -1,14 +1,19 @@
-import "../Styles/header.css"
+import "../Styles/header.css";
+import { Link } from "react-router-dom";
+import Logo from "../../public/icons/Logo";
 
 const Header = () => {
   return (
     <header>
-      <h1>Logo</h1>
+      <Link to="/">
+        <Logo height="150px" width="150px" />
+      </Link>
       <nav>
         <ul>
-          <li>Inicio</li>
-          <li>Sobre nosotros</li>
-          <li>Contacto</li>
+          <li className="home-link">Inicio</li>
+          <li>Crear cuenta</li>
+          <li>Canchas</li>
+          <li>Iniciar sesión</li>
         </ul>
       </nav>
     </header>
