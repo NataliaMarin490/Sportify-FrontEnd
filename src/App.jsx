@@ -1,18 +1,16 @@
 import "./App.css";
 import Header from "./components/Header";
+import { Route, Routes } from "react-router-dom";
+import Layout from "./Layouts/Layout ";
+import Home from "./Components/Home";
 
 function App() {
   return (
-    <>
-      <Header/>
-      <main>
-        <h2>Contenido Principal</h2>
-        <p>Aquí va la información básica de del sitio web.</p>
-      </main>
-      <footer>
-        <p>2025 Sportify. Digital House.</p>
-      </footer>
-    </>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route path="/" element={<Home />} />
+      </Route>
+    </Routes>
   );
 }
 
