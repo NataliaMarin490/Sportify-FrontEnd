@@ -6,4 +6,23 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 20px;
+
+  height: 10%;
+
+  position: sticky;
+  top: 0;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+}
+
+nav ul li {
+  display: inline;
+  margin: 0 15px;
+}
+
+nav ul li:hover {
+  text-decoration: underline;
 }
