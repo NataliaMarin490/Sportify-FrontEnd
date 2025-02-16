@@ -1,0 +1,11 @@
+.Contenedor {
+  display: flex;
+  flex-direction: column;
+}
+
+.canchas {
+  width: 300px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+}

@@ -1,11 +1,47 @@
-main {
-  background-color: var(--background-color);
+.contenedor-padre {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background-image: url("../../public/icons/image\ 3.png");
+}
 
+main {
   height: 70%;
   /* width: 100%; */
-
+  background-color: var(--background-color);
   padding: 20px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.ContenedorPpal {
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  margin-top: 10%;
+}
+
+.Reco {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 10px;
+  white-space: nowrap;
+}
+
+.TituloReco {
+  color: black;
+  justify-self: left;
+  margin-bottom: 0;
+}
+
+.TextoReco {
+  margin-top: 0;
+  color: rgba(110, 110, 110, 1);
+  font-size: 10px;
+  justify-self: left;
 }
 
 .searcher-container {
@@ -16,9 +52,7 @@ main {
   justify-content: center;
   align-items: flex-start;
   gap: 20px;
-
   padding: 10px 20px 10px 100px;
-  background-image: url("../../public/images/home/volley-main.jpg");
   background-size: cover;
   background-repeat: no-repeat;
 }
@@ -57,7 +91,44 @@ input:focus {
 button {
   width: 100%;
   padding: 10px;
-
   border-radius: 20px;
   background-color: var(--secondary-color);
+}
+
+.ContenedorCards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  justify-self: center;
+}
+
+.ContenedorInfo {
+  display: flex;
+  position: absolute;
+  top: 95%;
+  left: 50%;
+  z-index: 10;
+  width: 65%;
+  transform: translate(-50%, -50%);
+}
+
+.Contenedor1 {
+  background-color: rgba(69, 125, 88, 1);
+  width: 33.33%;
+  padding: 1px 10px 10px 5px;
+}
+
+.Contenedor2 {
+  background-color: rgba(37, 38, 37, 1);
+  width: 33.33%;
+  padding: 1px 10px 10px 5px;
+}
+
+.Titulo {
+  color: blanchedalmond;
+}
+
+.Texto {
+  color: blanchedalmond;
+  font-size: 10px;
 }
