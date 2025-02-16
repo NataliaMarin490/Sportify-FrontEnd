@@ -15,7 +15,7 @@ const Home = () => {
         <div className="searcher-container">
           <div className="main-text-container">
             <h1>CANCHAS DEPORTIVAS</h1>
-            <p>
+            <p className="Texto">
               Ofrecemos una amplia selección de canchas en todo el país, con
               precios <br />
               accesibles y condiciones óptimas para que disfrutes al máximo tu

@@ -1,6 +1,7 @@
 .Contenedor {
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
 .canchas {
@@ -9,3 +10,5 @@
   object-fit: cover;
   border-radius: 10px;
 }
+
+

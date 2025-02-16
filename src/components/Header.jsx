@@ -11,9 +11,9 @@ const Header = () => {
       <nav>
         <ul>
           <li className="home-link">Inicio</li>
-          <li>Crear cuenta</li>
+          <Link to="/crearCuenta">Crear cuenta</Link>
           <li>Canchas</li>
-          <li>Iniciar sesión</li>
+          <Link to="/IniciarSesion">Iniciar sesión</Link>
         </ul>
       </nav>
     </header>

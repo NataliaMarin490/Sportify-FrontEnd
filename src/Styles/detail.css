@@ -1,0 +1,30 @@
+.detailContenedor {
+  background-color: var(--background-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.detail {
+  display: flex;
+  justify-content: space-between;
+}
+
+.Producto {
+  color: black;
+  margin: 5%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.imagen {
+  width: 300px;
+  border-radius: 5%;
+}
+
+.contenedor2 {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 50px;
+}

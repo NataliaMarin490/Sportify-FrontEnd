@@ -1,0 +1,21 @@
+.ContenedorPpalCate {
+  background-color: var(--background-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.ContenedorCards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  justify-items: center;
+  max-width: 100%;
+  margin-bottom: 10%;
+  margin-top: 10%;
+}
+
+.searcherCat {
+  display: flex;
+  align-self: flex-end;
+  width: 50%;
+}

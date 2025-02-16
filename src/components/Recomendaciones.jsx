@@ -1,8 +1,6 @@
 import "../Styles/reco.css";
 import { Link } from "react-router-dom";
 
-import "../Styles/cards.css";
-
 const Reco = ({ recipe }) => {
   const { title, image, id } = recipe;
   console.log(recipe);

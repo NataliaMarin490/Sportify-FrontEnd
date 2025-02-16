@@ -16,7 +16,7 @@ const Context = ({ children }) => {
   //const [recipes, setRecipes] = useState([]);
   //console.log(cart);
 
-  const url = `https://api.spoonacular.com/recipes/random?number=10&apiKey=59101b590c62476881fafda6f7120104`;
+  const url = `https://api.spoonacular.com/recipes/random?number=10&apiKey=85e5e4352f844d13ae580009b2dee4f5`;
 
   useEffect(() => {
     axios(url).then((res) => {
