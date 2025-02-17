@@ -1,18 +1,19 @@
-#root {
-height: 100vh;
-width: 100vw;  
-}
+/*#root {
+  width: 100%;
+  margin: 0;
+  min-height: 100vh;
+}*/
 
 :root {
   /* Primary colores */
-  --header-color: #7FBF9D;
+  --header-color: #7fbf9d;
   --header-light: #82d7aa;
-  --header-dark: #457D58;
+  --header-dark: #457d58;
 
   --footer-color: #252625;
 
   /* Secondary colors */
-  --secondary-color: #F0592A;
+  --secondary-color: #f0592a;
   --secondary-light: #a6aeb7;
   --secondary-dark: #495057;
 
@@ -39,7 +40,6 @@ body {
   font-style: normal;
   margin: 0;
   padding: 0;
-
   height: 100vh;
 }
 

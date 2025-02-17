@@ -1,0 +1,59 @@
+.contenedorCuenta {
+  display: flex;
+  flex-direction: column;
+  background-image: url("/icons/imagencrear.jpg");
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.form {
+  background-color: white;
+  color: rgba(32, 87, 90, 1);
+  font-weight: bold;
+  width: 50%;
+  border-radius: 10%;
+}
+
+.form h2 {
+  text-align: center;
+  color: rgba(32, 87, 90, 1);
+}
+
+.campo {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.botoninicio {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 10px;
+}
+
+.entrada {
+  border-bottom: 0.5px solid rgba(32, 87, 90, 1);
+  border-width: 0.5px;
+  color: rgba(32, 87, 90, 1);
+  border-radius: 0%;
+  width: 150px;
+}
+
+label {
+  font-size: 10px;
+}
+
+.olvidaste {
+  font-size: 10px;
+  color: rgba(32, 87, 90, 1);
+}
+
+.recuerdame {
+  display: flex;
+  align-items: center;
+}

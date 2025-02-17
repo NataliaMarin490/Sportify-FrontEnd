@@ -1,0 +1,26 @@
+.ContenedorCardsCat {
+  display: flex;
+  flex-direction: column;
+}
+
+.canchasCate {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.boton {
+  background-color: rgba(126, 126, 126, 1);
+  font-size: 8px;
+  width: 100px;
+  align-self: center;
+}
+
+.ContenedorEnlace {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+}
