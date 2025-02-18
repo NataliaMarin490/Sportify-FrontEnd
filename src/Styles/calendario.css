@@ -1,0 +1,30 @@
+.datepicker::-webkit-input-placeholder {
+  color: transparent; /* Oculta el placeholder en Chrome y Safari */
+}
+
+.datepicker:-ms-input-placeholder {
+  color: transparent; /* Oculta el placeholder en Internet Explorer */
+}
+
+.datepicker::placeholder {
+  color: transparent; /* Oculta el placeholder en otros navegadores */
+}
+
+.date-time-picker {
+  display: flex;
+  gap: 10px; /* Espacio entre el selector de fecha y hora */
+  align-items: center;
+  justify-content: center;
+}
+
+.datepicker {
+  width: 150px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.timepicker {
+  width: 120px; /* Un poco más estrecho para la hora */
+}

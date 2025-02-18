@@ -1,0 +1,11 @@
+.ContenedorReco {
+  display: flex;
+  justify-content: center;
+}
+
+.canchasReco {
+  width: 150px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 10px;
+}
