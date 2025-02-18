@@ -1,10 +1,10 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Calendario from "../components/Calendario";
-import ReviewStars from "../components/Reseñas";
-import Form from "../components/FormReserva";
-import Mapa from "../components/Mapa";
+import Calendar from "../components/Calendar";
+import ReviewStars from "../components/Reviews";
+import BookingForm from "../components/BookingForm";
+import Map from "../components/Map";
 import "../Styles/detail.css";
 
 const Detail = () => {
@@ -29,20 +29,20 @@ const Detail = () => {
 
   return (
     <>
-      <div className="detailContenedor">
+      <div className="detail-container">
         <div className="detail">
-          <div className="Producto">
-            <img className="imagen" src={recipe.image} alt="" />
+          <div className="product">
+            <img className="image-detail" src={recipe.image} alt="" />
             <h4>{recipe.title}</h4>
             <p>{recipe.pricePerServing}</p>
           </div>
-          <Calendario />
+          <Calendar />
         </div>
-        <div className="contenedor2">
+        <div className="detail-extra-info">
           <ReviewStars />
-          <Form />
+          <BookingForm />
         </div>
-        <Mapa />
+        <Map />
       </div>
     </>
   );

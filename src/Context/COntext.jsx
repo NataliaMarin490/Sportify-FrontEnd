@@ -14,7 +14,6 @@ const Context = ({ children }) => {
 
   //const [cart, setCart] = useState([]);
   //const [recipes, setRecipes] = useState([]);
-  //console.log(cart);
 
   const url = `https://api.spoonacular.com/recipes/random?number=10&apiKey=85e5e4352f844d13ae580009b2dee4f5`;
 
