@@ -1,9 +1,9 @@
-.ContenedorReco {
+.recommendations-containe {
   display: flex;
   justify-content: center;
 }
 
-.canchasReco {
+.recommendations-fields {
   width: 150px;
   height: 100px;
   object-fit: cover;

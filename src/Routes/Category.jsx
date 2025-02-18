@@ -1,15 +1,14 @@
-import React from "react";
-import Imagen from "../components/ImagenCategoria";
-import "../Styles/Categoria.css";
-import { useRecipeStates } from "../Context/COntext";
-import CardsCategoria from "../components/CardsCategoria";
+import Image from "../components/Image";
+import "../Styles/Category.css";
+import { useRecipeStates } from "../Context/Context";
+import CardsCategory from "../components/CardsCategory";
 
-const Categoria = () => {
+const Category = () => {
   const { state } = useRecipeStates();
 
   return (
-    <div className="ContenedorPpalCate">
-      <Imagen />
+    <div className="category-container">
+      <Image />
       <div className="searcherCat">
         <input name="address" type="text" placeholder="Dirección" />
         <input name="sport" type="text" placeholder="Deporte" />
@@ -17,13 +16,13 @@ const Categoria = () => {
         <input name="hour" type="number" placeholder="Hora" />
         <button>Buscar</button>
       </div>
-      <div className="ContenedorCards">
+      <div className="category-cards-container">
         {state.recipes.map((recipe) => (
-          <CardsCategoria key={recipe.id} recipe={recipe} />
+          <CardsCategory key={recipe.id} recipe={recipe} />
         ))}
       </div>
     </div>
   );
 };
 
-export default Categoria;
+export default Category;

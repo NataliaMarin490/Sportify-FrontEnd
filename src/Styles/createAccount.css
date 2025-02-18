@@ -1,4 +1,4 @@
-.contenedorCuenta {
+.account-container {
   display: flex;
   flex-direction: column;
   background-image: url("/icons/imagencrear.jpg");
@@ -22,7 +22,7 @@ h2 {
   color: rgba(32, 87, 90, 1);
 }
 
-.campo {
+.input-container {
   margin-top: 5px;
   margin-bottom: 5px;
   justify-content: center;

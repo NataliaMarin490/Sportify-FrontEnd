@@ -1,10 +1,10 @@
-.ContenedorPpalCate {
+.category-container {
   background-color: var(--background-color);
   display: flex;
   flex-direction: column;
 }
 
-.ContenedorCards {
+.category-cards-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;

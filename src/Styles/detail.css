@@ -1,4 +1,4 @@
-.detailContenedor {
+.detail-container {
   background-color: var(--background-color);
   display: flex;
   flex-direction: column;
@@ -10,7 +10,7 @@
   justify-content: space-between;
 }
 
-.Producto {
+.product {
   color: black;
   margin: 5%;
   display: flex;
@@ -18,12 +18,12 @@
   align-items: center;
 }
 
-.imagen {
+.image-detail {
   width: 300px;
   border-radius: 5%;
 }
 
-.contenedor2 {
+.detail-extra-info {
   display: flex;
   justify-content: space-around;
   margin-bottom: 50px;

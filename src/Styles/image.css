@@ -1,22 +1,22 @@
-.ContenedorImg {
+.image-container {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
 }
 
-.Info {
+.image-info {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
   width: 50%;
 }
 
-.Imagen {
+.image {
   width: 100%;
 }
 
-.Titulo {
+.main-title {
   color: rgba(117, 117, 117, 1);
   font-weight: bold;
   font-size: 20px;
@@ -24,7 +24,7 @@
   justify-self: center;
 }
 
-.Titulo2 {
+.secondary-title {
   color: rgb(7, 7, 7);
   font-size: 7px;
   margin-top: 0;
@@ -32,7 +32,7 @@
   justify-self: center;
 }
 
-.TextoImagenCate {
+.image-text {
   color: rgba(117, 117, 117, 1);
   font-size: 10px;
   width: 50%;
