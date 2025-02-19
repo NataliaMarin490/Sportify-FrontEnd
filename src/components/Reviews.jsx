@@ -1,6 +1,5 @@
-import React from "react";
 import { FaStar, FaRegStar } from "react-icons/fa";
-import "../Styles/reseñas.css";
+import "../Styles/reviews.css";
 
 const reviews = [
   {
@@ -40,11 +39,11 @@ const ReviewStars = ({ rating }) => {
 const Reviews = () => {
   return (
     <section className="reviews-container">
-      <h2  className="reseña">Opiniones de Nuestros Clientes</h2>
-      <div className="contenedor-reviews">
+      <h2  className="review">Opiniones de Nuestros Clientes</h2>
+      <div className="review-container">
         {reviews.map((review) => (
           <div key={review.id} className="review-card">
-            <h4  className="reseña2">{review.name}</h4>
+            <h4  className="review2">{review.name}</h4>
             <ReviewStars rating={review.rating} />
             <p>Calificación: {review.rating}/5</p>
             <p>{review.comment}</p>

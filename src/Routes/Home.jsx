@@ -1,13 +1,10 @@
 import "../Styles/home.css";
 import Cards from "../components/Cards";
-import Reco from "../components/Recomendaciones";
-import React from "react";
-import { useRecipeStates } from "../Context/COntext";
+import Recommendations from "../components/Recommendations";
+import { useRecipeStates } from "../Context/Context";
 
 const Home = () => {
   const { state } = useRecipeStates();
-
-  console.log(state);
 
   return (
     <>
@@ -66,7 +63,7 @@ const Home = () => {
           </p>
           <div className="Reco">
             {state.recipes.map((recipe) => (
-              <Reco key={recipe.id} recipe={recipe} />
+              <Recommendations key={recipe.id} recipe={recipe} />
             ))}
           </div>
         </div>

@@ -1,19 +1,21 @@
 import "../Styles/header.css";
 import { Link } from "react-router-dom";
-import Logo from "../../public/icons/Logo";
+import LogoHeader from "../../public/icons/LogoHeader";
 
 const Header = () => {
   return (
     <header>
-      <Link to="/">
-        <Logo height="100px" width="100px" />
-      </Link>
+      <div className="logo-container">
+        <Link to="/">
+          <LogoHeader height="100px" width="100px" />
+        </Link>
+        <span>Donde empieza el partido</span>
+      </div>
       <nav>
         <ul>
-          <li className="home-link">Inicio</li>
-          <Link to="/crearCuenta">Crear cuenta</Link>
           <li>Canchas</li>
-          <Link to="/IniciarSesion">Iniciar sesión</Link>
+          <Link to="/createAccount">Crear cuenta</Link>
+          <Link to="/login">Iniciar sesión</Link>
         </ul>
       </nav>
     </header>

@@ -5,17 +5,16 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
-
-  height: 10%;
 
   position: sticky;
   top: 0;
+
+  z-index: 1000;
 }
 
 nav {
-  width: 40%;
-  padding: 0  ;
+  width: 20%;
+  padding: 0;
 }
 
 nav ul {
@@ -36,7 +35,7 @@ nav ul li:hover {
   cursor: pointer;
 }
 
-.home-link {
-  background-color: var(--header-dark);
-  padding: 50px 3%;
+.logo-container {
+  display: flex;
+  align-items: center;
 }
