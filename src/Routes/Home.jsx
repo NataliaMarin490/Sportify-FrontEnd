@@ -1,10 +1,11 @@
+import { useContextGlobal } from "../Context/global.context";
 import "../Styles/home.css";
 import Cards from "../components/Cards";
 import Recommendations from "../components/Recommendations";
-import { useRecipeStates } from "../Context/Context";
+
 
 const Home = () => {
-  const { state } = useRecipeStates();
+  const { state } = useContextGlobal();
 
   return (
     <>
@@ -51,8 +52,8 @@ const Home = () => {
       <main>
         <div className="ContenedorPpal">
           <div className="ContenedorCards">
-            {state.recipes.map((recipe) => (
-              <Cards key={recipe.id} recipe={recipe} />
+            {state.courts.map((court) => (
+              <Cards key={court.id} court={court} />
             ))}
           </div>
         </div>
@@ -62,8 +63,8 @@ const Home = () => {
             Conoce aquí las canchas más populares dentro de nuestros usuarios.
           </p>
           <div className="Reco">
-            {state.recipes.map((recipe) => (
-              <Recommendations key={recipe.id} recipe={recipe} />
+            {state.courts.map((court) => (
+              <Recommendations key={court.id} court={court} />
             ))}
           </div>
         </div>
