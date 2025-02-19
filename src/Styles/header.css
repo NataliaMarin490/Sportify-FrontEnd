@@ -11,6 +11,8 @@ header {
 
   position: sticky;
   top: 0;
+
+  z-index: 1000;
 }
 
 nav {
@@ -34,9 +36,4 @@ nav ul li {
 
 nav ul li:hover {
   cursor: pointer;
-}
-
-.home-link {
-  background-color: var(--header-dark);
-  padding: 50px 3%;
 }

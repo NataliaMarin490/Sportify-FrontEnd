@@ -3,20 +3,20 @@ import { Route, Routes } from "react-router-dom";
 import Layout from "./Layouts/Layout ";
 import Home from "./Routes/Home";
 import Admin from "./Routes/Admin";
-import Categoria from "./Routes/Categoria";
+import Category from "./Routes/Category";
 import Detail from "./Routes/Detail";
-import CrearCuenta from "./Routes/CrearCuenta.jsx";
-import IniciarSesion from "./Routes/IniciarSesion.jsx";
+import CreateAccount from "./Routes/CreateAccount.jsx";
+import Login from "./Routes/Login.jsx";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route path="/" element={<Home />} />
-        <Route path="/categoria" element={<Categoria />} />
+        <Route path="/category" element={<Category />} />
         <Route path="/detail/:id" element={<Detail />} />
-        <Route path="/CrearCuenta" element={<CrearCuenta />} />
-        <Route path="/IniciarSesion" element={<IniciarSesion />} />
+        <Route path="/createAccount" element={<CreateAccount />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/admin" element={<Admin />} />
       </Route>
     </Routes>

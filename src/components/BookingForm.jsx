@@ -1,12 +1,13 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import "../Styles/formulario.css";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "../Styles/bookingForm.css";
 
-const Form = () => {
+const BookingForm = () => {
   const [user, setUser] = useState({
-    nombre: "",
-    telefono: "",
-    participantes: "",
+    name: "",
+    phone: "",
+    participants: "",
+    address: "",
   });
   const [show, setShow] = useState(false);
   const [error, setError] = useState(false);
@@ -18,10 +19,10 @@ const Form = () => {
     const regexNum = /[0-9]/;
 
     if (
-      user.nombre.trim().length >= 3 &&
-      user.telefono.includes(" ") &&
-      user.participantes.includes(" ") &&
-      regexNum.test(user.telefono)
+      user.name.trim().length >= 3 &&
+      user.phone.includes(" ") &&
+      user.participants.includes(" ") &&
+      regexNum.test(user.phone)
     ) {
       setShow(true);
       setError(false);
@@ -34,13 +35,13 @@ const Form = () => {
   };
 
   return (
-    <div className="formulario">
+    <div className="form-container">
       <h4>Datos de Reserva</h4>
       {/* {condicion ? true : false } */}
       {show ? (
         <>
-          <div>{user.nombre}</div>
-          <div>{user.direccion} </div>
+          <div>{user.name}</div>
+          <div>{user.address} </div>
         </>
       ) : (
         <form className="form" onSubmit={handleSubmit}>
@@ -49,7 +50,7 @@ const Form = () => {
             placeholder="Cantidad de personas"
             type="number"
             onChange={(event) =>
-              setUser({ ...user, direccion: event.target.value })
+              setUser({ ...user, address: event.target.value })
             }
           />
           <label>Nombre Contacto: </label>
@@ -81,4 +82,4 @@ const Form = () => {
   );
 };
 
-export default Form;
+export default BookingForm;

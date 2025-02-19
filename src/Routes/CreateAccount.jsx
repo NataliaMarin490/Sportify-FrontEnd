@@ -1,7 +1,6 @@
-import React from "react";
-import "../Styles/crearCuenta.css";
+import "../Styles/createAccount.css";
 
-const CrearCuenta = () => {
+const CreateAccount = () => {
   /*const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -20,12 +19,12 @@ const CrearCuenta = () => {
   };*/
 
   return (
-    <div className="contenedorCuenta">
+    <div className="account-container">
       <form
         className="form" //</div>onSubmit={handleSubmit}
       >
         <h2>Crear Cuenta</h2>
-        <div className="campo">
+        <div className="input-container">
           <label>Nombre Completo</label>
           <input
             className="entrada"
@@ -36,7 +35,7 @@ const CrearCuenta = () => {
             required
           />
         </div>
-        <div className="campo">
+        <div className="input-container">
           <label>Apellidos</label>
           <input
             className="entrada"
@@ -47,7 +46,7 @@ const CrearCuenta = () => {
             required
           />
         </div>
-        <div className="campo">
+        <div className="input-container">
           <label>Correo electrónico</label>
           <input
             className="entrada"
@@ -58,7 +57,7 @@ const CrearCuenta = () => {
             required
           />
         </div>
-        <div className="campo">
+        <div className="input-container">
           <label>Contraseña</label>
           <input
             className="entrada"
@@ -69,7 +68,7 @@ const CrearCuenta = () => {
             required
           />
         </div>
-        <div className="campo">
+        <div className="input-container">
           <label>Confirma Contraseña</label>
           <input
             className="entrada"
@@ -80,7 +79,7 @@ const CrearCuenta = () => {
             required
           />
         </div>
-        <div className="campo">
+        <div className="input-container">
           <label>Fecha Nacimiento</label>
           <input
             className="entrada"
@@ -91,7 +90,7 @@ const CrearCuenta = () => {
             required
           />
         </div>
-        <div className="campo">
+        <div className="input-container">
           <label>Ciudad</label>
           <input
             className="entrada"
@@ -102,7 +101,7 @@ const CrearCuenta = () => {
             required
           />
         </div>
-        <div className="campo">
+        <div className="input-container">
           <label>Tipo de Usuario</label>
           <select
             name="role" //</div>value={formData.role} onChange={handleChange}
@@ -117,4 +116,4 @@ const CrearCuenta = () => {
   );
 };
 
-export default CrearCuenta;
+export default CreateAccount;

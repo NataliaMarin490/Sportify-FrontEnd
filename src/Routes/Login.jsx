@@ -1,8 +1,7 @@
-import React from "react";
-import "../Styles/iniciarsesion.css";
+import "../Styles/login.css";
 import { Link } from "react-router-dom";
 
-const IniciarSesion = () => {
+const Login = () => {
   /*const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -21,13 +20,13 @@ const IniciarSesion = () => {
   };*/
 
   return (
-    <div className="contenedorCuenta">
+    <div className="login-container">
       <form
         className="form" //</div>onSubmit={handleSubmit}
       >
         <h2>Iniciar Sesión</h2>
 
-        <div className="campo">
+        <div className="input-container">
           <label>Correo electrónico</label>
           <input
             className="entrada"
@@ -38,7 +37,7 @@ const IniciarSesion = () => {
             required
           />
         </div>
-        <div className="campo">
+        <div className="input-container">
           <label>Contraseña</label>
           <input
             className="entrada"
@@ -61,4 +60,4 @@ const IniciarSesion = () => {
   );
 };
 
-export default IniciarSesion;
+export default Login;
