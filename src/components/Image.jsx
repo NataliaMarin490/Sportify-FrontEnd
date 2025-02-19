@@ -3,7 +3,7 @@ import "../Styles/image.css";
 const Image = () => {
   return (
     <div>
-      <img className="image" src="public\icons\image 7.png" alt="cancha" />
+      <img className="image" src="icons\image 7.png" alt="cancha" />
       <div className="image-container">
         <p className="image-text">
           Sed ut perspiciatis unde omnis iste natus error sit voluptatem
