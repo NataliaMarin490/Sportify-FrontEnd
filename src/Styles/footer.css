@@ -21,16 +21,6 @@ footer {
   gap: 0.5rem;
 }
 
-.footerContacto {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.5rem;
-}
-.Logo {
-  height: 20px;
-  width: 25px;
-}
 .Mensaje {
   height: 20px;
   width: 25px;
