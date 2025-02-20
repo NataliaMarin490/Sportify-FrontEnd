@@ -15,19 +15,17 @@ const ContextProvider = ({ children }) => {
   //const [cart, setCart] = useState([]);
   //const [courts, setcourts] = useState([]);
 
-  //const url = `https://api.spoonacular.com/courts/random?number=10&apiKey=85e5e4352f844d13ae580009b2dee4f5`;
-  //const url = `http://localhost:8080/api/courts/search`;
+  // const url = `http://localhost:8080/api/courts/search`;
 
   useEffect(() => {
-    axios(courts).then((res) => {
-      //console.log(res.data);
-      console.log(courts);
-
-      dispatch({ type: "GET_COURTS", payload: courts });
-      //dispatch({ type: "GET_COURTS", payload: res.data});
-
-      //setcourts(res.data.courts);
-    });
+    // axios(url).then((res) => {
+    //   //console.log(res.data);
+    //   //dispatch({ type: "GET_COURTS", payload: res.data});
+      
+    //   //setcourts(res.data.courts);
+    // });
+    console.log('courts',courts);
+    dispatch({ type: "GET_COURTS", payload: courts });
   }, []);
 
   return (

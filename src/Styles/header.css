@@ -43,3 +43,10 @@ nav ul li:hover {
   display: flex;
   align-items: center;
 }
+
+.logo-header {
+  height: 100px;
+  width: 100px;
+
+  padding: 5px 15px;
+}
