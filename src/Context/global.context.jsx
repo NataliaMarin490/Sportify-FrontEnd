@@ -1,6 +1,7 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useReducer } from "react";
 import { reducer } from "../reducers/reducer";
+import { courts } from "./courts";
 
 const ContextGlobal = createContext();
 
@@ -19,9 +20,12 @@ const ContextProvider = ({ children }) => {
 
   useEffect(() => {
     axios(url).then((res) => {
-      console.log(res.data);
-      dispatch({ type: "GET_COURTS", payload: res.data});
-      //dispatch({ type: "GET_courts", payload: res.data.courts });
+      //console.log(res.data);
+      console.log(courts);
+      
+      dispatch({ type: "GET_COURTS", payload: courts});
+      //dispatch({ type: "GET_COURTS", payload: res.data});
+      
       //setcourts(res.data.courts);
     });
   }, []);
