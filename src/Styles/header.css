@@ -5,6 +5,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-right: 40px;
 
   position: sticky;
   top: 0;
@@ -13,7 +14,7 @@ header {
 }
 
 nav {
-  width: 40%;
+  width: 30%;
   padding: 0;
   display: flex;
   justify-content: space-evenly;
