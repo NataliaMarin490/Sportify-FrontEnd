@@ -36,7 +36,7 @@ const BookingForm = () => {
 
   return (
     <div className="form-container">
-      <h4>Datos de Reserva</h4>
+      <h4 className="tituloForm">Datos de Reserva</h4>
       {/* {condicion ? true : false } */}
       {show ? (
         <>
@@ -44,7 +44,7 @@ const BookingForm = () => {
           <div>{user.address} </div>
         </>
       ) : (
-        <form className="form" onSubmit={handleSubmit}>
+        <form className="formReserva" onSubmit={handleSubmit}>
           <label>Número Participantes: </label>
           <input
             placeholder="Cantidad de personas"
