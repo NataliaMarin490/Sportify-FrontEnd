@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useContextGlobal } from "../Context/global.context";
 import "../Styles/home.css";
 import Cards from "../components/Cards";
@@ -5,6 +6,10 @@ import Recommendations from "../components/Recommendations";
 
 const Home = () => {
   const { state } = useContextGlobal();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <>

@@ -24,7 +24,6 @@ const ContextProvider = ({ children }) => {
       
     //   //setcourts(res.data.courts);
     // });
-    console.log('courts',courts);
     dispatch({ type: "GET_COURTS", payload: courts });
   }, []);
 

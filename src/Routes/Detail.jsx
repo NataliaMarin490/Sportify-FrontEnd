@@ -10,16 +10,16 @@ import "../Styles/detail.css";
 const Detail = () => {
   const [recipe, setRecipe] = useState({});
   const params = useParams();
-  console.log(params);
 
   const url = `https://api.spoonacular.com/recipes/${
     params.id
   }/information?apiKey=${import.meta.env.VITE_API_KEY}`;
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     axios(url)
       .then(({ data }) => {
-        console.log(data);
         setRecipe(data);
       })
       .catch((err) => {

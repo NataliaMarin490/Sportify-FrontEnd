@@ -1,16 +1,25 @@
-import React from 'react'
+import { useEffect } from 'react'
 import "../Styles/admin.css";
 import { useContextGlobal } from '../Context/global.context';
-
-
+import { useNavigate } from 'react-router-dom';
 
 const Admin = () => {
   const {state, dispatch} = useContextGlobal();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (window) {
+      console.log(window.innerWidth, window.innerHeight);
+      if (window.innerWidth <= 700 && window.innerHeight <= 900) {
+        alert("Acceso restringido a esta vista.");
+        navigate('/');
+      }
+    }
+  }, [navigate]);
 
   const handleDelete = (id) => {
     dispatch({ type: "DELETE_COURT", payload: id });
   };
-
 
   const handleEdit = (id) => {
     console.log("Editar court con ID:", id);
