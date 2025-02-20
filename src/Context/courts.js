@@ -1,6 +1,5 @@
-export const courts =
-[
-    {
+export const courts = [
+  {
     id: 1,
     name: "Estadio La Cancha 1",
     sport: "Fútbol",
@@ -10,9 +9,10 @@ export const courts =
     capacity: 11,
     pricePerHour: 50000,
     address: "Calle 68",
-    neighborhood: "Salitre"
-    },
-    {
+    neighborhood: "Salitre",
+    image: "../../public/icons/image 7.png",
+  },
+  {
     id: 2,
     name: "Estadio La Cancha 2",
     sport: "Fútbol",
@@ -22,9 +22,10 @@ export const courts =
     capacity: 11,
     pricePerHour: 50000,
     address: "Calle 68",
-    neighborhood: "Salitre"
-    },
-    {
+    neighborhood: "Salitre",
+    image: "../../public/icons/image 7.png",
+  },
+  {
     id: 3,
     name: "Estadio La Cancha 3",
     sport: "Fútbol",
@@ -34,9 +35,10 @@ export const courts =
     capacity: 11,
     pricePerHour: 50000,
     address: "Calle 68",
-    neighborhood: "Salitre"
-    },
-    {
+    neighborhood: "Salitre",
+    image: "../../public/icons/image 7.png",
+  },
+  {
     id: 4,
     name: "Estadio La Cancha 4",
     sport: "Fútbol",
@@ -46,9 +48,10 @@ export const courts =
     capacity: 11,
     pricePerHour: 50000,
     address: "Calle 68",
-    neighborhood: "Salitre"
-    },
-    {
+    neighborhood: "Salitre",
+    image: "../../public/icons/image 7.png",
+  },
+  {
     id: 5,
     name: "Cancha Central de Basket 1",
     sport: "Baloncesto",
@@ -58,9 +61,10 @@ export const courts =
     capacity: 11,
     pricePerHour: 60000,
     address: "Calle 68",
-    neighborhood: "Salitre"
-    },
-    {
+    neighborhood: "Salitre",
+    image: "../../public/icons/image 7.png",
+  },
+  {
     id: 6,
     name: "Cancha Central de Basket 2",
     sport: "Baloncesto",
@@ -70,9 +74,10 @@ export const courts =
     capacity: 11,
     pricePerHour: 60000,
     address: "Calle 68",
-    neighborhood: "Salitre"
-    },
-    {
+    neighborhood: "Salitre",
+    image: "../../public/icons/image 7.png",
+  },
+  {
     id: 7,
     name: "Cancha Central de Basket 3",
     sport: "Baloncesto",
@@ -82,9 +87,10 @@ export const courts =
     capacity: 11,
     pricePerHour: 60000,
     address: "Calle 68",
-    neighborhood: "Salitre"
-    },
-    {
+    neighborhood: "Salitre",
+    image: "../../public/icons/image 7.png",
+  },
+  {
     id: 8,
     name: "Cancha Central de Basket 4",
     sport: "Baloncesto",
@@ -94,9 +100,10 @@ export const courts =
     capacity: 11,
     pricePerHour: 60000,
     address: "Calle 68",
-    neighborhood: "Salitre"
-    },
-    {
+    neighborhood: "Salitre",
+    image: "../../public/icons/image 7.png",
+  },
+  {
     id: 9,
     name: "Cancha Central de Tenis 1",
     sport: "Tenis",
@@ -106,9 +113,10 @@ export const courts =
     capacity: 11,
     pricePerHour: 80000,
     address: "Calle 68",
-    neighborhood: "Salitre"
-    },
-    {
+    neighborhood: "Salitre",
+    image: "../../public/icons/image 7.png",
+  },
+  {
     id: 10,
     name: "Cancha Central de Tenis 2",
     sport: "Tenis",
@@ -118,78 +126,7 @@ export const courts =
     capacity: 11,
     pricePerHour: 80000,
     address: "Calle 68",
-    neighborhood: "Salitre"
-    },
-    {
-    id: 11,
-    name: "Cancha Central de Tenis 3",
-    sport: "Tenis",
-    city: "Bogotá",
-    status: "Activo",
-    description: "Cancha Central de Tenis 3",
-    capacity: 11,
-    pricePerHour: 80000,
-    address: "Calle 68",
-    neighborhood: "Salitre"
-    },
-    {
-    id: 13,
-    name: "Cancha Voleibol Playa 1",
-    sport: "voleibol",
-    city: "Bogotá",
-    status: "Activo",
-    description: "Cancha Voleibol Playa 1",
-    capacity: 11,
-    pricePerHour: 100000,
-    address: "Calle 68",
-    neighborhood: "Salitre"
-    },
-    {
-    id: 14,
-    name: "Cancha Voleibol Playa 2",
-    sport: "voleibol",
-    city: "Bogotá",
-    status: "Activo",
-    description: "Cancha Voleibol Playa 2",
-    capacity: 11,
-    pricePerHour: 100000,
-    address: "Calle 68",
-    neighborhood: "Salitre"
-    },
-    {
-    id: 15,
-    name: "Cancha Voleibol Playa 3",
-    sport: "voleibol",
-    city: "Bogotá",
-    status: "Activo",
-    description: "Cancha Voleibol Playa 3",
-    capacity: 11,
-    pricePerHour: 100000,
-    address: "Calle 68",
-    neighborhood: "Salitre"
-    },
-    {
-    id: 16,
-    name: "Cancha Voleibol Playa 4",
-    sport: "voleibol",
-    city: "Bogotá",
-    status: "Activo",
-    description: "Cancha Voleibol Playa 4",
-    capacity: 11,
-    pricePerHour: 100000,
-    address: "Calle 68",
-    neighborhood: "Salitre"
-    },
-    {
-    id: 17,
-    name: "Estadio La Cancha 6",
-    sport: "Fútbol",
-    city: "Bogotá",
-    status: "Activo",
-    description: "Estadio La Cancha 6",
-    capacity: 10,
-    pricePerHour: 90000,
-    address: "Calle 68",
-    neighborhood: "Salitre"
-    }
- ]
+    neighborhood: "Salitre",
+    image: "../../public/icons/image 7.png",
+  },
+];

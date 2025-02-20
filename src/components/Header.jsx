@@ -1,6 +1,6 @@
 import "../Styles/header.css";
 import { Link } from "react-router-dom";
-import LogoHeader from "../../public/icons/LogoHeader";
+import headerIcon from "../../public/logoHeader.svg";
 import BackButton from "../components/BackButton";
 
 const Header = () => {
@@ -8,7 +8,7 @@ const Header = () => {
     <header>
       <div className="logo-container">
         <Link to="/">
-          <LogoHeader height="100px" width="100px" />
+          <img alt="logo" src={headerIcon} className="logo-header"/>
         </Link>
         <span>Donde empieza el partido</span>
       </div>
