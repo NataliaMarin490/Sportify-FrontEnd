@@ -77,31 +77,30 @@ body {
 }
 
 .admin-view button:nth-child(2):hover {
-  background-color: #e53935;
+  background-color: #eb5451;
 }
 
-/* Estilos para el botón de agregar (si lo implementas) */
-.admin-view button.add-button {
-  background-color: #007bff; /* Azul */
+.top-bar .create-btn {
+  background-color: #20575a !important;
   color: white;
   padding: 10px 15px;
   margin-top: 10px;
 }
 
-.admin-view button.add-button:hover {
-  background-color: #0056b3;
+.top-bar .create-btn:hover {
+  background-color: #2a6d70 !important;
 }
 
 .top-bar {
   display: flex;
   align-items: center;
-  gap: 10px; /* Espaciado entre el input y el botón */
+  gap: 10px;
   margin-bottom: 20px;
 }
 
 /* Estilos para el input de búsqueda */
 .top-bar input {
-  flex: 1; /* Hace que el input ocupe el espacio disponible */
+  flex: 1;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;

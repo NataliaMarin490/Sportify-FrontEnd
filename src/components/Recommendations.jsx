@@ -4,11 +4,14 @@ import PropTypes from "prop-types";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { useContextGlobal } from "../Context/global.context";
+
 
 const Recommendations = ({ courts }) => {
-  Recommendations.propTypes = {
-    courts: PropTypes.array.isRequired,
-  };
+  const { state } = useContextGlobal();
+
+  // Si no se pasa 'courts' como prop, usa 'recommendedCourts' del contexto
+  const courtsToDisplay = courts || state.recommendedCourts || [];
 
   const settings = {
     dots: true,
@@ -24,11 +27,11 @@ const Recommendations = ({ courts }) => {
   return (
     <div className="recommendations-container">
       <Slider {...settings}>
-        {courts.map((court, index) => (
+        {courtsToDisplay.map((court, index) => (
           <Link key={index} to={`/detail/${court.id}`}>
             <img
               className="recommendations-fields"
-              src={court.image}
+              src={court.imageUrl[0]}
               alt={court.title}
             />
           </Link>
@@ -36,6 +39,10 @@ const Recommendations = ({ courts }) => {
       </Slider>
     </div>
   );
+};
+
+Recommendations.propTypes = {
+  courts: PropTypes.array,
 };
 
 export default Recommendations;
