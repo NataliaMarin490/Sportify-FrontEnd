@@ -1,12 +1,12 @@
-import "../Styles/footer.css"
-import footerIcon from "../../public/logoFooter.svg";
+import "../Styles/footer.css";
+import LogoFooter from "../../public/icons/LogoFooter";
 
 const Footer = () => {
   return (
     <footer>
       <div className="footerContainer">
         <div className="footerLogo">
-          <img alt="logo" src={footerIcon} className="logo-footer"/>
+          <LogoFooter className="Logo" height="100px" width="100px" />
           <p>ALLRIGHTS RESERVED - 2025 ©</p>
         </div>
         <div className="footerSocial">

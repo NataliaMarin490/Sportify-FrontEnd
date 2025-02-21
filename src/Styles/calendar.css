@@ -1,104 +1,30 @@
-.calendar-container {
-  max-width: 400px;
-  margin: auto;
-  text-align: center;
-  padding: 20px;
-  border-radius: 10px;
-  border-color: #f5f5eb;
-  color: #686868;
+.datepicker::-webkit-input-placeholder {
+  color: transparent; /* Oculta el placeholder en Chrome y Safari */
+}
+
+.datepicker:-ms-input-placeholder {
+  color: transparent; /* Oculta el placeholder en Internet Explorer */
+}
+
+.datepicker::placeholder {
+  color: transparent; /* Oculta el placeholder en otros navegadores */
+}
+
+.date-time-picker {
   display: flex;
-  flex-direction: column;
+  gap: 10px; /* Espacio entre el selector de fecha y hora */
   align-items: center;
   justify-content: center;
 }
 
-.custom-calendar {
-  border: none;
-  background-color: #f5f5eb;
+.datepicker {
+  width: 150px;
   padding: 10px;
-  border-radius: 8px;
-}
-
-.react-calendar__tile {
-  color: #f0eded !important; /* Cambiar el color de los números a gris */
-}
-
-.react-calendar__tile--active {
-  background-color: rgba(0, 126, 71, 1) !important;
-  color: white !important;
-}
-
-.react-calendar__tile:hover {
-  background-color: #f1eded;
-}
-
-.time-picker {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
-  justify-content: center;
-}
-
-.time-button {
-  background-color: white;
-  border: 1px solid #e46115;
-  padding: 5px 15px;
+  font-size: 14px;
+  border: 1px solid #ccc;
   border-radius: 5px;
-  cursor: pointer;
-  font-size: 10px;
-  color: #e46115;
-  width: 15%;
 }
 
-.time-button:hover {
-  background-color: #e0e0e0;
-}
-
-.selected {
-  background-color: #4caf50;
-  color: white;
-}
-
-.selected-info {
-  margin-top: 15px;
-  font-size: 18px;
-  color: #686868;
-}
-
-.react-calendar__month-view__days__day {
-  color: #686868 !important;
-}
-.react-calendar__navigation {
-  color: #686868 !important;
-}
-
-.react-calendar__navigation__arrow {
-  color: #686868 !important;
-}
-
-.react-calendar__navigation__prev2-button {
-  color: #686868 !important;
-}
-
-.react-calendar__navigation__label__labelText {
-  color: #686868 !important;
-}
-.react-calendar__navigation__label__labelText--from {
-  color: #686868 !important;
-}
-
-.tituloCalendar {
-  color: rgba(0, 66, 37, 1);
-  font-size: 15px;
-}
-
-.react-calendar__tile--active {
-  background-color: rgba(
-    0,
-    66,
-    37,
-    1
-  ) !important; /* Fondo blanco para el día seleccionado */
-  color: white !important; /* Color de texto gris para el día seleccionado */
+.timepicker {
+  width: 120px; /* Un poco más estrecho para la hora */
 }
