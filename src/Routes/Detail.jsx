@@ -11,6 +11,7 @@ import BackButton from "../components/BackButton";
 import { useContextGlobal } from "../Context/global.context";
 
 const Detail = () => {
+
   const { state } = useContextGlobal();
   const { id } = useParams();
   console.log("Estado antes de actualizar:", state.courts);
@@ -19,6 +20,7 @@ const Detail = () => {
     state.courts && Array.isArray(state.courts)
       ? state.courts.find((item) => item.id === parseInt(id)) // Convertir id a número
       : null;
+
 
   return (
     <>

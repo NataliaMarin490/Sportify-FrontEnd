@@ -183,6 +183,7 @@ const ImageGallery = () => {
 
       {/* MODAL */}
       {isModalOpen && (
+
         <div
           className={`modal-overlay ${isModalOpen ? "show" : ""}`}
           onClick={() => setIsModalOpen(false)}
