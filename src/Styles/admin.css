@@ -1,0 +1,123 @@
+/* Estilos generales para el contenedor principal */
+
+.admin-view {
+  padding: 20px;
+  font-family: "Poppins";
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  color: #333;
+}
+
+body {
+  background-color: #ffffff !important; /* Forzar fondo blanco */
+  color: #333;
+}
+
+/* Estilos para el título */
+.admin-view h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Estilos para la tabla */
+.admin-view table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para las celdas de la tabla */
+.admin-view th,
+.admin-view td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Estilos para el encabezado de la tabla */
+.admin-view th {
+  background-color: #f8f9fa;
+  color: #333;
+  font-weight: bold;
+}
+
+/* Estilos para las filas de la tabla */
+.admin-view tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Estilos para los botones */
+.admin-view button {
+  padding: 8px 12px;
+  margin-right: 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+/* Estilos para el botón de editar */
+.admin-view button:nth-child(1) {
+  background-color: #4caf50; /* Verde */
+  color: white;
+}
+
+.admin-view button:nth-child(1):hover {
+  background-color: #45a049;
+}
+
+/* Estilos para el botón de eliminar */
+.admin-view button:nth-child(2) {
+  background-color: #f44336; /* Rojo */
+  color: white;
+}
+
+.admin-view button:nth-child(2):hover {
+  background-color: #e53935;
+}
+
+/* Estilos para el botón de agregar (si lo implementas) */
+.admin-view button.add-button {
+  background-color: #007bff; /* Azul */
+  color: white;
+  padding: 10px 15px;
+  margin-top: 10px;
+}
+
+.admin-view button.add-button:hover {
+  background-color: #0056b3;
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Espaciado entre el input y el botón */
+  margin-bottom: 20px;
+}
+
+/* Estilos para el input de búsqueda */
+.top-bar input {
+  flex: 1; /* Hace que el input ocupe el espacio disponible */
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Estilos para el botón de crear */
+.top-bar .create-btn {
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.top-bar .create-btn:hover {
+  background-color: #0056b3;
+}
