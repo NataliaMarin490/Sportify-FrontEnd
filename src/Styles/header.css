@@ -96,6 +96,9 @@ nav ul li:hover {
     width: auto;
     flex-direction: row;
   }
+  .logo-container span {
+    font-size: 12px;
+  } 
 }
 
 @media screen and (max-width: 480px) {
@@ -104,38 +107,47 @@ nav ul li:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    height: 55px;
+    nav span {
+      display: none;
+    }
   }
 
   nav {
-    width: auto;
-    min-width: 0;
+    width: 65%;
     display: flex;
     align-items: center;
+    justify-content: flex-end;
   }
 
   nav ul {
     flex-wrap: nowrap;
-    gap: 15px;
+    gap: 10px;
     justify-content: flex-end;
     white-space: nowrap;
-    display: flex;
-    align-items: center;
+    padding: 0;
   }
 
   .logo-container {
-    width: auto;
+    width: 30%;
     display: flex;
     align-items: center;
   }
+
   .logo-header {
-    height: 45px;
-    width: 45px;
+    height: 40px;
+    width: 40px;
     padding: 2px 5px;
   }
 
-  /* Si hay elementos que necesitan ocultarse en móvil */
   .links {
     width: auto;
     flex-direction: row;
+    gap: 8px;
   }
-}
+
+  .logo-container span {
+    display: none;
+  }
+
+  }

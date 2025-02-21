@@ -181,8 +181,11 @@ button {
   }
 
   .extra-info-container {
-    flex-direction: row;
-    align-items: flex-start;
+    display: flex;
+    position: absolute;
+    left: 50%;
+    z-index: 10;
+    transform: translate(-50%, -50%);
     width: 80%;
   }
 
@@ -203,5 +206,153 @@ button {
 
   .recommendations-text {
     text-align: left;
+  }
+}
+
+@media (max-width: 720px) {
+  .home-container {
+    height: 70%;
+  }
+
+  .main-content {
+    margin-top: 25%;
+  }
+
+  .searcher-container {
+    align-items: flex-start;
+    padding: 10px 15px;
+  }
+
+  .searcher {
+    width: 90%;
+    height: auto;
+    padding: 8px;
+  }
+
+  input {
+    width: 100%;
+  }
+
+  .home-cards-container {
+    grid-template-columns: 1fr;
+    gap: 30px 0;
+    margin-top: 50px;
+  }
+
+  .extra-info-container {
+    display: flex;
+    position: absolute;
+    left: 50%;
+    z-index: 10;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    margin-top: 5%;
+  }
+
+  .box-1, .box-2 {
+    width: 45%;
+    padding: 10px;
+    margin: 0;
+  }
+
+  .home-recommendations-container {
+    align-items: flex-start;
+    width: 85%;
+  }
+
+  .recommendations-title {
+    font-size: 18px;
+    margin-bottom: 3px;
+  }
+
+  .recommendations-text {
+    font-size: 14px;
+  }
+}
+@media (max-width: 600px) {
+  .extra-info-container {
+    display: flex;
+    position: absolute;
+    left: 50%;
+    z-index: 10;
+    transform: translate(-50%, -50%);
+    width: 85%;
+    margin-top: 10%;
+  }
+
+  .box-1, .box-2 {
+    width: 45%;
+    padding: 8px;
+    margin: 0;
+  }
+
+  .text {
+    font-size: 14px;
+  }
+  .home-cards-container {
+    margin-top: 80px;
+  }
+}
+
+
+@media (max-width: 490px) {
+  .main-content {
+    margin-top: 25%;
+  }
+
+  .searcher-container {
+    padding: 10px 15px;
+  }
+
+  .searcher {
+    width: 85%;
+    height: auto;
+    padding: 8px;
+  }
+
+  input {
+    width: 100%;
+  }
+
+  .home-cards-container {
+    grid-template-columns: 1fr;
+    gap: 25px 0;
+    margin-top: 120px;
+  }
+
+  .extra-info-container {
+    flex-direction: row;
+    align-items: flex-start;
+    width: 85%;
+    margin-top: 15%;
+  }
+
+  .box-1, .box-2 {
+    width: auto;
+    padding: 8px 10px;
+    margin: 15px 0;
+    font-size: 12px;
+  }
+
+  .box-title {
+    font-size: 14px;
+    margin: 10px 0 5px 0;
+  }
+
+  .text {
+    font-size: 12px;
+  }
+
+  .home-recommendations-container {
+    width: 85%;
+    margin-top: 3%;
+  }
+
+  .recommendations-title {
+    font-size: 16px;
+  }
+
+  .recommendations-text {
+    font-size: 12px;
   }
 }

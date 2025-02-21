@@ -46,34 +46,67 @@ footer {
 }
 
 @media (max-width: 890px) {
-  header {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 10px;
+  footer {
+    flex-direction: row;
     height: auto;
   }
 
-  nav {
-    width: 100%;
-    justify-content: space-between;
-    margin-top: 10px;
+  .footerContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    padding: 5px 15px;
   }
 
-  nav ul {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  nav ul li {
-    margin-bottom: 10px;
-  }
-  .logo-container {
+  .footerLogo {
+    display: flex;
     justify-content: center;
-    width: 100%;
+    align-items: center;
+    gap: 0.3rem;
   }
 
-  .logo-header {
-    height: 50px;
-    width: 50px;
+  .logo-footer {
+    height: 45px;
+    width: 70px;
+    padding: 2px 4px;
+  }
+
+  .footerSocial {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .footerContainer {
+    padding: 5px 10px;
+    justify-content: space-between;
+  }
+
+  .footerLogo {
+    gap: 0.2rem;
+  }
+
+  .logo-footer {
+    height: 40px;
+    width: 65px;
+    padding: 2px 4px;
+  }
+
+  .footerSocial {
+    gap: 0.3rem;
+  }
+
+  .Social {
+    height: 16px;
+    width: 16px;
+  }
+
+  .Mensaje {
+    height: 12px;
+    width: 16px;
   }
 }
