@@ -1,7 +1,8 @@
 import "../Styles/header.css";
 import { Link } from "react-router-dom";
+import LogoHeader from "../../public/icons/LogoHeader";
+
 import headerIcon from "../../public/logoHeader.svg";
-import BackButton from "../components/BackButton";
 
 const Header = () => {
   return (
@@ -21,7 +22,6 @@ const Header = () => {
           <Link className="link" to="/login">
             Iniciar sesión
           </Link>
-          <BackButton className="link" />
         </ul>
       </nav>
     </header>

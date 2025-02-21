@@ -183,9 +183,15 @@ const ImageGallery = () => {
 
       {/* MODAL */}
       {isModalOpen && (
-        <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h3>Imágenes de la Cancha</h3>
+
+        <div
+          className={`modal-overlay ${isModalOpen ? "show" : ""}`}
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div
+            className="modal-content"
+            onClick={(e) => e.stopPropagation()} // Evitar que clic en el modal cierre
+          >
             <div className="modal-images">
               {images.map((img, index) => (
                 <img
