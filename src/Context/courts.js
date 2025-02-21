@@ -10,7 +10,7 @@ export const courts = [
     pricePerHour: 50000,
     address: "Calle 68",
     neighborhood: "Salitre",
-    image: ["../../public/icons/image 7.png", "../../public/icons/image 7.png"],
+    image: "../../public/icons/image 7.png"
   },
   {
     id: 2,
@@ -23,7 +23,7 @@ export const courts = [
     pricePerHour: 50000,
     address: "Calle 68",
     neighborhood: "Salitre",
-    image: ["../../public/icons/image 7.png", "../../public/icons/image 7.png"],
+    image: "../../public/icons/image 7.png"
   },
   {
     id: 3,
@@ -36,7 +36,7 @@ export const courts = [
     pricePerHour: 50000,
     address: "Calle 68",
     neighborhood: "Salitre",
-    image: ["../../public/icons/image 7.png", "../../public/icons/image 7.png"],
+    image: "../../public/icons/image 7.png"
   },
   {
     id: 4,
@@ -49,7 +49,7 @@ export const courts = [
     pricePerHour: 50000,
     address: "Calle 68",
     neighborhood: "Salitre",
-    image: ["../../public/icons/image 7.png", "../../public/icons/image 7.png"],
+    image: "../../public/icons/image 7.png",
   },
   {
     id: 5,
@@ -62,7 +62,7 @@ export const courts = [
     pricePerHour: 60000,
     address: "Calle 68",
     neighborhood: "Salitre",
-    image: ["../../public/icons/image 7.png", "../../public/icons/image 7.png"],
+    image: "../../public/icons/image 7.png",
   },
   {
     id: 6,
@@ -75,7 +75,7 @@ export const courts = [
     pricePerHour: 60000,
     address: "Calle 68",
     neighborhood: "Salitre",
-    image: ["../../public/icons/image 7.png", "../../public/icons/image 7.png"],
+    image: "../../public/icons/image 7.png",
   },
   {
     id: 7,
@@ -88,7 +88,7 @@ export const courts = [
     pricePerHour: 60000,
     address: "Calle 68",
     neighborhood: "Salitre",
-    image: ["../../public/icons/image 7.png", "../../public/icons/image 7.png"],
+    image: "../../public/icons/image 7.png",
   },
   {
     id: 8,
@@ -101,7 +101,7 @@ export const courts = [
     pricePerHour: 60000,
     address: "Calle 68",
     neighborhood: "Salitre",
-    image: ["../../public/icons/image 7.png", "../../public/icons/image 7.png"],
+    image: "../../public/icons/image 7.png",
   },
   {
     id: 9,
