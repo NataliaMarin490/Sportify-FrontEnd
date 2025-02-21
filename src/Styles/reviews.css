@@ -50,3 +50,53 @@
 .star-empty {
   color: gray;
 }
+
+/* ...existing code... */
+
+@media (max-width: 890px) {
+  .reviews-container {
+    max-width: 80%;
+    padding: 15px;
+  }
+
+  .review-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .review-card {
+    width: 90%;
+    margin: 10px 0;
+    font-size: 9px;
+  }
+
+  .review {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .reviews-container {
+    max-width: 95%;
+    padding: 10px;
+  }
+
+  .review-container {
+    gap: 0.5rem;
+  }
+
+  .review-card {
+    width: 95%;
+    margin: 8px 0;
+    font-size: 8px;
+  }
+
+  .review {
+    font-size: 16px;
+  }
+
+  .stars {
+    gap: 3px;
+  }
+}
