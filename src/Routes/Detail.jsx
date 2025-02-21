@@ -11,7 +11,6 @@ import BackButton from "../components/BackButton";
 import { useContextGlobal } from "../Context/global.context";
 
 const Detail = () => {
-
   const { state } = useContextGlobal();
   const { id } = useParams();
   console.log("Estado antes de actualizar:", state.courts);
@@ -25,12 +24,14 @@ const Detail = () => {
       ? state.courts.find((item) => item.id === parseInt(id)) // Convertir id a número
       : null;
 
-
   return (
     <>
       <div className="detail-container">
         <div className="detail">
           <div className="product">
+            <span className="contenedor-titulo">
+              <h4 className="title-product"> {product.name}</h4>
+            </span>
             <div className="galeria">
               <img
                 className="image-detail"
@@ -39,9 +40,6 @@ const Detail = () => {
               />
               <ImageGallery />
             </div>
-            <span className="contenedor-titulo">
-              <h4 className="title-product"> {product.name}</h4>
-            </span>
 
             <div className="InfoProduct">
               <h4 className="title-product"> $ </h4>
