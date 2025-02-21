@@ -1,17 +1,11 @@
-.recommendations-container {
-  margin: 30px 0;
-  padding: 0 20px 0 50px;
-  width: 93%;
+.recommendations-containe {
+  display: flex;
+  justify-content: center;
 }
 
 .recommendations-fields {
-  width: 250px;
-  height: 250px;
+  width: 150px;
+  height: 100px;
   object-fit: cover;
   border-radius: 10px;
-}
-
-.slick-prev:before,
-.slick-next:before {
-  color: black !important;
 }

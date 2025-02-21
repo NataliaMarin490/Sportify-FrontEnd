@@ -5,7 +5,7 @@ const Map = () => {
   const position = [7.7682, -72.225];
 
   return (
-    <div style={{ width: "100%", height: "400px", border: "5px" }}>
+    <div style={{ width: "100%", height: "400px" }}>
       <MapContainer
         center={position}
         zoom={13}

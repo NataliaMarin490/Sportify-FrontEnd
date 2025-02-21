@@ -5,38 +5,30 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-right: 40px;
 
   position: sticky;
   top: 0;
 
   z-index: 1000;
-
-  padding: 5px 20px;
-  height: 70px;
 }
 
 nav {
-  width: 30%;
+  width: 20%;
   padding: 0;
-  display: flex;
-  justify-content: space-evenly;
 }
 
 nav ul {
   list-style: none;
   padding: 0;
   margin: 0;
-  width: 100%;
+
   display: flex;
   align-items: center;
-  justify-content: space-between;
 }
 
-.links {
-  display: flex;
-  flex-direction: column;
-  width: 10%;
+nav ul li {
+  display: inline;
+  margin: 0 20px;
 }
 
 nav ul li:hover {
@@ -46,12 +38,4 @@ nav ul li:hover {
 .logo-container {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-}
-
-.logo-header {
-  height: 60px;
-  width: 60px;
-
-  padding: 3px 10px;
 }

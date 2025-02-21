@@ -1,10 +1,10 @@
 import Image from "../components/Image";
 import "../Styles/Category.css";
-import { useContextGlobal} from "../Context/global.context";
+import { useRecipeStates } from "../Context/Context";
 import CardsCategory from "../components/CardsCategory";
 
 const Category = () => {
-  const { state } = useContextGlobal;
+  const { state } = useRecipeStates();
 
   return (
     <div className="category-container">
@@ -17,8 +17,8 @@ const Category = () => {
         <button>Buscar</button>
       </div>
       <div className="category-cards-container">
-        {state.courts.map((court) => (
-          <CardsCategory key={court.id} recipe={court} />
+        {state.recipes.map((recipe) => (
+          <CardsCategory key={recipe.id} recipe={recipe} />
         ))}
       </div>
     </div>

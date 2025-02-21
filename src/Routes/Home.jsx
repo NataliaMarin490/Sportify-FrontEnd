@@ -1,23 +1,18 @@
-import { useEffect } from "react";
-import { useContextGlobal } from "../Context/global.context";
 import "../Styles/home.css";
 import Cards from "../components/Cards";
 import Recommendations from "../components/Recommendations";
+import { useRecipeStates } from "../Context/Context";
 
 const Home = () => {
-  const { state } = useContextGlobal();
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  const { state } = useRecipeStates();
 
   return (
     <>
-      <div className="home-container">
+      <div className="contenedor-padre">
         <div className="searcher-container">
           <div className="main-text-container">
             <h1>CANCHAS DEPORTIVAS</h1>
-            <p className="text">
+            <p className="Texto">
               Ofrecemos una amplia selección de canchas en todo el país, con
               precios <br />
               accesibles y condiciones óptimas para que disfrutes al máximo tu
@@ -32,58 +27,45 @@ const Home = () => {
             <button>Buscar</button>
           </div>
         </div>
-        <div className="extra-info-container">
-          <div className="box-1">
-            <h4 className="box-title">NUESTRAS CANCHAS MÁS RESERVADAS</h4>
-            <p className="text">
+        <div className="ContenedorInfo">
+          <div className="Contenedor1">
+            <h4 className="Titulo">NUESTRAS CANCHAS MÁS RESERVADAS</h4>
+            <p className="Texto">
               Conoce aquí las canchas más populares dentro de nuestros usuarios.
             </p>
-            <img
-              alt="arrow"
-              src="../../public/right-arrow.png"
-              className="right-arrow"
-            />
           </div>
-          <div className="box-2">
-            <h4 className="box-title">NUESTRAS CANCHAS MÁS RESERVADAS</h4>
-            <p className="text">
+          <div className="Contenedor2">
+            <h4 className="Titulo">NUESTRAS CANCHAS MÁS RESERVADAS</h4>
+            <p className="Texto">
               Conoce aquí las canchas más populares dentro de nuestros usuarios.
             </p>
-            <img
-              alt="arrow"
-              src="../../public/right-arrow.png"
-              className="right-arrow"
-            />
           </div>
-          <div className="box-1">
-            <h4 className="box-title">NUESTRAS CANCHAS MÁS RESERVADAS</h4>
-            <p className="text">
+          <div className="Contenedor1">
+            <h4 className="Titulo">NUESTRAS CANCHAS MÁS RESERVADAS</h4>
+            <p className="Texto">
               Conoce aquí las canchas más populares dentro de nuestros usuarios.
             </p>
-            <img
-              alt="arrow"
-              src="../../public/right-arrow.png"
-              className="right-arrow"
-            />
           </div>
         </div>
       </div>
       <main>
-        <div className="main-content">
-          <div className="home-cards-container">
-            {state.courts.map((court) => (
-              <Cards key={court.id} court={court} />
+        <div className="ContenedorPpal">
+          <div className="ContenedorCards">
+            {state.recipes.map((recipe) => (
+              <Cards key={recipe.id} recipe={recipe} />
             ))}
           </div>
         </div>
-        <div className="home-recommendations-container">
-          <h4 className="recommendations-title">
-            NUESTRAS CANCHAS MÁS RESERVADAS
-          </h4>
-          <p className="recommendations-text">
+        <div>
+          <h4 className="TituloReco">NUESTRAS CANCHAS MÁS RESERVADAS</h4>
+          <p className="TextoReco">
             Conoce aquí las canchas más populares dentro de nuestros usuarios.
           </p>
-          <Recommendations courts={state.courts} />
+          <div className="Reco">
+            {state.recipes.map((recipe) => (
+              <Recommendations key={recipe.id} recipe={recipe} />
+            ))}
+          </div>
         </div>
       </main>
     </>
