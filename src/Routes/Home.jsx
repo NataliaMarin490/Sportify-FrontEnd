@@ -36,7 +36,7 @@ const Home = () => {
           <div className="box-1">
             <h4 className="box-title">NUESTRAS CANCHAS MÁS RESERVADAS</h4>
             <p className="text">
-              Conoce aquí las canchas más populares dentro de nuestros usuarios.
+              Conoce aquí las canchas más reservadas dentro de nuestros usuarios.
             </p>
             <img
               alt="arrow"
@@ -47,7 +47,7 @@ const Home = () => {
           <div className="box-2">
             <h4 className="box-title">NUESTRAS CANCHAS MÁS RESERVADAS</h4>
             <p className="text">
-              Conoce aquí las canchas más populares dentro de nuestros usuarios.
+              Conoce aquí las canchas más reservadas dentro de nuestros usuarios.
             </p>
             <img
               alt="arrow"
@@ -58,7 +58,7 @@ const Home = () => {
           <div className="box-1">
             <h4 className="box-title">NUESTRAS CANCHAS MÁS RESERVADAS</h4>
             <p className="text">
-              Conoce aquí las canchas más populares dentro de nuestros usuarios.
+              Conoce aquí las canchas más reservadas dentro de nuestros usuarios.
             </p>
             <img
               alt="arrow"
