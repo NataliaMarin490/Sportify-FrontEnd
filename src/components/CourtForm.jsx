@@ -20,6 +20,7 @@ const CourtForm = ({ onSubmit }) => {
   const [countries, setCountries] = useState([]);
   const [regions, setRegions] = useState([]);
   const [cities, setCities] = useState([]);
+  const [isLoading, setIsLoading] = useState(false); // Estado para manejar la carga
 
   useEffect(() => {
     fetch("http://localhost:8080/sports/status/5")
@@ -48,19 +49,10 @@ const CourtForm = ({ onSubmit }) => {
   }, [formData.country]);
 
   useEffect(() => {
-    console.log("Valor de region seleccionado:", formData.region);
     if (formData.region) {
       fetch(`http://localhost:8080/api/cities/by-region/${formData.region}`)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then((data) => {
-          console.log("Ciudades recibidas desde API:", data);
-          setCities(data);
-        })
+        .then((response) => response.json())
+        .then((data) => setCities(data))
         .catch((error) => console.error("Error fetching cities:", error));
     } else {
       setCities([]);
@@ -80,49 +72,71 @@ const CourtForm = ({ onSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (formData.images.length < 5) {
       alert("Debes subir al menos 5 imágenes.");
       return;
     }
-  
+
+    setIsLoading(true); // Activar el estado de carga
+
     const formDataToSend = new FormData();
-    formDataToSend.append("court", JSON.stringify({
+
+    // Crear el objeto JSON para la cancha con el formato requerido
+    const courtData = {
       name: formData.name,
-      sport: formData.sport,
-      country: formData.country,
-      address: formData.address,
-      capacity: formData.capacity,
       description: formData.description,
-      price: formData.price,
-      city: formData.city,
-      region: formData.region,
-      neighborhood: formData.neighborhood
-    }));
-  
+      capacity: formData.capacity,
+      pricePerHour: formData.price,
+      address: formData.address,
+      neighborhood: formData.neighborhood,
+      sportId: formData.sport,
+      cityId: formData.city,
+      statusId: 1, // Suponiendo que el statusId siempre es 1
+    };
+
+    formDataToSend.append("court", JSON.stringify(courtData));
+
+    // Agregar las imágenes al FormData
     formData.images.forEach((image) => {
       formDataToSend.append("images", image);
     });
-  
+
     try {
-      const response = await fetch("http://localhost:8080/add", {
+      const response = await fetch("http://localhost:8080/api/courts/add", {
         method: "POST",
         body: formDataToSend,
       });
-  
+
       if (!response.ok) {
         throw new Error("Error al guardar la cancha");
       }
-  
+
       const result = await response.json();
       console.log("Cancha creada:", result);
       alert("Cancha creada con éxito!");
+
+      // Limpiar el formulario
+      setFormData({
+        name: "",
+        sport: "",
+        country: "",
+        address: "",
+        capacity: "",
+        description: "",
+        price: "",
+        city: "",
+        region: "",
+        neighborhood: "",
+        images: [],
+      });
     } catch (error) {
       console.error("Error:", error);
       alert("Hubo un error al crear la cancha.");
+    } finally {
+      setIsLoading(false); // Desactivar el estado de carga
     }
   };
-  
 
   const removeImage = (index) => {
     const newImages = formData.images.filter((_, i) => i !== index);
@@ -293,7 +307,9 @@ const CourtForm = ({ onSubmit }) => {
           </div>
         </div>
         <div className="button-container">
-          <button type="submit">Guardar Cancha</button>
+          <button type="submit" disabled={isLoading}>
+            {isLoading ? "Guardando..." : "Guardar Cancha"}
+          </button>
         </div>
       </div>
     </form>

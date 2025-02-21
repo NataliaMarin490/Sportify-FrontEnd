@@ -28,9 +28,21 @@ const Admin = () => {
       }
     }
   }, [navigate]);
+  const [loading, setLoading] = useState(false);
 
   const handleDelete = (id) => {
-    dispatch({ type: "DELETE_COURT", payload: id });
+    if (window.confirm("¿Estás seguro de que quieres eliminar esta cancha?")) {
+      axios
+        .put(`http://localhost:8080/api/courts/delete/${id}`)
+        .then(() => {
+          dispatch({ type: "DELETE_COURT", payload: id });
+          alert("La cancha ha sido eliminada exitosamente.");
+        })
+        .catch((error) => {
+          console.error("Error al eliminar la cancha:", error);
+          alert("Hubo un error al eliminar la cancha.");
+        });
+    }
   };
 
   const handleEdit = (id) => {
@@ -70,7 +82,12 @@ const Admin = () => {
               <td>{court.name}</td>
               <td>
                 <button onClick={() => handleEdit(court.id)}>Editar</button>
-                <button onClick={() => handleDelete(court.id)}>Eliminar</button>
+                <button
+                  onClick={() => handleDelete(court.id)}
+                  disabled={loading}
+                >
+                  {loading ? "Eliminando..." : "Eliminar"}
+                </button>
               </td>
             </tr>
           ))}
