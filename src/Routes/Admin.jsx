@@ -1,16 +1,27 @@
-import React from 'react'
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "../Styles/admin.css";
-import { useContextGlobal } from '../Context/global.context';
-
-
+import { useContextGlobal } from "../Context/global.context";
+import { useNavigate } from "react-router-dom";
 
 const Admin = () => {
-  const {state, dispatch} = useContextGlobal();
+  const { state, dispatch } = useContextGlobal();
+  const navigate = useNavigate();
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    if (window) {
+      console.log(window.innerWidth, window.innerHeight);
+      if (window.innerWidth <= 700 && window.innerHeight <= 900) {
+        alert("Acceso restringido a esta vista.");
+        navigate('/');
+      }
+    }
+  }, [navigate]);
 
   const handleDelete = (id) => {
     dispatch({ type: "DELETE_COURT", payload: id });
   };
-
 
   const handleEdit = (id) => {
     console.log("Editar court con ID:", id);
@@ -20,6 +31,20 @@ const Admin = () => {
   return (
     <div className="admin-view">
       <h1>Admin Panel</h1>
+      <div className="top-bar">
+        <input
+          type="text"
+          placeholder="Buscar..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <button
+          onClick={() => navigate("/create-court")}
+          className="create-btn"
+        >
+          Crear
+        </button>
+      </div>
       <table>
         <thead>
           <tr>
@@ -44,6 +69,6 @@ const Admin = () => {
       {/* <button onClick={handleAdd}>Agregar Nueva Receta</button> */}
     </div>
   );
-}
+};
 
-export default Admin
+export default Admin;

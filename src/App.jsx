@@ -7,6 +7,8 @@ import Detail from "./Routes/Detail";
 import CreateAccount from "./Routes/CreateAccount.jsx";
 import Login from "./Routes/Login.jsx";
 import Admin from "./Routes/Admin.jsx";
+import CreateCourt from "./Routes/CreateCourt";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 function App() {
   return (
@@ -18,6 +20,7 @@ function App() {
         <Route path="/createAccount" element={<CreateAccount />} />
         <Route path="/login" element={<Login />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/create-court" element={<CreateCourt />} />
       </Route>
     </Routes>
   );

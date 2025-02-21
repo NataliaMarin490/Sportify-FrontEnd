@@ -1,0 +1,186 @@
+/* Contenedor principal */
+.create-court-container {
+  background-color: #ffffff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.court {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 700px;
+  width: 100%;
+  background: #f8f6f6;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos del formulario */
+.court-form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 20px;
+  gap: 60px;
+}
+
+h2 {
+  text-align: center;
+  width: 100%;
+  margin-bottom: 15px;
+  color: #20575a;
+}
+
+h3 {
+  text-align: left;
+  width: 100%;
+}
+
+.form-container {
+  display: flex;
+  align-items: stretch;
+  gap: 30px;
+  flex-wrap: wrap;
+  background-color: #ffffff;
+}
+
+.form-section {
+  flex: 1;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Etiquetas y campos de entrada */
+.court-form label {
+  font-weight: bold;
+  color: #20575a;
+  display: block;
+  margin-bottom: 5px;
+  font-size: 12px;
+}
+
+.court-form input,
+.court-form select,
+.court-form textarea {
+  width: 100%;
+  padding: 5px;
+  margin-bottom: 10px;
+  border: none;
+  border-bottom: 2px solid #20575a;
+  background: transparent;
+  font-size: 16px;
+  outline: none;
+  color: #000;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.court-form input:focus,
+.court-form select:focus,
+.court-form textarea:focus {
+  border-bottom: 2px solid #14403e;
+}
+
+/* Estilos del botón */
+.court-form button {
+  padding: 10px;
+  background-color: #20575a;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 40%;
+  margin-top: 10px;
+}
+
+.court-form button:hover {
+  background-color: #174346;
+}
+
+/* Estilos para vista previa de imágenes */
+.image-section {
+  width: 100%;
+  margin-top: 15px;
+}
+
+.image-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.image-box {
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.image-box button {
+  position: absolute;
+  top: -5%;
+  right: -5%;
+  transform: translate(50%, -50%);
+  background: #20575a;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 22px;
+  height: 2px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-upload {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #20575a;
+  color: white;
+  width: 60px;
+  height: 60px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  text-align: center;
+  position: relative;
+}
+
+.image-upload input {
+  display: none;
+}
+
+.image-upload i {
+  font-size: 42px;
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.button-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
