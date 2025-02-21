@@ -10,6 +10,7 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 5px;
+  margin: 10px;
 }
 
 .product {
@@ -17,13 +18,18 @@
   display: flex;
   margin: 5%;
   flex-direction: column;
-  align-items: center;
+  align-items: left;
 }
 
 .image-detail {
   width: 300px;
   border-radius: 5%;
   margin-bottom: 10px;
+  height: 80%;
+}
+
+.image-detail:hover {
+  transform: scale(1.1);
 }
 
 .detail-extra-info {
@@ -39,10 +45,10 @@
 
 .details-product {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   width: 100%;
   margin: 0;
-  font-size: 12px;
+  font-size: 14px;
   align-items: center;
   text-align: center;
   width: 40%;
@@ -65,4 +71,24 @@
   flex-wrap: wrap;
   gap: 30px;
   justify-content: center;
+}
+
+.aling-body {
+  width: auto;
+}
+
+.Mapa {
+  display: flex;
+  justify-items: center;
+  margin: 40px;
+}
+
+.galeria {
+  display: flex;
+  justify-content: left;
+  gap: 12px;
+}
+
+.contenedor-titulo {
+  display: flex;
 }
