@@ -9,12 +9,22 @@ const Admin = () => {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
 
+  function checkScreenSize() {
+    if (window.innerWidth < 890) {
+      document.body.innerHTML =
+        "<h2 style='text-align:center; padding: 50px;'>Esta página solo está disponible en versión de escritorio.</h2>";
+    }
+  }
+
+  window.onload = checkScreenSize;
+  window.onresize = checkScreenSize;
+
   useEffect(() => {
     if (window) {
       console.log(window.innerWidth, window.innerHeight);
       if (window.innerWidth <= 700 && window.innerHeight <= 900) {
         alert("Acceso restringido a esta vista.");
-        navigate('/');
+        navigate("/");
       }
     }
   }, [navigate]);

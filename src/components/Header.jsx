@@ -1,7 +1,5 @@
 import "../Styles/header.css";
 import { Link } from "react-router-dom";
-import LogoHeader from "../../public/icons/LogoHeader";
-
 import headerIcon from "../../public/logoHeader.svg";
 
 const Header = () => {
@@ -9,7 +7,7 @@ const Header = () => {
     <header>
       <div className="logo-container">
         <Link to="/">
-          <img alt="logo" src={headerIcon} className="logo-header"/>
+          <img alt="logo" src={headerIcon} className="logo-header" />
         </Link>
         <span>Donde empieza el partido</span>
       </div>
