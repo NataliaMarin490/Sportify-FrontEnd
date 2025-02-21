@@ -10,7 +10,7 @@ export const courts = [
     pricePerHour: 50000,
     address: "Calle 68",
     neighborhood: "Salitre",
-    image: ["../../public/icons/image 7.png", "../../public/icons/image 7.png"],
+    image: "../../public/icons/image 7.png"
   },
   {
     id: 2,
@@ -24,7 +24,7 @@ export const courts = [
     address: "Calle 68",
     neighborhood: "Salitre",
 
-    image: ["../../public/icons/image 7.png", "../../public/icons/image 7.png"],
+    image: "../../public/icons/image 7.png"
 
   },
   {
@@ -39,7 +39,7 @@ export const courts = [
     address: "Calle 68",
     neighborhood: "Salitre",
 
-    image: ["../../public/icons/image 7.png", "../../public/icons/image 7.png"],
+    image: "../../public/icons/image 7.png"
 
   },
   {
@@ -54,7 +54,7 @@ export const courts = [
     address: "Calle 68",
     neighborhood: "Salitre",
 
-    image: ["../../public/icons/image 7.png", "../../public/icons/image 7.png"],
+    image: "../../public/icons/image 7.png",
 
   },
   {
@@ -69,7 +69,7 @@ export const courts = [
     address: "Calle 68",
     neighborhood: "Salitre",
 
-    image: ["../../public/icons/image 7.png", "../../public/icons/image 7.png"],
+    image: "../../public/icons/image 7.png",
 
   },
   {
@@ -84,7 +84,7 @@ export const courts = [
     address: "Calle 68",
     neighborhood: "Salitre",
 
-    image: ["../../public/icons/image 7.png", "../../public/icons/image 7.png"],
+    image: "../../public/icons/image 7.png",
 
   },
   {
@@ -99,7 +99,7 @@ export const courts = [
     address: "Calle 68",
     neighborhood: "Salitre",
 
-    image: ["../../public/icons/image 7.png", "../../public/icons/image 7.png"],
+    image: "../../public/icons/image 7.png",
 
   },
   {
@@ -113,7 +113,8 @@ export const courts = [
     pricePerHour: 60000,
     address: "Calle 68",
     neighborhood: "Salitre",
-    image: ["../../public/icons/image 7.png", "../../public/icons/image 7.png"],
+
+    image: "../../public/icons/image 7.png",
 
   },
   {

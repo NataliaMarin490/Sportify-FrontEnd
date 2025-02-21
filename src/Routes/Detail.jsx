@@ -16,6 +16,10 @@ const Detail = () => {
   const { id } = useParams();
   console.log("Estado antes de actualizar:", state.courts);
 
+  useEffect(() => {
+    window.scrollTo(0, 0); // Esto llevará el scroll al principio de la página
+  }, []);
+
   const product =
     state.courts && Array.isArray(state.courts)
       ? state.courts.find((item) => item.id === parseInt(id)) // Convertir id a número
