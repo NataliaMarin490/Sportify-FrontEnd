@@ -21,6 +21,26 @@ const ContextProvider = ({ children }) => {
 
   // const url = `http://localhost:8080/api/courts/search`;
 
+      // Función para transformar imageUrl, ya sea que venga como string o array
+      function transformImageUrls(imageUrls) {
+        const defaultImage = DEFAULT_IMAGE;
+      
+        if (Array.isArray(imageUrls)) {
+          return imageUrls.map((url) => {
+            if (!url) return defaultImage;
+            const id = url.split("id=")[1]; // Extrae el ID de la URL
+            return id ? `https://lh3.googleusercontent.com/d/${id}=w500` : defaultImage;
+          });
+        } else if (typeof imageUrls === "string") {
+          if (!imageUrls) return defaultImage;
+          const id = imageUrls.split("id=")[1];
+          return id ? `https://lh3.googleusercontent.com/d/${id}=w500` : defaultImage;
+        }
+      
+        return defaultImage;
+      }
+
+
   useEffect(() => {
     const fetchCourts = async () => {
       try {
@@ -30,7 +50,7 @@ const ContextProvider = ({ children }) => {
 
         const modifiedData = response.data.map((court) => ({
           ...court,
-          imageUrl: transformImageUrls(court.imageUrl),
+        imageUrl: transformImageUrls(court.imageUrl), 
         }));
 
         dispatch({ type: "GET_COURTS", payload: modifiedData });
@@ -38,35 +58,7 @@ const ContextProvider = ({ children }) => {
         console.error("Error al obtener las canchas:", error);
       }
     };
-
-    // Función que extrae el id del parámetro "id" en la URL de Google Drive
-    function getIdFromUrl(url) {
-      if (typeof url !== "string") return null;
-      const match = url.match(/[?&]id=([^&]+)/);
-      return match ? match[1] : null;
-    }
-
-    // Función para transformar imageUrl, ya sea que venga como string o array
-    function transformImageUrls(imageUrls) {
-      // Define aquí tu imagen por defecto
-      const defaultImage = DEFAULT_IMAGE;
-
-      if (Array.isArray(imageUrls)) {
-        return imageUrls.map((url) => {
-          // Si el elemento es null, undefined o una cadena vacía, retorna la imagen por defecto
-          if (!url) return defaultImage;
-          const id = getIdFromUrl(url);
-          // Si se extrajo el id, se crea la nueva URL, sino se asigna la imagen por defecto
-          return id ? `https://lh3.google.com/u/0/d/${id}` : defaultImage;
-        });
-      } else if (typeof imageUrls === "string") {
-        if (!imageUrls) return defaultImage;
-        const id = getIdFromUrl(imageUrls);
-        return id ? `https://lh3.google.com/u/0/d/${id}` : defaultImage;
-      }
-      // En otros casos, se retorna la imagen por defecto
-      return defaultImage;
-    }
+    
 
     const fetchRecommendedCourts = async () => {
       try {
