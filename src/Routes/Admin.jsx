@@ -3,6 +3,7 @@ import axios from "axios";
 import "../Styles/admin.css";
 import { useContextGlobal } from "../Context/global.context";
 import { useNavigate } from "react-router-dom";
+import { FaEdit, FaTrash, FaSearch } from "react-icons/fa";
 
 const Admin = () => {
   const { state, dispatch } = useContextGlobal();
@@ -54,18 +55,21 @@ const Admin = () => {
     <div className="admin-view">
       <h1>Admin Panel</h1>
       <div className="top-bar">
-        <input
-          type="text"
-          placeholder="Buscar..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <button
+      <button
           onClick={() => navigate("/create-court")}
           className="create-btn"
         >
           Crear
         </button>
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Buscar..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <FaSearch className="search-icon" /> {/* Ícono de búsqueda */}
+        </div>
       </div>
       <table>
         <thead>
@@ -81,12 +85,18 @@ const Admin = () => {
               <td>{court.id}</td>
               <td>{court.name}</td>
               <td>
-                <button onClick={() => handleEdit(court.id)}>Editar</button>
+                <button
+                  onClick={() => handleEdit(court.id)}
+                  disabled={loading}
+                  className="icon-btn"
+                >
+                  <FaEdit /> {/* Icono de editar */}
+                </button>
                 <button
                   onClick={() => handleDelete(court.id)}
-                  disabled={loading}
+                  className="icon-btn"
                 >
-                  {loading ? "Eliminando..." : "Eliminar"}
+                  <FaTrash /> {/* Icono de eliminar */}
                 </button>
               </td>
             </tr>
