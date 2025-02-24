@@ -92,7 +92,7 @@ const CourtForm = ({ onSubmit }) => {
       neighborhood: formData.neighborhood,
       sportId: formData.sport,
       cityId: formData.city,
-      statusId: 1, // Suponiendo que el statusId siempre es 1
+      statusId: 1,
     };
 
     formDataToSend.append("court", JSON.stringify(courtData));

@@ -11,6 +11,7 @@ const Cards = ({ court }) => {
       sport: PropTypes.string.isRequired,
       city: PropTypes.string.isRequired,
       id: PropTypes.number.isRequired,
+      imageUrl: PropTypes.string.isRequired,
     }).isRequired,
   };
 
@@ -19,10 +20,10 @@ const Cards = ({ court }) => {
   return (
     <Link to={`/detail/${id}`}>
       <div className="cards-container">
-        <img className="fields" src={image} alt={name} />
+        <img className="fields" src={court.imageUrl[0]} alt={name} />
         <h3 className="cards-title">{name}</h3>
-        <h4 className="cards-text">${sport}</h4>
-        <h4 className="cards-text">${city}</h4>
+        <h4 className="cards-text">{sport}</h4>
+        <h4 className="cards-text">{city}</h4>
       </div>
     </Link>
   );

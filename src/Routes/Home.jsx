@@ -83,7 +83,7 @@ const Home = () => {
           <p className="recommendations-text">
             Conoce aquí las canchas más populares dentro de nuestros usuarios.
           </p>
-          <Recommendations courts={state.courts} />
+          <Recommendations courts={state.recommendedCourts} />
         </div>
       </main>
     </>
