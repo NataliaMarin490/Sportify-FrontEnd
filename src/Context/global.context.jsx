@@ -1,7 +1,6 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useReducer } from "react";
 import { reducer } from "../reducers/reducer";
-import { courts } from "./courts";
 
 const DEFAULT_IMAGE =
   "https://civideportes.com.co/wp-content/uploads/2019/10/C%C3%B3mo-hacer-una-cancha-de-f%C3%BAtbol.jpg";
@@ -21,25 +20,27 @@ const ContextProvider = ({ children }) => {
 
   // const url = `http://localhost:8080/api/courts/search`;
 
-      // Función para transformar imageUrl, ya sea que venga como string o array
-      function transformImageUrls(imageUrls) {
-        const defaultImage = DEFAULT_IMAGE;
-      
-        if (Array.isArray(imageUrls)) {
-          return imageUrls.map((url) => {
-            if (!url) return defaultImage;
-            const id = url.split("id=")[1]; // Extrae el ID de la URL
-            return id ? `https://lh3.googleusercontent.com/d/${id}=w500` : defaultImage;
-          });
-        } else if (typeof imageUrls === "string") {
-          if (!imageUrls) return defaultImage;
-          const id = imageUrls.split("id=")[1];
-          return id ? `https://lh3.googleusercontent.com/d/${id}=w500` : defaultImage;
-        }
-      
-        return defaultImage;
-      }
+  function transformImageUrls(imageUrls) {
+    const defaultImage = DEFAULT_IMAGE;
 
+    if (Array.isArray(imageUrls)) {
+      return imageUrls.map((url) => {
+        if (!url) return defaultImage;
+        const id = url.split("id=")[1]; // Extrae el ID de la URL
+        return id
+          ? `https://lh3.googleusercontent.com/d/${id}=w500`
+          : defaultImage;
+      });
+    } else if (typeof imageUrls === "string") {
+      if (!imageUrls) return defaultImage;
+      const id = imageUrls.split("id=")[1];
+      return id
+        ? `https://lh3.googleusercontent.com/d/${id}=w500`
+        : defaultImage;
+    }
+
+    return defaultImage;
+  }
 
   useEffect(() => {
     const fetchCourts = async () => {
@@ -50,7 +51,7 @@ const ContextProvider = ({ children }) => {
 
         const modifiedData = response.data.map((court) => ({
           ...court,
-        imageUrl: transformImageUrls(court.imageUrl), 
+          imageUrl: transformImageUrls(court.imageUrl),
         }));
 
         dispatch({ type: "GET_COURTS", payload: modifiedData });
@@ -58,7 +59,6 @@ const ContextProvider = ({ children }) => {
         console.error("Error al obtener las canchas:", error);
       }
     };
-    
 
     const fetchRecommendedCourts = async () => {
       try {

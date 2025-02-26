@@ -53,9 +53,10 @@ main {
   align-items: center;
   gap: 20px;
 
-  width: 70%;
+  width: 75%;
   height: 15%;
   padding: 0 10px;
+  margin: 0 10%;
   background-color: white;
   border-radius: 8px;
 }

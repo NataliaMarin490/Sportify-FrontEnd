@@ -13,7 +13,6 @@ const Header = () => {
       </div>
       <nav>
         <ul>
-          <li className="link">Canchas</li>
           <Link className="link" to="/createAccount">
             Crear cuenta
           </Link>

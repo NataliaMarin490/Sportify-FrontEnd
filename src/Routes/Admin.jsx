@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import "../Styles/admin.css";
 import { useContextGlobal } from "../Context/global.context";
@@ -59,7 +59,7 @@ const Admin = () => {
           onClick={() => navigate("/create-court")}
           className="create-btn"
         >
-          Crear
+          Agregar cancha
         </button>
         <div className="search-container">
           <input
@@ -68,7 +68,7 @@ const Admin = () => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <FaSearch className="search-icon" /> {/* Ícono de búsqueda */}
+          <FaSearch className="search-icon" />
         </div>
       </div>
       <table>
@@ -90,20 +90,19 @@ const Admin = () => {
                   disabled={loading}
                   className="icon-btn"
                 >
-                  <FaEdit /> {/* Icono de editar */}
+                  <FaEdit />
                 </button>
                 <button
                   onClick={() => handleDelete(court.id)}
                   className="icon-btn"
                 >
-                  <FaTrash /> {/* Icono de eliminar */}
+                  <FaTrash />
                 </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      {/* <button onClick={handleAdd}>Agregar Nueva Receta</button> */}
     </div>
   );
 };
