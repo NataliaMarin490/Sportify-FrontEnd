@@ -19,7 +19,7 @@ function App() {
         <Route path="/detail/:id" element={<Detail />} />
         <Route path="/createAccount" element={<CreateAccount />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/admin" element={<Admin />} />
+        <Route path="/administrador" element={<Admin />} />
         <Route path="/create-court" element={<CreateCourt />} />
       </Route>
     </Routes>
