@@ -19,7 +19,7 @@ const Detail = () => {
     state.courts && Array.isArray(state.courts)
       ? state.courts.find((item) => item.id === parseInt(id))
       : null;
-  console.log(product);
+
   return (
     <>
       <div className="detail-container">
