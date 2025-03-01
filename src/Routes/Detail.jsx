@@ -1,8 +1,5 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import CalendarWithTime from "../components/Calendar";
-import ReviewStars from "../components/Reviews";
 import BookingForm from "../components/BookingForm";
 import Map from "../components/Map";
 import "../Styles/detail.css";
@@ -13,75 +10,65 @@ import { useContextGlobal } from "../Context/global.context";
 const Detail = () => {
   const { state } = useContextGlobal();
   const { id } = useParams();
-  console.log("Estado antes de actualizar:", state.courts);
 
   useEffect(() => {
-    window.scrollTo(0, 0); // Esto llevará el scroll al principio de la página
+    window.scrollTo(0, 0);
   }, []);
 
   const product =
     state.courts && Array.isArray(state.courts)
-      ? state.courts.find((item) => item.id === parseInt(id)) // Convertir id a número
+      ? state.courts.find((item) => item.id === parseInt(id))
       : null;
-
+  console.log(product);
   return (
     <>
       <div className="detail-container">
+        <BackButton />
         <div className="detail">
           <div className="product">
-            <span className="contenedor-titulo">
-              <h4 className="title-product"> {product.name}</h4>
-            </span>
-            <div className="galeria">
+            <div className="gallery">
               <img
                 className="image-detail"
-                src={product.image}
+                src={product.imageUrl[id - 1]}
                 alt={product.name}
               />
               <ImageGallery />
             </div>
-
-            <div className="InfoProduct">
-              <h4 className="title-product"> $ </h4>
-              <p>{product.pricePerHour}</p>
-            </div>
-            <div className="contenedor-detail-product">
-              <div className="details-product">
-                <h4 className="title-product"> Categoria: </h4>
-                <p>{product.sport}</p>
-              </div>
-              <div className="details-product">
-                <h4 className="title-product"> Ciudad: </h4>
-                <p>{product.city}</p>
-              </div>
-              <div className="details-product">
-                <h4 className="title-product"> Descripción: </h4>
-                <p>{product.description}</p>
-              </div>
-              <div className="details-product">
-                <h4 className="title-product"> Capacidad: </h4>
-                <p>{product.capacity}</p>
-              </div>
-              <div className="details-product">
-                <h4 className="title-product"> Dirección: </h4>
-                <p>{product.address}</p>
-              </div>
-              <div className="details-product">
-                <h4 className="title-product"> Localidad: </h4>
-                <p>{product.neighborhood}</p>
-              </div>
-            </div>
           </div>
-          <CalendarWithTime />
-          <span className="aling-body">
-            <BackButton />
-          </span>
+          <div className="product-info">
+            <div className="description-container">
+              <div className="detail-product-container">
+                <div className="detail-header">
+                  <h4 className="title-product"> {product.name} </h4>
+                  <span>4.5 Stars | 450 Reseñas</span>
+                </div>
+                <div className="detail-content">
+                  <span>{product.pricePerHour}</span>
+                  <span>{product.city}</span>
+                  <span>{product.sport}</span>
+                  <span>{product.status}</span>
+                </div>
+              </div>
+              <div className="detail-product-container">
+                <div className="detail-header">
+                  <h4 className="title-product"> Características </h4>
+                </div>
+                <div className="detail-content">
+                  <span>{product.pricePerHour}</span>
+                  <span>{product.city}</span>
+                  <span>{product.sport}</span>
+                  <span>{product.status}</span>
+                  <span>{product.sport}</span>
+                  <span>{product.status}</span>
+                </div>
+              </div>
+            </div>
+
+            <BookingForm />
+          </div>
         </div>
-        <div className="detail-extra-info">
-          <ReviewStars />
-          <BookingForm />
-        </div>
-        <div className="Mapa">
+        <div className="map">
+          <h4 className="title-product"> Ubicación </h4>
           <Map />
         </div>
       </div>
