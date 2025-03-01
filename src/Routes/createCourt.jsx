@@ -1,4 +1,3 @@
-import React from "react";
 import CourtForm from "../components/CourtForm";
 
 const CreateCourt = () => {
