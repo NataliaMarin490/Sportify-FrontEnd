@@ -22,7 +22,6 @@ const Admin = () => {
 
   useEffect(() => {
     if (window) {
-      console.log(window.innerWidth, window.innerHeight);
       if (window.innerWidth <= 700 && window.innerHeight <= 900) {
         alert("Acceso restringido a esta vista.");
         navigate("/");
