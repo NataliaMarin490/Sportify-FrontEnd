@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "../Styles/CreateCourt.css";
 
 const CourtForm = ({ onSubmit }) => {
@@ -113,7 +113,6 @@ const CourtForm = ({ onSubmit }) => {
       }
 
       const result = await response.json();
-      console.log("Cancha creada:", result);
       alert("Cancha creada con éxito!");
 
       // Limpiar el formulario

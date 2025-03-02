@@ -8,6 +8,7 @@ import CreateAccount from "./Routes/CreateAccount.jsx";
 import Login from "./Routes/Login.jsx";
 import CreateCourt from "./Routes/CreateCourt";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import PerfilUser from "./Routes/PerfilUser.jsx";
 import AdminCourts from "./Routes/AdminCourts.jsx";
 import AdminCategories from "./Routes/AdminCategories.jsx";
 import AdminUsers from "./Routes/AdminUsers.jsx";
@@ -24,6 +25,7 @@ function App() {
         <Route path="/createAccount" element={<CreateAccount />} />
         <Route path="/login" element={<Login />} />
         <Route path="/create-court" element={<CreateCourt />} />
+        <Route path="/profile" element={<PerfilUser />} />
       </Route>
       <Route path="/administration" element={<AdminLayout />}>
         <Route index element={<AdminCourts />} />
