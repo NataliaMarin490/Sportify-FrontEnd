@@ -1,31 +1,75 @@
 import "../Styles/formsUser.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 const FormsUser = ({ user = {}, onSubmit }) => {
   const location = useLocation();
   const isRegisterPage = location.pathname === "/createAccount";
   const [isEditing, setIsEditing] = useState(Object.keys(user).length === 0);
+  const [countries, setCountries] = useState([]);
+  const [regions, setRegions] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [errors, setErrors] = useState({});
+
   const [userData, setUserData] = useState({
     name: user.name || "",
     lastName: user.lastName || "",
     email: user.email || "",
-    phone: user.phone || "",
-    city: user.city || "",
-    fechaNacimiento: user.fechaNacimiento || "",
+    phoneNumber: user.phoneNumber || "",
+    cityId: user.cityId || "",
+    birthdate: user.birthdate || "",
     password: user.password || "",
     confirmpassword: user.confirmpassword || "",
+    country: user.country || "",
+    region: user.region || "",
   });
-  const [errors, setErrors] = useState({
-    name: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    city: "",
-    fechaNacimiento: "",
-    password: "",
-    confirmpassword: "",
-  });
+
+  useEffect(() => {
+    setUserData((prevState) => ({
+      ...prevState,
+      name: user?.name || "",
+      lastName: user?.lastName || "",
+      email: user?.email || "",
+      phoneNumber: user?.phoneNumber || "",
+      cityId: user?.cityId || "",
+      birthdate: user?.birthdate || "",
+      password: user?.password || "",
+      confirmpassword: user?.confirmpassword || "",
+      country: user?.country ? String(user.country) : "",
+      region: user?.region || "",
+    }));
+  }, [user]);
+
+  useEffect(() => {
+    fetch("http://localhost:8080/api/countries/search")
+      .then((response) => response.json())
+      .then((data) => setCountries(data))
+      .catch((error) => console.error("Error fetching countries:", error));
+  }, []);
+
+  useEffect(() => {
+    if (userData.country) {
+      fetch(`http://localhost:8080/api/regions/by-country/${userData.country}`)
+        .then((response) => response.json())
+        .then((data) => setRegions(data))
+        .catch((error) => console.error("Error fetching regions:", error));
+    } else {
+      setRegions([]);
+      setCities([]);
+    }
+  }, [userData.country]);
+
+  useEffect(() => {
+    if (userData.region) {
+      fetch(`http://localhost:8080/api/cities/by-region/${userData.region}`)
+        .then((response) => response.json())
+        .then((data) => setCities(data))
+        .catch((error) => console.error("Error fetching cities:", error));
+    } else {
+      setCities([]);
+    }
+  }, [userData.region]);
+
   const [successMessage, setSuccessMessage] = useState("");
 
   const handleChange = (e) => {
@@ -52,10 +96,10 @@ const FormsUser = ({ user = {}, onSubmit }) => {
     }
 
     // Validación de teléfono: solo número y obligatorio
-    if (!userData.phone) {
-      newErrors.phone = "El número celular es obligatorio";
-    } else if (isNaN(userData.phone)) {
-      newErrors.phone = "El número celular debe ser solo numérico";
+    if (!userData.phoneNumber) {
+      newErrors.phoneNumber = "El número celular es obligatorio";
+    } else if (isNaN(userData.phoneNumber)) {
+      newErrors.phoneNumber = "El número celular debe ser solo numérico";
     }
 
     if (!userData.email) {
@@ -64,11 +108,11 @@ const FormsUser = ({ user = {}, onSubmit }) => {
       newErrors.email = "Correo electrónico inválido";
     }
 
-    if (!userData.city) {
-      newErrors.city = "La ciudad es obligatoria";
+    if (!userData.cityId) {
+      newErrors.cityId = "La ciudad es obligatoria";
     }
-    if (!userData.fechaNacimiento) {
-      newErrors.fechaNacimiento = "La fecha de nacimiento es obligatoria";
+    if (!userData.birthdate) {
+      newErrors.birthdate = "La fecha de nacimiento es obligatoria";
     }
 
     // Validación de la contraseña (mínimo 6 caracteres)
@@ -104,11 +148,13 @@ const FormsUser = ({ user = {}, onSubmit }) => {
       name: "",
       lastName: "",
       email: "",
-      phone: "",
-      city: "",
-      fechaNacimiento: "",
+      phoneNumber: "",
+      cityId: "",
+      birthdate: "",
       password: "",
       confirmpassword: "",
+      country: "",
+      region: "",
     });
 
     // Desactivar el modo de edición
@@ -200,14 +246,16 @@ const FormsUser = ({ user = {}, onSubmit }) => {
             isRegisterPage ? "border-green-500" : "border-red-500"
           }`}
           type="tel"
-          name="phone"
+          name="phoneNumber"
           placeholder="ej. +XXX XXXX XXXX"
-          value={userData.phone}
+          value={userData.phoneNumber}
           onChange={handleChange}
           disabled={!isEditing}
           required
         />
-        {errors.phone && <p className="error-message">{errors.phone}</p>}
+        {errors.phoneNumber && (
+          <p className="error-message">{errors.phoneNumber}</p>
+        )}
       </div>
 
       {/* Campo Fecha Nacimiento */}
@@ -222,16 +270,100 @@ const FormsUser = ({ user = {}, onSubmit }) => {
             isRegisterPage ? "border-green-500" : "border-red-500"
           }`}
           type="date"
-          name="fechaNacimiento"
+          name="birthdate"
           placeholder="ej. 01/01/2000"
-          value={userData.fechaNacimiento}
+          value={userData.birthdate}
           onChange={handleChange}
           disabled={!isEditing}
           required
         />
-        {errors.fechaNacimiento && (
-          <p className="error-message">{errors.fechaNacimiento}</p>
+        {errors.birthdate && (
+          <p className="error-message">{errors.birthdate}</p>
         )}
+      </div>
+
+      {/* Campo Paìs*/}
+      <div
+        className={`input-container ${
+          isRegisterPage ? "input-color-create" : "input-color-profile"
+        }`}
+      >
+        <label className="label">
+          País:
+          <select
+            className={`entrada-registrer ${
+              isRegisterPage ? "border-green-500" : "border-red-500"
+            }`}
+            name="country"
+            value={userData.country}
+            onChange={handleChange}
+            required
+            disabled={!isEditing}
+          >
+            {isEditing || isRegisterPage ? (
+              <>
+                <option value="">Selecciona un país</option>
+                {countries.map((country) => (
+                  <option key={country.idCountry} value={country.idCountry}>
+                    {country.countryName}
+                  </option>
+                ))}
+              </>
+            ) : (
+              <>
+                {countries.map((country) =>
+                  parseInt(country.idCountry) === parseInt(userData.country) ? (
+                    <option key={country.idCountry} value={country.idCountry}>
+                      {country.countryName}
+                    </option>
+                  ) : null
+                )}
+              </>
+            )}
+          </select>
+        </label>
+      </div>
+
+      {/* Campo Region*/}
+      <div
+        className={`input-container ${
+          isRegisterPage ? "input-color-create" : "input-color-profile"
+        }`}
+      >
+        <label className="label">
+          Región/Estado:
+          <select
+            className={`entrada-registrer ${
+              isRegisterPage ? "border-green-500" : "border-red-500"
+            }`}
+            name="region"
+            value={userData.region}
+            onChange={handleChange}
+            required
+            disabled={!isEditing}
+          >
+            {isEditing || isRegisterPage ? (
+              <>
+                <option value="">Selecciona una región</option>
+                {regions.map((region) => (
+                  <option key={region.id} value={region.id}>
+                    {region.name}
+                  </option>
+                ))}
+              </>
+            ) : (
+              <>
+                {regions.map((region) =>
+                  region.id === userData.region ? (
+                    <option key={region.id} value={region.id}>
+                      {region.name}
+                    </option>
+                  ) : null
+                )}
+              </>
+            )}
+          </select>
+        </label>
       </div>
 
       {/* Campo Ciudad*/}
@@ -240,22 +372,42 @@ const FormsUser = ({ user = {}, onSubmit }) => {
           isRegisterPage ? "input-color-create" : "input-color-profile"
         }`}
       >
-        <label className="label">Ciudad</label>
-        <input
-          className={`entrada-registrer ${
-            isRegisterPage ? "border-green-500" : "border-red-500"
-          }`}
-          type="text"
-          name="city"
-          placeholder="ej. Medellín"
-          value={userData.city}
-          onChange={handleChange}
-          disabled={!isEditing}
-          required
-        />
-        {errors.fechaNacimiento && (
-          <p className="error-message">{errors.fechaNacimiento}</p>
-        )}
+        <label className="label">
+          Ciudad:
+          <select
+            className={`entrada-registrer ${
+              isRegisterPage ? "border-green-500" : "border-red-500"
+            }`}
+            name="cityId"
+            value={userData.cityId}
+            onChange={handleChange}
+            required
+            disabled={!isEditing}
+          >
+            {isEditing || isRegisterPage ? (
+              <>
+                <option value="">Selecciona una ciudad</option>
+                {cities.map((city) => (
+                  <option key={city.id} value={city.id}>
+                    {city.name}
+                  </option>
+                ))}
+              </>
+            ) : (
+              <>
+                {cities.map((city) =>
+                  city.id === userData.cityId ? (
+                    <option key={city.id} value={city.id}>
+                      {city.name}
+                    </option>
+                  ) : null
+                )}
+              </>
+            )}
+          </select>
+        </label>
+
+        {errors.cityId && <p className="error-message">{errors.cityId}</p>}
       </div>
 
       {/* Campo Contraseña */}

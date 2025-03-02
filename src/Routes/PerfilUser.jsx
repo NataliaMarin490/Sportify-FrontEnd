@@ -4,15 +4,18 @@ import FormsUser from "../components/FormsUser.jsx";
 import UserAvatar from "../components/UserAvatar.jsx";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
+
 const user = {
   name: "Juan",
   lastName: "Pérez",
   email: "juan@example.com",
-  phone: "123456789",
-  city: "Medellín",
-  fechaNacimiento: "2000-12-01",
+  phoneNumber: "123456789",
+  cityId: 1,
+  birthdate: "2000-12-01",
   password: "********",
   confirmpassword: "*******",
+  country: 1,
+  region: 1,
 };
 
 const PerfilUser = () => {
@@ -44,7 +47,6 @@ const PerfilUser = () => {
       })
       .then((data) => {
         console.log("Usuario registrado:", data);
-        // Aquí puedes manejar la respuesta del servidor, por ejemplo, mostrar un mensaje o redirigir
       })
       .catch((error) => {
         console.error("Error al registrar usuario:", error);
