@@ -1,117 +1,48 @@
 import "../Styles/createAccount.css";
+import FormsUser from "../components/FormsUser.jsx";
 
 const CreateAccount = () => {
-  /*const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    role: "user",
-  });
+  const handleRegister = (newUser) => {
+    console.log("Registrando usuario:", newUser);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    // Enviar datos al backend
+    fetch("http://localhost:8080/api/auth/register", {
+      method: "POST", // Método POST para enviar datos
+      headers: {
+        "Content-Type": "application/json", // Asegurarse de que los datos sean enviados en formato JSON
+      },
+      body: JSON.stringify(newUser), // Convertir el objeto a JSON
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error en la solicitud");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Usuario registrado:", data);
+        // Aquí puedes manejar la respuesta del servidor, por ejemplo, mostrar un mensaje o redirigir
+      })
+      .catch((error) => {
+        console.error("Error al registrar usuario:", error);
+      });
   };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("User Data:", formData);
-  };*/
 
   return (
     <div className="account-container">
-      <form
-        className="form" //</div>onSubmit={handleSubmit}
-      >
-        <h2>Crear Cuenta</h2>
-        <div className="input-container">
-          <label>Nombre Completo</label>
-          <input
-            className="entrada"
-            type="text"
-            name="name"
-            // value={formData.name}
-            //onChange={handleChange}
-            required
-          />
+      <div className="details-register-container">
+        <div className="details-register-subcontainer">
+          <img
+            className="imagen-account"
+            src="public\images\crearCuenta\side-view-female-friends-playing-basketball.png"
+            alt="friends-Female"
+          ></img>
+          <div className="forms-title">
+            <span className="titulo-account">Crea tu cuenta</span>
+            <FormsUser user={{}} onSubmit={handleRegister} />
+          </div>
         </div>
-        <div className="input-container">
-          <label>Apellidos</label>
-          <input
-            className="entrada"
-            type="text"
-            name="name"
-            // value={formData.name}
-            //onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="input-container">
-          <label>Correo electrónico</label>
-          <input
-            className="entrada"
-            type="email"
-            name="email"
-            //value={formData.email}
-            //onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="input-container">
-          <label>Contraseña</label>
-          <input
-            className="entrada"
-            type="password"
-            name="password"
-            //value={formData.password}
-            //onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="input-container">
-          <label>Confirma Contraseña</label>
-          <input
-            className="entrada"
-            type="password"
-            name="password"
-            //value={formData.password}
-            //onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="input-container">
-          <label>Fecha Nacimiento</label>
-          <input
-            className="entrada"
-            type="date"
-            name="birthdate"
-            //value={formData.password}
-            //onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="input-container">
-          <label>Ciudad</label>
-          <input
-            className="entrada"
-            type="text"
-            name="city"
-            //value={formData.password}
-            //onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="input-container">
-          <label>Tipo de Usuario</label>
-          <select
-            name="role" //</div>value={formData.role} onChange={handleChange}
-          >
-            <option value="user">Usuario</option>
-            <option value="admin">Administrador</option>
-          </select>
-        </div>
-        <button>Registrarse</button>
-      </form>
+      </div>
     </div>
   );
 };

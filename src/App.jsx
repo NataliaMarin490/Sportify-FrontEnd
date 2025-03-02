@@ -9,6 +9,7 @@ import Login from "./Routes/Login.jsx";
 import Admin from "./Routes/Admin.jsx";
 import CreateCourt from "./Routes/CreateCourt";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import PerfilUser from "./Routes/PerfilUser.jsx";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/administrador" element={<Admin />} />
         <Route path="/create-court" element={<CreateCourt />} />
+        <Route path="/profile" element={<PerfilUser />} />
       </Route>
     </Routes>
   );
