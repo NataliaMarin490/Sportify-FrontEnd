@@ -1,48 +1,54 @@
 .account-container {
   display: flex;
-  flex-direction: column;
-  background-image: url("/icons/imagencrear.jpg");
+  background-image: linear-gradient(
+      rgba(138, 135, 135, 0.5),
+      rgba(129, 129, 131, 0.5)
+    ),
+    url("public/images/crearCuenta/Fondo.jpg");
   background-size: cover;
   background-position: center;
   min-height: 100vh;
   justify-content: center;
   align-items: center;
+  font-family: "Poppins", serif;
 }
 
-form {
+.details-register-container {
+  display: flex;
+  width: 95%;
+  height: 80%;
+  margin: 5%;
   background-color: white;
-  color: rgba(32, 87, 90, 1);
-  font-weight: bold;
-  width: 50%;
-  border-radius: 10%;   
-}
-
-h2 {
-  text-align: center;
-  color: rgba(32, 87, 90, 1);
-}
-
-.input-container {
-  margin-top: 5px;
-  margin-bottom: 5px;
   justify-content: center;
+}
+
+.details-register-subcontainer {
+  display: flex;
+  margin: 5%;
+  gap: 5%;
+  width: 100%;
+  justify-content: center;
+}
+
+.titulo-account {
+  color: black;
+  font-family: "Poppins", serif;
+  font-size: 35px;
+  margin-bottom: 10%;
+  font-weight: bold;
+  margin-left: 8%;
+  margin-right: 8%;
+  text-align: center;
+  width: 95%;
+}
+
+.imagen-account {
+  width: 50%;
+}
+
+.forms-title {
   display: flex;
   flex-direction: column;
-}
-
-button {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.entrada {
-  border-bottom: 0.5px solid rgba(32, 87, 90, 1);
-  border-width: 0.5px;
-  color: rgba(32, 87, 90, 1);
-  border-radius: 0%;
-  width: 150px;
-}
-
-label {
-  font-size: 10px;
+  width: 95%;
+  align-items : center;
 }

@@ -1,0 +1,76 @@
+.container-profile-ppal {
+  display: flex;
+  flex-direction: column;
+  background-image: linear-gradient(
+      rgba(138, 135, 135, 0.5),
+      rgba(129, 129, 131, 0.5)
+    ),
+    url("public/images/crearCuenta/Fondo.jpg");
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  font-family: "Poppins", serif;
+}
+
+.back-button-perfil {
+  width: 5%;
+  align-self: self-end;
+  margin-right: 5%;
+  margin-top: 5%;
+}
+
+.container-profile {
+  display: flex;
+  height: 80%;
+  margin: 5%;
+  background-color: white;
+  gap: 3%;
+}
+
+.titulo-account {
+  color: black;
+  font-family: "Poppins", serif;
+  font-size: 35px;
+  margin-bottom: 10%;
+  font-weight: bold;
+  margin-left: 8%;
+  margin-right: 8%;
+  text-align: center;
+}
+
+.imagen-account {
+  width: 50%;
+}
+
+.subcontainer-pofile {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  margin-top: 5%;
+  margin-bottom: 3%;
+}
+
+/* Estilos para ocultar el Header en la página de perfil o creación de cuenta */
+.hidden {
+  display: none !important;
+}
+
+/* Ajustar la visibilidad del Header cuando se necesita */
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Si quieres que el UserAvatar se vea al frente */
+.user-avatar-container {
+  position: absolute;
+  top: 10px;
+  right: 0px;
+  z-index: 10;
+}
+
+.hide-nav header nav {
+  display: none;
+}
