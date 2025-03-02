@@ -1,20 +1,18 @@
-.sidebar {
-    
+.sidebar { 
     background-color: var(--header-color); 
-    color: black;
     padding: 25px; 
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); 
     position: fixed;
-    margin-top: 18px;
-    padding-bottom: 100px;
+    padding-bottom: 95px;
    
    
   }
   
   .sidebar h2 {
-    margin-bottom: 20px; /* Espaciado debajo del título */
+    margin-bottom: 20px; 
     font-size: 1.5rem; /* Tamaño del título */
-    text-align: center; /* Centrar el título */
+    text-align: center; 
+    color: var(--footer-color);
   }
   
   .sidebar ul {

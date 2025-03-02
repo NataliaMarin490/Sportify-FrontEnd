@@ -1,12 +1,10 @@
-.admin-layout {
+.adminLayout {
   width: 95%;
   max-width: 1500px; 
-  margin: 10px auto; 
-
+  margin: 12px auto; 
   }
   
-
-  .admin-content {
+  .adminContent {
     flex: 1; 
     margin-left: 200px;
     padding: 10px; 

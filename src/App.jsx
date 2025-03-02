@@ -27,7 +27,7 @@ function App() {
         <Route path="/create-court" element={<CreateCourt />} />
         <Route path="/profile" element={<PerfilUser />} />
       </Route>
-      <Route path="/administration" element={<AdminLayout />}>
+      <Route path="/administracion" element={<AdminLayout />}>
         <Route index element={<AdminCourts />} />
         <Route path="categories" element={<AdminCategories />} />
         <Route path="users" element={<AdminUsers />} />

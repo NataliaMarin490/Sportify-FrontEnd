@@ -5,7 +5,7 @@ import { useContextGlobal } from "../Context/global.context";
 import { useEffect } from "react";
 import { adminRoutes } from "../components/Sidebar";
 import Sidebar from "../components/Sidebar";
-import styles from "../Styles/adminLayout.module.css"; 
+import "../Styles/adminLayout.css"; 
 
 const AdminLayout = () => {
   const { state, toggleSidebar } = useContextGlobal();
@@ -21,10 +21,10 @@ const AdminLayout = () => {
   return (
     <>
       <Header />
-      <div className={styles["admin-layout"]}>
+      <div className="adminLayout">
         {state.showSidebar && <Sidebar />}
-        <div className={styles["admin-content"]}>
-          <Outlet /> {/* Aquí se renderizan las rutas de Administración */}
+        <div className="adminContent">
+          <Outlet /> 
         </div>
       </div>
       <Footer />
