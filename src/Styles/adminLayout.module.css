@@ -1,0 +1,13 @@
+.admin-layout {
+  width: 95%;
+  max-width: 1500px; 
+  margin: 10px auto; 
+
+  }
+  
+
+  .admin-content {
+    flex: 1; 
+    margin-left: 200px;
+    padding: 10px; 
+  }

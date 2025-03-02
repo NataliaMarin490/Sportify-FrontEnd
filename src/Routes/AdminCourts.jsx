@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import "../Styles/admin.css";
+import "../Styles/adminCourts.css";
 import { useContextGlobal } from "../Context/global.context";
 import { useNavigate } from "react-router-dom";
 import { FaEdit, FaTrash, FaSearch } from "react-icons/fa";
 
-const Admin = () => {
+
+const AdminCourts = () => {
   const { state, dispatch } = useContextGlobal();
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
@@ -53,14 +54,8 @@ const Admin = () => {
 
   return (
     <div className="admin-view">
-      <h1>Admin Panel</h1>
+  
       <div className="top-bar">
-      <button
-          onClick={() => navigate("/create-court")}
-          className="create-btn"
-        >
-          Agregar cancha
-        </button>
         <div className="search-container">
           <input
             type="text"
@@ -70,6 +65,11 @@ const Admin = () => {
           />
           <FaSearch className="search-icon" />
         </div>
+        <button
+          onClick={() => navigate("/create-court")}
+          className="create-btn">
+          Agregar cancha
+        </button>
       </div>
       <table>
         <thead>
@@ -107,4 +107,4 @@ const Admin = () => {
   );
 };
 
-export default Admin;
+export default AdminCourts;

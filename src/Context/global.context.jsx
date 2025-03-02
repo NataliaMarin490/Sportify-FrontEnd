@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createContext, useContext, useEffect, useReducer } from "react";
+import { createContext, useCallback, useContext, useEffect, useReducer } from "react";
 import { reducer } from "../reducers/reducer";
 
 const DEFAULT_IMAGE =
@@ -14,6 +14,10 @@ const initialState = {
 
 const ContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  const toggleSidebar = useCallback((show) => {
+    dispatch({ type: "TOGGLE_SIDEBAR", payload: show });
+  }, [dispatch]);
 
   //const [cart, setCart] = useState([]);
   //const [courts, setcourts] = useState([]);
@@ -82,7 +86,7 @@ const ContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <ContextGlobal.Provider value={{ state, dispatch }}>
+    <ContextGlobal.Provider value={{ state, dispatch, toggleSidebar }}>
       {children}
     </ContextGlobal.Provider>
   );

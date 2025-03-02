@@ -26,6 +26,12 @@ export const reducer = (state, action) => {
         courts: state.courts.filter((court) => court.id !== action.payload),
       };
 
+    case "TOGGLE_SIDEBAR":
+      return {
+        ...state,
+        showSidebar: action.payload,
+      };
+
     default:
       throw new Error("Acción no existente");
   }
