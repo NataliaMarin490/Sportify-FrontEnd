@@ -47,6 +47,7 @@ const PerfilUser = () => {
       })
       .then((data) => {
         console.log("Usuario registrado:", data);
+
       })
       .catch((error) => {
         console.error("Error al registrar usuario:", error);

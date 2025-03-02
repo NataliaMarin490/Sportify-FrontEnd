@@ -70,6 +70,7 @@ const FormsUser = ({ user = {}, onSubmit }) => {
     }
   }, [userData.region]);
 
+
   const [successMessage, setSuccessMessage] = useState("");
 
   const handleChange = (e) => {
@@ -96,10 +97,12 @@ const FormsUser = ({ user = {}, onSubmit }) => {
     }
 
     // Validación de teléfono: solo número y obligatorio
+
     if (!userData.phoneNumber) {
       newErrors.phoneNumber = "El número celular es obligatorio";
     } else if (isNaN(userData.phoneNumber)) {
       newErrors.phoneNumber = "El número celular debe ser solo numérico";
+
     }
 
     if (!userData.email) {
@@ -108,11 +111,13 @@ const FormsUser = ({ user = {}, onSubmit }) => {
       newErrors.email = "Correo electrónico inválido";
     }
 
+
     if (!userData.cityId) {
       newErrors.cityId = "La ciudad es obligatoria";
     }
     if (!userData.birthdate) {
       newErrors.birthdate = "La fecha de nacimiento es obligatoria";
+
     }
 
     // Validación de la contraseña (mínimo 6 caracteres)
@@ -249,6 +254,7 @@ const FormsUser = ({ user = {}, onSubmit }) => {
           name="phoneNumber"
           placeholder="ej. +XXX XXXX XXXX"
           value={userData.phoneNumber}
+
           onChange={handleChange}
           disabled={!isEditing}
           required
@@ -256,6 +262,7 @@ const FormsUser = ({ user = {}, onSubmit }) => {
         {errors.phoneNumber && (
           <p className="error-message">{errors.phoneNumber}</p>
         )}
+
       </div>
 
       {/* Campo Fecha Nacimiento */}
@@ -273,10 +280,12 @@ const FormsUser = ({ user = {}, onSubmit }) => {
           name="birthdate"
           placeholder="ej. 01/01/2000"
           value={userData.birthdate}
+
           onChange={handleChange}
           disabled={!isEditing}
           required
         />
+
         {errors.birthdate && (
           <p className="error-message">{errors.birthdate}</p>
         )}
@@ -366,12 +375,14 @@ const FormsUser = ({ user = {}, onSubmit }) => {
         </label>
       </div>
 
+
       {/* Campo Ciudad*/}
       <div
         className={`input-container ${
           isRegisterPage ? "input-color-create" : "input-color-profile"
         }`}
       >
+
         <label className="label">
           Ciudad:
           <select
@@ -408,6 +419,7 @@ const FormsUser = ({ user = {}, onSubmit }) => {
         </label>
 
         {errors.cityId && <p className="error-message">{errors.cityId}</p>}
+
       </div>
 
       {/* Campo Contraseña */}
