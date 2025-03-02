@@ -10,6 +10,7 @@ const ContextGlobal = createContext();
 const initialState = {
   courts: [],
   recommendedCourts: [],
+  toggleSidebar: true,
 };
 
 const ContextProvider = ({ children }) => {

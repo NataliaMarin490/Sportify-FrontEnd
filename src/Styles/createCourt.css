@@ -81,6 +81,10 @@ h3 {
   color: #000;
   border-radius: 0;
   box-shadow: none;
+
+  font-family: "Poppins", serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
 .court-form input:focus,

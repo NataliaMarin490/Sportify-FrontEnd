@@ -13,6 +13,7 @@ import AdminCategories from "./Routes/AdminCategories.jsx";
 import AdminUsers from "./Routes/AdminUsers.jsx";
 import AdminFeatures from "./Routes/AdminFeatures.jsx";
 import AdminLayout from "./Layouts/AdminLayout.jsx";
+import PerfilUser from "./Routes/PerfilUser.jsx";
 
 function App() {
   return (
@@ -24,12 +25,6 @@ function App() {
         <Route path="/createAccount" element={<CreateAccount />} />
         <Route path="/login" element={<Login />} />
         <Route path="/create-court" element={<CreateCourt />} />
-      </Route>
-      <Route path="/administration" element={<AdminLayout />}>
-        <Route index element={<AdminCourts />} />
-        <Route path="categories" element={<AdminCategories />} />
-        <Route path="users" element={<AdminUsers />} />
-        <Route path="features" element={<AdminFeatures />} />
       </Route>
     </Routes>
   );

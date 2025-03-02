@@ -1,0 +1,67 @@
+/* UserAvatar.css */
+
+.user-avatar-container {
+  position: fixed; /* Fijarlo en la pantalla */
+  top: 10px; /* Separación desde la parte superior */
+  right: 20px; /* Separación desde la derecha */
+  z-index: 1000; /* Asegurar que esté por encima del contenido */
+}
+
+.user-avatar {
+  width: 60px; /* Tamaño del círculo */
+  height: 60px;
+  background-color: #0f0f0f; /* Color de fondo del círculo */
+  color: white;
+  border-radius: 50%; /* Hace que el contenedor sea redondo */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25px;
+  cursor: pointer;
+  user-select: none; /* Evita que el texto sea seleccionado */
+  transition: background-color 0.3s ease;
+}
+
+/* Cambio de color al hacer hover sobre el avatar */
+.user-avatar:hover {
+  background-color: #45a049;
+  transform: scale(1.1);
+}
+
+/* Estilos del menú desplegable */
+.dropdown-menu {
+  position: absolute;
+  top: 65px; /* Se coloca justo debajo del avatar */
+  right: 0;
+  background-color: rgba(127, 191, 157, 1);
+  border: 1px solid #ddd;
+  color: white;
+  border-radius: 5px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  width: 150px;
+  z-index: 1000; /* Asegura que el menú esté por encima de otros elementos */
+}
+
+.detail-menu {
+  display: flex;
+
+  margin: 5%;
+}
+
+.link:hover {
+  background-color: rgba(69, 125, 88, 1);
+}
+
+.link {
+  cursor: pointer;
+  color: white;
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.detail-menu img:hover {
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  transform: scale(1.2);
+}

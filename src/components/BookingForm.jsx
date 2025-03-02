@@ -35,9 +35,8 @@ const BookingForm = () => {
   };
 
   return (
-    <div className="form-container">
+    <div className="booking-form-container">
       <h4 className="tituloForm">Datos de Reserva</h4>
-      {/* {condicion ? true : false } */}
       {show ? (
         <>
           <div>{user.name}</div>
