@@ -55,7 +55,7 @@ const useLogin = (onLogin) => {
       setError("Error al procesar la respuesta del servidor.");
     }
   } catch (err) {
-    setError(err.response?.data?.message || "Alguno de los dates es incorrecto. Inténtalo de nuevo.");
+    setError(err.response?.data?.message || "Alguno de los datos es incorrecto. Inténtalo de nuevo.");
   }
 };
 
