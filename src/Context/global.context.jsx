@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createContext, useContext, useEffect, useReducer } from "react";
+import { createContext, useCallback, useContext, useEffect, useReducer } from "react";
 import { reducer } from "../reducers/reducer";
 import API_BASE_URL from "../config";
 
@@ -10,10 +10,16 @@ const ContextGlobal = createContext();
 const initialState = {
   courts: [],
   recommendedCourts: [],
+  toggleSidebar: false,
 };
 
 const ContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  const toggleSidebar = useCallback((show) => {
+    dispatch({ type: "TOGGLE_SIDEBAR", payload: show });
+  }, [dispatch]);
+
 
   function transformImageUrls(imageUrls) {
     if (!imageUrls) return DEFAULT_IMAGE;
@@ -61,7 +67,7 @@ const ContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <ContextGlobal.Provider value={{ state, dispatch }}>
+    <ContextGlobal.Provider value={{ state, dispatch, toggleSidebar }}>
       {children}
     </ContextGlobal.Provider>
   );
