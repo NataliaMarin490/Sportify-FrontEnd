@@ -139,11 +139,30 @@ label {
   margin-bottom: 5px;
 }
 
-.input-mail, .input-password {
+.input-mail, .password-container {
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
   font-size: 14px;
+}
+
+.password-container {
+  position: relative;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: 0;
+  top: 45%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.password-toggle-btn img {
+  height: 22px;
+  width: 22px;
 }
 
 /* recordarme y olvidaste contraseña */

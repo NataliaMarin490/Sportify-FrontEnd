@@ -22,24 +22,6 @@ const useLogin = (onLogin) => {
       return;
     }
 
-    // Simulación con json-server
-
-    /* try {
-      const response = await axios.get("http://localhost:8080/users"); 
-      const user = response.data.find(
-        (u) => u.email_address === formData.email && u.user_password === formData.password
-      );
-
-      if (user) {
-        localStorage.setItem("user", JSON.stringify(user));
-        onLogin(user);
-      } else {
-        setError("Credenciales incorrectas. Inténtalo de nuevo.");
-      }
-    } catch (err) {
-      setError("Error al conectar con el servidor.");
-    }
-  }; */
 
   try {
     const response = await axios.post("http://localhost:8080/api/auth/login", formData);

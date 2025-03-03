@@ -1,52 +1,21 @@
 import "../Styles/login.css";
 import { Link } from "react-router-dom";
-// import { useState } from "react";
+import { useState } from "react";
 // import axios from "axios";
 import PropTypes from 'prop-types';
 import useLogin from "../Hooks/useLogin";
 
 
-// version anterior para login
-/* const Login = ({ onLogin }) => {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-
-  Login.propTypes = {
-    onLogin: PropTypes.func.isRequired,
-  };
-
-  const [error, setError] = useState("");
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-
-    if (!formData.email || !formData.password) {
-      setError("Todos los campos son obligatorios.");
-      return;
-    }
-
-    try {
-      const response = await axios.post("http://localhost:8080/api/login", formData);
-
-      localStorage.setItem("user", JSON.stringify(response.data.user));
-      onLogin(response.data.user);
-    } catch (err) {
-      setError(`Credenciales incorrectas. ${err.response?.data?.message || "Inténtalo de nuevo."}`);
-    }
-  }; */
-
   // login utilizando HOOK
 
   const Login = ({ onLogin }) => {
     const { formData, error, handleChange, handleSubmit } = useLogin(onLogin);
+
+    const [passwordVisible, setPasswordVisible] = useState(false);
+    
+    const togglePasswordVisibility = () => {
+        setPasswordVisible(!passwordVisible);
+    };
   
     Login.propTypes = {
       onLogin: PropTypes.func.isRequired,
@@ -87,13 +56,25 @@ import useLogin from "../Hooks/useLogin";
         <div className="input-container">
           <label>Contraseña</label>
           <input
-            className="input-password"
-            type="password"
+            className="password-container"
+            type={passwordVisible ? "text" : "password"}
             name="password"
             value={formData.password}
             onChange={handleChange}
             required
           />
+          <button
+              type="button"
+              className="password-toggle-btn"
+              onClick={togglePasswordVisibility}
+            >
+              {passwordVisible ? (
+                <img src="\icons\eye-open.svg" alt="Ver contraseña" />
+              ) : (
+                <img src="\icons\eye-closed.svg" alt="Ocultar contraseña" />
+              )}
+            </button>
+                        
         </div>
 
         {error && <p className="error">{error}</p>}
