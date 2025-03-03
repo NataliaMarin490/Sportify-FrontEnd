@@ -1,0 +1,138 @@
+.form-account {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Poppins", serif;
+  font-weight: bold;
+}
+
+.form-width-create {
+  width: 80%;
+}
+
+.form-width-profile {
+  width: 100%;
+}
+
+.input-container {
+  margin-left: 8%;
+  margin-right: 8%;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  font-family: "Poppins", serif;
+  color: rgba(32, 87, 90, 1);
+  width: 90%;
+}
+
+.input-color-create {
+  color: rgba(32, 87, 90, 1);
+}
+
+.input-color-profile {
+  color: black;
+  font-weight: normal;
+}
+
+.titulo-account {
+  color: black;
+  font-family: "Poppins", serif;
+  font-size: 35px;
+  margin-bottom: 10%;
+  font-weight: bold;
+  margin-left: 8%;
+  margin-right: 8%;
+  text-align: center;
+}
+
+.label {
+  font-size: 15px;
+}
+
+.entrada-registrer {
+  border-radius: 0%;
+  font-size: 15px;
+  width: 100%;
+  text-align: left;
+}
+
+.border-green-500 {
+  border-bottom: 2px solid rgba(32, 87, 90, 1);
+}
+
+.border-red-500 {
+  border-bottom: 3px solid rgb(243, 234, 234);
+}
+
+.entrada-registrer::placeholder {
+  color: rgb(160, 156, 156);
+  opacity: 1;
+  font-size: 12px;
+}
+
+.input-container input::placeholder {
+  font-family: "Poppins", serif;
+  color: rgb(160, 156, 156);
+  opacity: 1;
+  font-size: 12px;
+}
+
+.button-account {
+  margin-top: 15px;
+  margin-bottom: 10px;
+  background-color: rgba(32, 87, 90, 1);
+  font-size: 18px;
+}
+
+.button-create {
+  width: 100%;
+}
+
+.button-edit {
+  width: 50%;
+}
+
+.error-message {
+  color: red;
+  font-size: 10px;
+}
+
+.button-account:active {
+  transform: scale(0.95); /* Hace que el botón se achique ligeramente */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Sombra más fuerte al hacer clic */
+}
+
+.input-container {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.input-container label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 4px;
+  color: #000;
+}
+
+.input-container input,
+.input-container select {
+  width: 100%;
+  background-color: white;
+  color: black;
+  font-family: "Poppins", serif;
+  border: none;
+  border-bottom: 2px solid black;
+  padding: 8px 0;
+  font-size: 16px;
+  outline: none;
+}
+
+.input-container input:focus,
+.input-container select:focus {
+  border-bottom: 2px solid #20575a;
+  .error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 4px;
+  }
+}

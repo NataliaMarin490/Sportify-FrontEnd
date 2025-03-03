@@ -4,6 +4,7 @@ import "../Styles/admin.css";
 import { useContextGlobal } from "../Context/global.context";
 import { useNavigate } from "react-router-dom";
 import { FaEdit, FaTrash, FaSearch } from "react-icons/fa";
+import API_BASE_URL from "../config";
 
 const Admin = () => {
   const { state, dispatch } = useContextGlobal();
@@ -22,7 +23,6 @@ const Admin = () => {
 
   useEffect(() => {
     if (window) {
-      console.log(window.innerWidth, window.innerHeight);
       if (window.innerWidth <= 700 && window.innerHeight <= 900) {
         alert("Acceso restringido a esta vista.");
         navigate("/");
@@ -34,7 +34,7 @@ const Admin = () => {
   const handleDelete = (id) => {
     if (window.confirm("¿Estás seguro de que quieres eliminar esta cancha?")) {
       axios
-        .put(`http://localhost:8080/api/courts/delete/${id}`)
+        .put(`${API_BASE_URL}/courts/delete/${id}`)
         .then(() => {
           dispatch({ type: "DELETE_COURT", payload: id });
           alert("La cancha ha sido eliminada exitosamente.");
@@ -55,7 +55,7 @@ const Admin = () => {
     <div className="admin-view">
       <h1>Admin Panel</h1>
       <div className="top-bar">
-      <button
+        <button
           onClick={() => navigate("/create-court")}
           className="create-btn"
         >

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "../Styles/CreateCourt.css";
+import API_BASE_URL from "../config";
 
 const CourtForm = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -23,14 +24,14 @@ const CourtForm = ({ onSubmit }) => {
   const [isLoading, setIsLoading] = useState(false); // Estado para manejar la carga
 
   useEffect(() => {
-    fetch("http://localhost:8080/sports/status/5")
+    fetch(`${API_BASE_URL}/sports/status/5`)
       .then((response) => response.json())
       .then((data) => setSports(data))
       .catch((error) => console.error("Error fetching sports:", error));
   }, []);
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/countries/search")
+    fetch(`${API_BASE_URL}/countries/search`)
       .then((response) => response.json())
       .then((data) => setCountries(data))
       .catch((error) => console.error("Error fetching countries:", error));
@@ -38,7 +39,7 @@ const CourtForm = ({ onSubmit }) => {
 
   useEffect(() => {
     if (formData.country) {
-      fetch(`http://localhost:8080/api/regions/by-country/${formData.country}`)
+      fetch(`${API_BASE_URL}/regions/by-country/${formData.country}`)
         .then((response) => response.json())
         .then((data) => setRegions(data))
         .catch((error) => console.error("Error fetching regions:", error));
@@ -50,7 +51,7 @@ const CourtForm = ({ onSubmit }) => {
 
   useEffect(() => {
     if (formData.region) {
-      fetch(`http://localhost:8080/api/cities/by-region/${formData.region}`)
+      fetch(`${API_BASE_URL}/cities/by-region/${formData.region}`)
         .then((response) => response.json())
         .then((data) => setCities(data))
         .catch((error) => console.error("Error fetching cities:", error));
@@ -103,7 +104,7 @@ const CourtForm = ({ onSubmit }) => {
     });
 
     try {
-      const response = await fetch("http://localhost:8080/api/courts/add", {
+      const response = await fetch(`${API_BASE_URL}/courts/add`, {
         method: "POST",
         body: formDataToSend,
       });
@@ -113,7 +114,6 @@ const CourtForm = ({ onSubmit }) => {
       }
 
       const result = await response.json();
-      console.log("Cancha creada:", result);
       alert("Cancha creada con éxito!");
 
       // Limpiar el formulario
