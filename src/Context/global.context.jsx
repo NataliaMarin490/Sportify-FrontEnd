@@ -10,7 +10,7 @@ const ContextGlobal = createContext();
 const initialState = {
   courts: [],
   recommendedCourts: [],
-  toggleSidebar: true,
+  toggleSidebar: false,
 };
 
 const ContextProvider = ({ children }) => {
@@ -20,10 +20,6 @@ const ContextProvider = ({ children }) => {
     dispatch({ type: "TOGGLE_SIDEBAR", payload: show });
   }, [dispatch]);
 
-  //const [cart, setCart] = useState([]);
-  //const [courts, setcourts] = useState([]);
-
-  // const url = `http://localhost:8080/api/courts/search`;
 
   function transformImageUrls(imageUrls) {
     const defaultImage = DEFAULT_IMAGE;
