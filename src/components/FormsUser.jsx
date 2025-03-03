@@ -1,6 +1,7 @@
 import "../Styles/formsUser.css";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import API_BASE_URL from "../config";
 
 const FormsUser = ({ user = {}, onSubmit }) => {
   const location = useLocation();
@@ -10,6 +11,7 @@ const FormsUser = ({ user = {}, onSubmit }) => {
   const [regions, setRegions] = useState([]);
   const [cities, setCities] = useState([]);
   const [errors, setErrors] = useState({});
+  const [documentTypes, setDocumentTypes] = useState([]);
 
   const [userData, setUserData] = useState({
     name: user.name || "",
@@ -22,26 +24,34 @@ const FormsUser = ({ user = {}, onSubmit }) => {
     confirmpassword: user.confirmpassword || "",
     country: user.country || "",
     region: user.region || "",
+    idDocumentType: user.idDocumentType || "",
+    document: user.document || "",
   });
 
   useEffect(() => {
-    setUserData((prevState) => ({
-      ...prevState,
-      name: user?.name || "",
-      lastName: user?.lastName || "",
-      email: user?.email || "",
-      phoneNumber: user?.phoneNumber || "",
-      cityId: user?.cityId || "",
-      birthdate: user?.birthdate || "",
-      password: user?.password || "",
-      confirmpassword: user?.confirmpassword || "",
-      country: user?.country ? String(user.country) : "",
-      region: user?.region || "",
-    }));
+    setUserData({
+      name: user.name || "",
+      lastName: user.lastName || "",
+      email: user.email || "",
+      phoneNumber: user.phoneNumber || "",
+      cityId: user.cityId || "",
+      birthdate: user.birthdate || "",
+      password: "",
+      confirmpassword: "",
+      country: user.country ? String(user.country) : "",
+      region: user.region || "",
+      idDocumentType: user.idDocumentType || "",
+      document: user.document || "",
+    });
+    setErrors({});
   }, [user]);
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/countries/search")
+    setIsEditing(Object.keys(user).length === 0);
+  }, [user]);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/countries/search`)
       .then((response) => response.json())
       .then((data) => setCountries(data))
       .catch((error) => console.error("Error fetching countries:", error));
@@ -49,7 +59,7 @@ const FormsUser = ({ user = {}, onSubmit }) => {
 
   useEffect(() => {
     if (userData.country) {
-      fetch(`http://localhost:8080/api/regions/by-country/${userData.country}`)
+      fetch(`${API_BASE_URL}/regions/by-country/${userData.country}`)
         .then((response) => response.json())
         .then((data) => setRegions(data))
         .catch((error) => console.error("Error fetching regions:", error));
@@ -60,8 +70,15 @@ const FormsUser = ({ user = {}, onSubmit }) => {
   }, [userData.country]);
 
   useEffect(() => {
+    fetch(`${API_BASE_URL}/document-types`)
+      .then((response) => response.json())
+      .then((data) => setDocumentTypes(data))
+      .catch((error) => console.error("Error fetching document types:", error));
+  }, []);
+
+  useEffect(() => {
     if (userData.region) {
-      fetch(`http://localhost:8080/api/cities/by-region/${userData.region}`)
+      fetch(`${API_BASE_URL}/cities/by-region/${userData.region}`)
         .then((response) => response.json())
         .then((data) => setCities(data))
         .catch((error) => console.error("Error fetching cities:", error));
@@ -69,7 +86,6 @@ const FormsUser = ({ user = {}, onSubmit }) => {
       setCities([]);
     }
   }, [userData.region]);
-
 
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -102,7 +118,6 @@ const FormsUser = ({ user = {}, onSubmit }) => {
       newErrors.phoneNumber = "El número celular es obligatorio";
     } else if (isNaN(userData.phoneNumber)) {
       newErrors.phoneNumber = "El número celular debe ser solo numérico";
-
     }
 
     if (!userData.email) {
@@ -111,13 +126,11 @@ const FormsUser = ({ user = {}, onSubmit }) => {
       newErrors.email = "Correo electrónico inválido";
     }
 
-
     if (!userData.cityId) {
       newErrors.cityId = "La ciudad es obligatoria";
     }
     if (!userData.birthdate) {
       newErrors.birthdate = "La fecha de nacimiento es obligatoria";
-
     }
 
     // Validación de la contraseña (mínimo 6 caracteres)
@@ -139,31 +152,46 @@ const FormsUser = ({ user = {}, onSubmit }) => {
       return;
     }
 
-    // Si no hay errores, proceder con el submit
-    // Llamar a la función onSubmit para enviar los datos
-    onSubmit(userData);
+    const userToSend = {
+      ...userData,
+      password: userData.password,
+      confirmpassword: undefined,
+    };
 
-    // Mostrar mensaje de éxito
-    isRegisterPage
-      ? setSuccessMessage("Usuario Registrado Correctamente!")
-      : setSuccessMessage("Datos Actualizados Correctamente!");
-
-    // Limpiar el formulario
-    setUserData({
-      name: "",
-      lastName: "",
-      email: "",
-      phoneNumber: "",
-      cityId: "",
-      birthdate: "",
-      password: "",
-      confirmpassword: "",
-      country: "",
-      region: "",
-    });
-
-    // Desactivar el modo de edición
-    setIsEditing(false);
+    fetch("http://localhost:8080/api/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userToSend),
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error("Error en el registro");
+        return response.text();
+      })
+      .then((data) => {
+        console.log("Registro exitoso:", data);
+        setSuccessMessage("Usuario registrado correctamente!");
+        setUserData({
+          name: "",
+          lastName: "",
+          email: "",
+          phoneNumber: "",
+          cityId: "",
+          birthdate: "",
+          password: "",
+          confirmpassword: "",
+          country: "",
+          region: "",
+          idDocumentType: "",
+          document: "",
+        });
+        setErrors({});
+        setTimeout(() => {
+          setSuccessMessage("");
+        }, 3000);
+      })
+      .catch((error) => {
+        console.error("Error en el registro:", error);
+      });
   };
 
   return (
@@ -217,6 +245,43 @@ const FormsUser = ({ user = {}, onSubmit }) => {
         {errors.lastName && <p className="error-message">{errors.lastName}</p>}
       </div>
 
+      <div className="input-container">
+        <label className="label">Tipo de Documento</label>
+        <select
+          name="idDocumentType"
+          value={userData.idDocumentType}
+          onChange={handleChange}
+          disabled={!isEditing}
+          required
+        >
+          <option value="">Seleccione un tipo</option>
+          {documentTypes.map((type) => (
+            <option key={type.id} value={type.id}>
+              {type.document_type}
+            </option>
+          ))}
+        </select>
+        {errors.idDocumentType && (
+          <p className="error-message">{errors.idDocumentType}</p>
+        )}
+      </div>
+
+      <div className="input-container">
+        <label className="label">Documento</label>
+        <input
+          className={`entrada-registrer ${
+            isRegisterPage ? "border-green-500" : "border-red-500"
+          }`}
+          type="text"
+          name="document"
+          value={userData.document}
+          placeholder="ej. 123456789"
+          onChange={handleChange}
+          disabled={!isEditing}
+          required
+        />
+        {errors.document && <p className="error-message">{errors.document}</p>}
+      </div>
       {/* Campo Correo Electrónico */}
       <div
         className={`input-container ${
@@ -254,7 +319,6 @@ const FormsUser = ({ user = {}, onSubmit }) => {
           name="phoneNumber"
           placeholder="ej. +XXX XXXX XXXX"
           value={userData.phoneNumber}
-
           onChange={handleChange}
           disabled={!isEditing}
           required
@@ -262,7 +326,6 @@ const FormsUser = ({ user = {}, onSubmit }) => {
         {errors.phoneNumber && (
           <p className="error-message">{errors.phoneNumber}</p>
         )}
-
       </div>
 
       {/* Campo Fecha Nacimiento */}
@@ -280,7 +343,6 @@ const FormsUser = ({ user = {}, onSubmit }) => {
           name="birthdate"
           placeholder="ej. 01/01/2000"
           value={userData.birthdate}
-
           onChange={handleChange}
           disabled={!isEditing}
           required
@@ -375,14 +437,12 @@ const FormsUser = ({ user = {}, onSubmit }) => {
         </label>
       </div>
 
-
       {/* Campo Ciudad*/}
       <div
         className={`input-container ${
           isRegisterPage ? "input-color-create" : "input-color-profile"
         }`}
       >
-
         <label className="label">
           Ciudad:
           <select
@@ -419,7 +479,6 @@ const FormsUser = ({ user = {}, onSubmit }) => {
         </label>
 
         {errors.cityId && <p className="error-message">{errors.cityId}</p>}
-
       </div>
 
       {/* Campo Contraseña */}
@@ -483,7 +542,7 @@ const FormsUser = ({ user = {}, onSubmit }) => {
           type="button"
           onClick={() => setIsEditing(true)}
           className={`button-account ${
-            isRegisterPage ? "border-green-500" : "border-red-500"
+            !isRegisterPage && isEditing ? "border-green-500" : "border-red-500"
           }`}
         >
           Editar
