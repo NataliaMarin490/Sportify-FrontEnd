@@ -34,7 +34,7 @@ const AdminCourts = () => {
   const handleDelete = (id) => {
     if (window.confirm("¿Estás seguro de que quieres eliminar esta cancha?")) {
       axios
-        .put(`http://localhost:8080/api/courts/delete/${id}`)
+        .put(`${API_BASE_URL}/courts/delete/${id}`)
         .then(() => {
           dispatch({ type: "DELETE_COURT", payload: id });
           alert("La cancha ha sido eliminada exitosamente.");

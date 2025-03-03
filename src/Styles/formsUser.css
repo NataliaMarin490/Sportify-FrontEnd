@@ -4,7 +4,6 @@
   align-items: center;
   font-family: "Poppins", serif;
   font-weight: bold;
-  border-radius: 10%;
 }
 
 .form-width-create {
@@ -71,6 +70,13 @@
   font-size: 12px;
 }
 
+.input-container input::placeholder {
+  font-family: "Poppins", serif;
+  color: rgb(160, 156, 156);
+  opacity: 1;
+  font-size: 12px;
+}
+
 .button-account {
   margin-top: 15px;
   margin-bottom: 10px;
@@ -94,4 +100,39 @@
 .button-account:active {
   transform: scale(0.95); /* Hace que el botón se achique ligeramente */
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Sombra más fuerte al hacer clic */
+}
+
+.input-container {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.input-container label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 4px;
+  color: #000;
+}
+
+.input-container input,
+.input-container select {
+  width: 100%;
+  background-color: white;
+  color: black;
+  font-family: "Poppins", serif;
+  border: none;
+  border-bottom: 2px solid black;
+  padding: 8px 0;
+  font-size: 16px;
+  outline: none;
+}
+
+.input-container input:focus,
+.input-container select:focus {
+  border-bottom: 2px solid #20575a;
+  .error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 4px;
+  }
 }
