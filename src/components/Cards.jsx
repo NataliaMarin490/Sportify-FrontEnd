@@ -2,7 +2,6 @@ import "../Styles/cards.css";
 import { Link } from "react-router-dom";
 import "../Styles/cards.css";
 import PropTypes from "prop-types";
-import image from "../../public/icons/image 7.png";
 
 const Cards = ({ court }) => {
   Cards.propTypes = {
@@ -12,18 +11,32 @@ const Cards = ({ court }) => {
       city: PropTypes.string.isRequired,
       id: PropTypes.number.isRequired,
       imageUrl: PropTypes.string.isRequired,
+      properties: PropTypes.array.isRequired,
     }).isRequired,
   };
 
-  const { name, sport, city, id } = court;
+  const { name, sport, city, id, properties } = court;
 
   return (
     <Link to={`/detail/${id}`}>
       <div className="cards-container">
-        <img className="fields" src={court.imageUrl[0]} alt={name} />
-        <h3 className="cards-title">{name}</h3>
-        <h4 className="cards-text">{sport}</h4>
-        <h4 className="cards-text">{city}</h4>
+        <div className="card-image-container">
+          <img className="card-image" src={court.imageUrl[0]} alt={name} />
+        </div>
+        <div className="card-description-container">
+          <h3 className="cards-title">{sport}</h3>
+          <h4 className="cards-text">
+            <i className="fa-solid fa-location-dot"></i> {city}
+          </h4>
+          <h4 className="card-name">{name}</h4>
+          {properties.map((prop, id) => (
+            <div key={id} className="card-properties-container">
+              <i className="fa-solid fa-circle-check"></i>
+              <p className="cards-text">{prop}</p>
+            </div>
+          ))}
+        </div>
+        <button className="card-button">Ver más</button>
       </div>
     </Link>
   );

@@ -36,6 +36,12 @@ input {
   text-align: center;
   font-size: 14px;
   color: gray;
+  background-color: #f9f9f9;
+  border: 0;
+}
+
+input:focus {
+  outline: none;
 }
 
 .title {
