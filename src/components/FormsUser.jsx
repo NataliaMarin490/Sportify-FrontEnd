@@ -126,8 +126,8 @@ const FormsUser = ({ user = {}, onSubmit }) => {
       newErrors.email = "Correo electrónico inválido";
     }
 
-    if (!userData.cityId) {
-      newErrors.cityId = "La ciudad es obligatoria";
+    if (!userData.country) {
+      newErrors.country = "El país es obligatorio";
     }
     if (!userData.birthdate) {
       newErrors.birthdate = "La fecha de nacimiento es obligatoria";
@@ -151,6 +151,12 @@ const FormsUser = ({ user = {}, onSubmit }) => {
       setErrors(newErrors);
       return;
     }
+    onSubmit(userData);
+
+    // Mostrar mensaje de éxito
+    isRegisterPage
+      ? setSuccessMessage("Usuario Registrado Correctamente!")
+      : setSuccessMessage("Datos Actualizados Correctamente!");
 
     const userToSend = {
       ...userData,
@@ -175,14 +181,14 @@ const FormsUser = ({ user = {}, onSubmit }) => {
           lastName: "",
           email: "",
           phoneNumber: "",
-          cityId: "",
+          //cityId: "",
           birthdate: "",
           password: "",
           confirmpassword: "",
           country: "",
-          region: "",
-          idDocumentType: "",
-          document: "",
+          //region: "",
+          //idDocumentType: "",
+          //document: "",
         });
         setErrors({});
         setTimeout(() => {
@@ -245,18 +251,39 @@ const FormsUser = ({ user = {}, onSubmit }) => {
         {errors.lastName && <p className="error-message">{errors.lastName}</p>}
       </div>
 
-      <div className="input-container">
+      {/*Campo tipo doc
+      <div
+        className={`input-container ${
+          isRegisterPage ? "input-color-create" : "input-color-profile"
+        }`}
+      >
         <label className="label">Tipo de Documento</label>
         <select
+          className={`entrada-registrer ${
+            isRegisterPage ? "border-green-500" : "border-red-500"
+          }`}
           name="idDocumentType"
           value={userData.idDocumentType}
           onChange={handleChange}
           disabled={!isEditing}
           required
         >
-          <option value="">Seleccione un tipo</option>
+          <option
+            className={`entrada-registrer ${
+              isRegisterPage ? "border-green-500" : "border-red-500"
+            }`}
+            value=""
+          >
+            Seleccione un tipo
+          </option>
           {documentTypes.map((type) => (
-            <option key={type.id} value={type.id}>
+            <option
+              className={`entrada-registrer ${
+                isRegisterPage ? "border-green-500" : "border-red-500"
+              }`}
+              key={type.id}
+              value={type.id}
+            >
               {type.document_type}
             </option>
           ))}
@@ -265,8 +292,12 @@ const FormsUser = ({ user = {}, onSubmit }) => {
           <p className="error-message">{errors.idDocumentType}</p>
         )}
       </div>
-
-      <div className="input-container">
+    {/*Documento}
+      <div
+        className={`input-container ${
+          isRegisterPage ? "input-color-create" : "input-color-profile"
+        }`}
+      >
         <label className="label">Documento</label>
         <input
           className={`entrada-registrer ${
@@ -281,7 +312,8 @@ const FormsUser = ({ user = {}, onSubmit }) => {
           required
         />
         {errors.document && <p className="error-message">{errors.document}</p>}
-      </div>
+      </div>*/}
+
       {/* Campo Correo Electrónico */}
       <div
         className={`input-container ${
@@ -395,7 +427,7 @@ const FormsUser = ({ user = {}, onSubmit }) => {
         </label>
       </div>
 
-      {/* Campo Region*/}
+      {/* Campo Region
       <div
         className={`input-container ${
           isRegisterPage ? "input-color-create" : "input-color-profile"
@@ -437,7 +469,7 @@ const FormsUser = ({ user = {}, onSubmit }) => {
         </label>
       </div>
 
-      {/* Campo Ciudad*/}
+      {/* Campo Ciudad
       <div
         className={`input-container ${
           isRegisterPage ? "input-color-create" : "input-color-profile"
@@ -479,7 +511,7 @@ const FormsUser = ({ user = {}, onSubmit }) => {
         </label>
 
         {errors.cityId && <p className="error-message">{errors.cityId}</p>}
-      </div>
+      </div>*/}
 
       {/* Campo Contraseña */}
       <div
