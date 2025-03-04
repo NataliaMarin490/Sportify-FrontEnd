@@ -1,5 +1,5 @@
 import BackButton from "../components/BackButton.jsx";
-import "../Styles/perfilUser.css";
+import "../Styles/userProfile.css";
 import FormsUser from "../components/FormsUser.jsx";
 import UserAvatar from "../components/UserAvatar.jsx";
 import { useLocation } from "react-router-dom";
@@ -18,7 +18,7 @@ const user = {
   region: 1,
 };
 
-const PerfilUser = () => {
+const UserProfile = () => {
   const location = useLocation(); // Obtener la ruta actual
 
   useEffect(() => {
@@ -31,26 +31,39 @@ const PerfilUser = () => {
   const handleUpdate = (updatedUser) => {
     console.log("Actualizando usuario:", updatedUser);
 
-    // Enviar datos al backend
     fetch("http://localhost:8080/api/auth/register", {
-      method: "POST", // Método POST para enviar datos
-      headers: {
-        "Content-Type": "application/json", // Asegurarse de que los datos sean enviados en formato JSON
-      },
-      body: JSON.stringify(updatedUser), // Convertir el objeto a JSON
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userToSend),
     })
       .then((response) => {
-        if (!response.ok) {
-          throw new Error("Error en la solicitud");
-        }
-        return response.json();
+        if (!response.ok) throw new Error("Error en el registro");
+        return response.text();
       })
       .then((data) => {
-        console.log("Usuario registrado:", data);
-
+        console.log("Registro exitoso:", data);
+        setSuccessMessage("Usuario registrado correctamente!");
+        setUserData({
+          name: "",
+          lastName: "",
+          email: "",
+          phoneNumber: "",
+          //cityId: "",
+          birthdate: "",
+          password: "",
+          confirmpassword: "",
+          country: "",
+          //region: "",
+          //idDocumentType: "",
+          //document: "",
+        });
+        setErrors({});
+        setTimeout(() => {
+          setSuccessMessage("");
+        }, 3000);
       })
       .catch((error) => {
-        console.error("Error al registrar usuario:", error);
+        console.error("Error en el registro:", error);
       });
   };
 
@@ -64,17 +77,17 @@ const PerfilUser = () => {
         <div className="user-avatar-container">
           <UserAvatar userName={user.name} />
         </div>
-        <div className="back-button-perfil">
+        <div className="back-button-profile">
           <BackButton />
         </div>
         <div className="container-profile">
           <img
-            className="imagen-account"
+            className="image-account"
             src="public/images/perfil/perfil.jpg"
             alt="Imagen de perfil"
           ></img>
-          <div className="subcontainer-pofile">
-            <span className="titulo-account">
+          <div className="subContainer-profile">
+            <span className="title-account">
               {user.name} {user.lastName}
             </span>
             <FormsUser user={user} onSubmit={handleUpdate} />
@@ -85,4 +98,4 @@ const PerfilUser = () => {
   );
 };
 
-export default PerfilUser;
+export default UserProfile;

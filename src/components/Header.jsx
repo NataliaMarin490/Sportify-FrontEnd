@@ -13,10 +13,10 @@ const Header = () => {
       </div>
       <nav>
         <ul>
-          <Link className="link" to="/createAccount">
+          <Link className="link-header" to="/createAccount">
             Crear cuenta
           </Link>
-          <Link className="link" to="/login">
+          <Link className="link-header" to="/login">
             Iniciar sesión
           </Link>
         </ul>
