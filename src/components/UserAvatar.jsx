@@ -18,6 +18,13 @@ const UserAvatar = ({ userName }) => {
     setIsMenuOpen(!isMenuOpen); // Alterna el estado del menú
   };
 
+  //funcion para cierre de sesion
+  const handleLogout = () => {
+    if (onLogout) {
+      onLogout();
+    }
+  };
+
   return (
     <div className="user-avatar-container">
       {/* Avatar con iniciales */}
@@ -44,7 +51,7 @@ const UserAvatar = ({ userName }) => {
                 <span>Panel Admin</span>
               </Link>
             </div>
-            <div className="detail-menu">
+            <div className="detail-menu" onClick={handleLogout}>
               <Link className="link" to="/login">
                 <img src="public\icons\log-out.png" alt="perfil" />
                 <span>Cerrar sesión</span>

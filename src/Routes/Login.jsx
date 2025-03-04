@@ -4,12 +4,17 @@ import { useState } from "react";
 // import axios from "axios";
 import PropTypes from 'prop-types';
 import useLogin from "../Hooks/useLogin";
-
+import { useNavigate } from "react-router-dom";
 
   // login utilizando HOOK
 
   const Login = ({ onLogin }) => {
-    const { formData, error, handleChange, handleSubmit } = useLogin(onLogin);
+    const navigate = useNavigate();
+    
+    const { formData, error, handleChange, handleSubmit } = useLogin((userData) => {
+      onLogin(userData); 
+      navigate("/"); 
+    });
 
     const [passwordVisible, setPasswordVisible] = useState(false);
     
@@ -17,9 +22,6 @@ import useLogin from "../Hooks/useLogin";
         setPasswordVisible(!passwordVisible);
     };
   
-    Login.propTypes = {
-      onLogin: PropTypes.func.isRequired,
-    };
 
   return (
     <div className="login-container">
@@ -104,6 +106,10 @@ import useLogin from "../Hooks/useLogin";
   </div>
   </div>
   );
+};
+
+Login.propTypes = {
+  onLogin: PropTypes.func.isRequired,
 };
 
 export default Login;
