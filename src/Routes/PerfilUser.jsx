@@ -31,26 +31,39 @@ const PerfilUser = () => {
   const handleUpdate = (updatedUser) => {
     console.log("Actualizando usuario:", updatedUser);
 
-    // Enviar datos al backend
     fetch("http://localhost:8080/api/auth/register", {
-      method: "POST", // Método POST para enviar datos
-      headers: {
-        "Content-Type": "application/json", // Asegurarse de que los datos sean enviados en formato JSON
-      },
-      body: JSON.stringify(updatedUser), // Convertir el objeto a JSON
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userToSend),
     })
       .then((response) => {
-        if (!response.ok) {
-          throw new Error("Error en la solicitud");
-        }
-        return response.json();
+        if (!response.ok) throw new Error("Error en el registro");
+        return response.text();
       })
       .then((data) => {
-        console.log("Usuario registrado:", data);
-
+        console.log("Registro exitoso:", data);
+        setSuccessMessage("Usuario registrado correctamente!");
+        setUserData({
+          name: "",
+          lastName: "",
+          email: "",
+          phoneNumber: "",
+          //cityId: "",
+          birthdate: "",
+          password: "",
+          confirmpassword: "",
+          country: "",
+          //region: "",
+          //idDocumentType: "",
+          //document: "",
+        });
+        setErrors({});
+        setTimeout(() => {
+          setSuccessMessage("");
+        }, 3000);
       })
       .catch((error) => {
-        console.error("Error al registrar usuario:", error);
+        console.error("Error en el registro:", error);
       });
   };
 
