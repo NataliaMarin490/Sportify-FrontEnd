@@ -2,6 +2,7 @@ import axios from "axios";
 import { createContext, useCallback, useContext, useEffect, useReducer } from "react";
 import { reducer } from "../reducers/reducer";
 import API_BASE_URL from "../config";
+import { courts } from "./courts";
 
 const DEFAULT_IMAGE = "https://i.imgur.com/WYy9SAr.jpeg"; // Nueva imagen por defecto de Imgur
 
@@ -40,7 +41,6 @@ const ContextProvider = ({ children }) => {
           ...court,
           imageUrl: transformImageUrls(court.imageUrl),
         }));
-
         dispatch({ type: "GET_COURTS", payload: modifiedData });
       } catch (error) {
         console.error("Error al obtener las canchas:", error);

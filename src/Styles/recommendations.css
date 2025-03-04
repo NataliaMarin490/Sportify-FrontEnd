@@ -2,6 +2,16 @@
   margin: 30px 0;
   padding: 0 20px 0 50px;
   width: 93%;
+
+  .slick-prev:before,
+  .slick-next:before {
+    color: black !important;
+  }
+
+  .slick-prev,
+  .slick-next {
+    top: 75px !important;
+  }
 }
 
 .recommendations-fields {
@@ -9,9 +19,4 @@
   height: 250px;
   object-fit: cover;
   border-radius: 10px;
-}
-
-.slick-prev:before,
-.slick-next:before {
-  color: black !important;
 }

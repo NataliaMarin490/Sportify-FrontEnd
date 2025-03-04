@@ -1,5 +1,5 @@
-import BackButton from "../components/BackButton";
-import "../Styles/perfilUser.css";
+import BackButton from "../components/BackButton.jsx";
+import "../Styles/userProfile.css";
 import FormsUser from "../components/FormsUser.jsx";
 import UserAvatar from "../components/UserAvatar.jsx";
 import { useLocation } from "react-router-dom";
@@ -18,7 +18,7 @@ const user = {
   region: 1,
 };
 
-const PerfilUser = () => {
+const UserProfile = () => {
   const location = useLocation(); // Obtener la ruta actual
 
   useEffect(() => {
@@ -77,17 +77,17 @@ const PerfilUser = () => {
         <div className="user-avatar-container">
           <UserAvatar userName={user.name} />
         </div>
-        <div className="back-button-perfil">
+        <div className="back-button-profile">
           <BackButton />
         </div>
         <div className="container-profile">
           <img
-            className="imagen-account"
+            className="image-account"
             src="public/images/perfil/perfil.jpg"
             alt="Imagen de perfil"
           ></img>
-          <div className="subcontainer-pofile">
-            <span className="titulo-account">
+          <div className="subContainer-profile">
+            <span className="title-account">
               {user.name} {user.lastName}
             </span>
             <FormsUser user={user} onSubmit={handleUpdate} />
@@ -98,4 +98,4 @@ const PerfilUser = () => {
   );
 };
 
-export default PerfilUser;
+export default UserProfile;
