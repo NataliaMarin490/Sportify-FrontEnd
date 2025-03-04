@@ -2,6 +2,7 @@ import axios from "axios";
 import { createContext, useCallback, useContext, useEffect, useReducer } from "react";
 import { reducer } from "../reducers/reducer";
 import API_BASE_URL from "../config";
+import { courts } from "./courts";
 
 const DEFAULT_IMAGE = "https://i.imgur.com/WYy9SAr.jpeg"; // Nueva imagen por defecto de Imgur
 
@@ -34,14 +35,13 @@ const ContextProvider = ({ children }) => {
   useEffect(() => {
     const fetchCourts = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/courts/search`);
+        // const response = await axios.get(`${API_BASE_URL}/courts/search`);
 
-        const modifiedData = response.data.map((court) => ({
-          ...court,
-          imageUrl: transformImageUrls(court.imageUrl),
-        }));
-
-        dispatch({ type: "GET_COURTS", payload: modifiedData });
+        // const modifiedData = response.data.map((court) => ({
+        //   ...court,
+        //   imageUrl: transformImageUrls(court.imageUrl),
+        // }));
+        dispatch({ type: "GET_COURTS", payload: courts });
       } catch (error) {
         console.error("Error al obtener las canchas:", error);
       }
@@ -49,14 +49,14 @@ const ContextProvider = ({ children }) => {
 
     const fetchRecommendedCourts = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/courts/random`);
+        // const response = await axios.get(`${API_BASE_URL}/courts/random`);
 
-        const modifiedData = response.data.map((court) => ({
-          ...court,
-          imageUrl: transformImageUrls(court.imageUrl),
-        }));
+        // const modifiedData = response.data.map((court) => ({
+        //   ...court,
+        //   imageUrl: transformImageUrls(court.imageUrl),
+        // }));
 
-        dispatch({ type: "GET_RECOMMENDED_COURTS", payload: modifiedData });
+        dispatch({ type: "GET_RECOMMENDED_COURTS", payload: courts });
       } catch (error) {
         console.error("Error al obtener las recomendaciones:", error);
       }

@@ -14,9 +14,7 @@ header {
 
   padding: 5px 20px;
   height: 70px;
-
 }
-
 
 nav {
   width: 20%;
@@ -36,10 +34,12 @@ nav ul {
   gap: 20px;
 }
 
-.links {
+.link-header {
+  cursor: pointer;
+  color: white;
   display: flex;
-  flex-direction: column;
-  width: 10%;
+  gap: 8px;
+  width: 100%;
 }
 
 nav ul li:hover {
@@ -50,6 +50,10 @@ nav ul li:hover {
   display: flex;
   align-items: center;
   justify-content: flex-start;
+
+  span {
+    font-style: italic;
+  }
 }
 
 .logo-header {
@@ -71,7 +75,7 @@ nav ul li:hover {
     display: flex;
     align-items: center;
   }
-  
+
   .logo-header {
     height: 50px;
     width: 50px;
@@ -91,14 +95,14 @@ nav ul li:hover {
     white-space: nowrap;
     padding: 0 10px;
   }
-  
+
   .links {
     width: auto;
     flex-direction: row;
   }
   .logo-container span {
     font-size: 12px;
-  } 
+  }
 }
 
 @media screen and (max-width: 480px) {
@@ -149,5 +153,4 @@ nav ul li:hover {
   .logo-container span {
     display: none;
   }
-
-  }
+}
