@@ -1,4 +1,4 @@
-import BackButton from "../components/BackButton";
+import BackButton from "../components/BackButton.jsx";
 import "../Styles/perfilUser.css";
 import FormsUser from "../components/FormsUser.jsx";
 import UserAvatar from "../components/UserAvatar.jsx";
