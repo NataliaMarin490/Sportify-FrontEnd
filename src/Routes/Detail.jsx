@@ -54,12 +54,19 @@ const Detail = () => {
                   <h4 className="title-product"> Características </h4>
                 </div>
                 <div className="detail-content">
-                  <span>{product.pricePerHour}</span>
-                  <span>{product.city}</span>
-                  <span>{product.sport}</span>
-                  <span>{product.status}</span>
-                  <span>{product.sport}</span>
-                  <span>{product.status}</span>
+                  {product.features &&
+                    product.features.map((feature, index) => (
+                      <div key={index} className={`feature-item`}>
+                        {product.featuresImageUrl[index] && (
+                          <img
+                            src={product.featuresImageUrl[index]}
+                            alt={feature}
+                            className="feature-icon"
+                          />
+                        )}
+                        <span>{feature}</span>
+                      </div>
+                    ))}
                 </div>
               </div>
             </div>
