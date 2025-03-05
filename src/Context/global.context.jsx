@@ -47,7 +47,7 @@ const ContextProvider = ({ children }) => {
           `${API_BASE_URL}/courts/search?page=1&size=10`
         );
 
-        const modifiedData = response.data.map((court) => ({
+        const modifiedData = response.data.data.map((court) => ({
           ...court,
           imageUrl: transformImageUrls(court.imageUrl),
         }));
