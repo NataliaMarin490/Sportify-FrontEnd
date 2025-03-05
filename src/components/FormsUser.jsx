@@ -8,24 +8,17 @@ const FormsUser = ({ user = {}, onSubmit }) => {
   const isRegisterPage = location.pathname === "/createAccount";
   const [isEditing, setIsEditing] = useState(Object.keys(user).length === 0);
   const [countries, setCountries] = useState([]);
-  const [regions, setRegions] = useState([]);
-  const [cities, setCities] = useState([]);
   const [errors, setErrors] = useState({});
-  const [documentTypes, setDocumentTypes] = useState([]);
 
   const [userData, setUserData] = useState({
     name: user.name || "",
     lastName: user.lastName || "",
     email: user.email || "",
     phoneNumber: user.phoneNumber || "",
-    cityId: user.cityId || "",
     birthdate: user.birthdate || "",
     password: user.password || "",
     confirmpassword: user.confirmpassword || "",
     country: user.country || "",
-    region: user.region || "",
-    idDocumentType: user.idDocumentType || "",
-    document: user.document || "",
   });
 
   useEffect(() => {
@@ -34,14 +27,10 @@ const FormsUser = ({ user = {}, onSubmit }) => {
       lastName: user.lastName || "",
       email: user.email || "",
       phoneNumber: user.phoneNumber || "",
-      cityId: user.cityId || "",
       birthdate: user.birthdate || "",
       password: "",
       confirmpassword: "",
       country: user.country ? String(user.country) : "",
-      region: user.region || "",
-      idDocumentType: user.idDocumentType || "",
-      document: user.document || "",
     });
     setErrors({});
   }, [user]);
@@ -56,36 +45,6 @@ const FormsUser = ({ user = {}, onSubmit }) => {
       .then((data) => setCountries(data))
       .catch((error) => console.error("Error fetching countries:", error));
   }, []);
-
-  useEffect(() => {
-    if (userData.country) {
-      fetch(`${API_BASE_URL}/regions/by-country/${userData.country}`)
-        .then((response) => response.json())
-        .then((data) => setRegions(data))
-        .catch((error) => console.error("Error fetching regions:", error));
-    } else {
-      setRegions([]);
-      setCities([]);
-    }
-  }, [userData.country]);
-
-  useEffect(() => {
-    fetch(`${API_BASE_URL}/document-types`)
-      .then((response) => response.json())
-      .then((data) => setDocumentTypes(data))
-      .catch((error) => console.error("Error fetching document types:", error));
-  }, []);
-
-  useEffect(() => {
-    if (userData.region) {
-      fetch(`${API_BASE_URL}/cities/by-region/${userData.region}`)
-        .then((response) => response.json())
-        .then((data) => setCities(data))
-        .catch((error) => console.error("Error fetching cities:", error));
-    } else {
-      setCities([]);
-    }
-  }, [userData.region]);
 
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -159,9 +118,13 @@ const FormsUser = ({ user = {}, onSubmit }) => {
       : setSuccessMessage("Datos Actualizados Correctamente!");
 
     const userToSend = {
-      ...userData,
+      name: userData.name,
+      lastName: userData.lastName,
+      email: userData.email,
       password: userData.password,
-      confirmpassword: undefined,
+      phoneNumber: userData.phoneNumber,
+      birthdate: userData.birthdate,
+      countryId: parseInt(userData.country, 10),
     };
 
     fetch("http://localhost:8080/api/auth/register", {
@@ -181,14 +144,10 @@ const FormsUser = ({ user = {}, onSubmit }) => {
           lastName: "",
           email: "",
           phoneNumber: "",
-          //cityId: "",
           birthdate: "",
           password: "",
           confirmpassword: "",
           country: "",
-          //region: "",
-          //idDocumentType: "",
-          //document: "",
         });
         setErrors({});
         setTimeout(() => {
