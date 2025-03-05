@@ -6,6 +6,29 @@
   background-color: beige;
 }
 
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 5px;
+}
+
+.feature-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.feature-item.left {
+  justify-content: flex-start;
+}
+
+.feature-item.right {
+  justify-content: flex-end;
+  flex-direction: row-reverse;
+}
+
 .detail {
   display: flex;
   flex-direction: column;
