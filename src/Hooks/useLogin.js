@@ -22,24 +22,38 @@ const useLogin = (onLogin) => {
       return;
     }
 
+    try {
+      const response = await axios.post("http://localhost:8080/api/auth/login", formData);
+      console.log("Respuesta del backend:", response.data);
 
-  try {
-    const response = await axios.post("http://localhost:8080/api/auth/login", formData);
+      if (response.data && response.data.token) {
+        const userData = {
+          fullName: response.data.fullName,
+          role: response.data.role,
+          token: response.data.token,
+        };
 
-    if (response.data && response.data.token) {
-      
-      localStorage.setItem("authToken", response.data.token);
-      localStorage.setItem("user", JSON.stringify(response.data.user));
+        console.log("Usuario autenticado:", userData);
 
-      
-      onLogin(response.data.user);
-    } else {
-      setError("Error al procesar la respuesta del servidor.");
+        if (onLogin) {
+          console.log("Ejecutando onLogin...");
+          onLogin({
+            fullName: response.data.fullName,
+            role: response.data.role,
+            token: response.data.token,
+          });
+        }  else {
+          console.error("Error: onLogin no está definido");
+        }
+        
+        console.log("Usuario autenticado con exito!!!:", userData);
+      } else {
+        setError("Error al procesar la respuesta del servidor.");
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || "Alguno de los datos es incorrecto. Inténtalo de nuevo.");
     }
-  } catch (err) {
-    setError(err.response?.data?.message || "Alguno de los datos es incorrecto. Inténtalo de nuevo.");
-  }
-};
+  };
 
   return {
     formData,
