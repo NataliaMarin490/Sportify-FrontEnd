@@ -1,24 +1,26 @@
 /* UserAvatar.css */
 
 .user-avatar-container {
-  position: fixed; /* Fijarlo en la pantalla */
-  top: 10px; /* Separación desde la parte superior */
-  right: 20px; /* Separación desde la derecha */
-  z-index: 1000; /* Asegurar que esté por encima del contenido */
-}
-
-.user-avatar {
-  width: 60px; /* Tamaño del círculo */
-  height: 60px;
-  background-color: #0f0f0f; /* Color de fondo del círculo */
-  color: white;
-  border-radius: 50%; /* Hace que el contenedor sea redondo */
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 25px;
+  position: relative;
+  margin-left: auto;
+  padding-left: 10px; 
+  margin-right: 40px;
+}
+
+.user-avatar {
+  width: 55px;
+  height: 55px;
+  background-color: black; 
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  font-size: 18px;
   cursor: pointer;
-  user-select: none; /* Evita que el texto sea seleccionado */
   transition: background-color 0.3s ease;
 }
 

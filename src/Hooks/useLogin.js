@@ -37,11 +37,12 @@ const useLogin = (onLogin) => {
 
         if (onLogin) {
           console.log("Ejecutando onLogin...");
-          onLogin({
+          onLogin(userData
+            /* {
             fullName: response.data.fullName,
             role: response.data.role,
             token: response.data.token,
-          });
+          } */);
         }  else {
           console.error("Error: onLogin no está definido");
         }

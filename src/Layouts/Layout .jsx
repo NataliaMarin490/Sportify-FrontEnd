@@ -10,20 +10,29 @@ const Layout = () => {
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      setUser(JSON.parse(storedUser));  // Si hay un usuario guardado, establecerlo en el estado
     }
   }, []);
 
-  
+  // Manejar el login (cuando el usuario se loguea)
+  const handleLogin = (userData) => {
+    setUser(userData);  // Guardar el usuario en el estado
+    localStorage.setItem("user", JSON.stringify(userData));  // Guardarlo en localStorage
+  };
+
+  // Manejar el logout (cuando el usuario se desloguea)
   const handleLogout = () => {
-    localStorage.removeItem("user");
-    setUser(null);
+    setUser(null);  // Limpiar el estado
+    localStorage.removeItem("user");  // Eliminar el usuario del localStorage
   };
 
   return (
     <>
-      <Header user={user} onLogout={handleLogout} />
+      <Header user={user} onLogout={handleLogout}  />
+      {/* onLogin={handleLogin} */}
+      
       <Outlet />
+      
       <Footer />
     </>
   );

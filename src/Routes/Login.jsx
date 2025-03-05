@@ -1,19 +1,20 @@
 import "../Styles/login.css";
-import { Link } from "react-router-dom";
 import { useState } from "react";
 // import axios from "axios";
 import PropTypes from 'prop-types';
 import useLogin from "../Hooks/useLogin";
-import { useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
   // login utilizando HOOK
 
   const Login = ({ onLogin }) => {
     const navigate = useNavigate();
-    
-    const { formData, error, handleChange, handleSubmit } = useLogin((userData) => {
-      onLogin(userData); 
-      navigate("/"); 
+    const location = useLocation(); // para ir a la anterior pagina
+    const from = location.state?.from || "/";
+
+    const { formData, error, handleChange, handleSubmit } =     useLogin((userData) => {
+    onLogin(userData);
+    navigate(from, { replace: true }); 
     });
 
     const [passwordVisible, setPasswordVisible] = useState(false);
