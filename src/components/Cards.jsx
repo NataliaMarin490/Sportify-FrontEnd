@@ -11,11 +11,11 @@ const Cards = ({ court }) => {
       city: PropTypes.string.isRequired,
       id: PropTypes.number.isRequired,
       imageUrl: PropTypes.string.isRequired,
-      properties: PropTypes.array.isRequired,
+      features: PropTypes.arrayOf(PropTypes.string).isRequired,
     }).isRequired,
   };
 
-  const { name, sport, city, id, properties } = court;
+  const { name, sport, city, id, features } = court;
 
   return (
     <Link to={`/detail/${id}`}>
@@ -29,7 +29,7 @@ const Cards = ({ court }) => {
             <i className="fa-solid fa-location-dot"></i> {city}
           </h4>
           <h4 className="card-name">{name}</h4>
-          {properties.map((prop, id) => (
+          {features.slice(0, 3).map((prop, id) => (
             <div key={id} className="card-properties-container">
               <i className="fa-solid fa-circle-check"></i>
               <p className="cards-text">{prop}</p>

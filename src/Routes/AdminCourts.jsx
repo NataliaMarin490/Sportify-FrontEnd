@@ -4,7 +4,7 @@ import "../Styles/adminCourts.css";
 import { useContextGlobal } from "../Context/global.context";
 import { useNavigate } from "react-router-dom";
 import { FaEdit, FaTrash, FaSearch } from "react-icons/fa";
-
+import API_BASE_URL from "../config";
 
 const AdminCourts = () => {
   const { state, dispatch } = useContextGlobal();
@@ -53,7 +53,6 @@ const AdminCourts = () => {
 
   return (
     <div className="admin-view">
-  
       <div className="top-bar">
         <div className="search-container">
           <input
@@ -66,7 +65,8 @@ const AdminCourts = () => {
         </div>
         <button
           onClick={() => navigate("/create-court")}
-          className="create-btn">
+          className="create-btn"
+        >
           Agregar cancha
         </button>
       </div>

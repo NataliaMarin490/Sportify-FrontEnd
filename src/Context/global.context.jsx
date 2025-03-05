@@ -1,5 +1,11 @@
 import axios from "axios";
-import { createContext, useCallback, useContext, useEffect, useReducer } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useReducer,
+} from "react";
 import { reducer } from "../reducers/reducer";
 import API_BASE_URL from "../config";
 import { courts } from "./courts";
@@ -17,10 +23,12 @@ const initialState = {
 const ContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const toggleSidebar = useCallback((show) => {
-    dispatch({ type: "TOGGLE_SIDEBAR", payload: show });
-  }, [dispatch]);
-
+  const toggleSidebar = useCallback(
+    (show) => {
+      dispatch({ type: "TOGGLE_SIDEBAR", payload: show });
+    },
+    [dispatch]
+  );
 
   function transformImageUrls(imageUrls) {
     if (!imageUrls) return DEFAULT_IMAGE;
@@ -35,9 +43,11 @@ const ContextProvider = ({ children }) => {
   useEffect(() => {
     const fetchCourts = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/courts/search`);
+        const response = await axios.get(
+          `${API_BASE_URL}/courts/search?page=1&size=10`
+        );
 
-        const modifiedData = response.data.map((court) => ({
+        const modifiedData = response.data.data.map((court) => ({
           ...court,
           imageUrl: transformImageUrls(court.imageUrl),
         }));
