@@ -36,7 +36,7 @@ const UserAvatar = ({ userName }) => {
               </Link>
             </div>
             <div className="detail-menu">
-              <Link className="link" to="/administrador">
+              <Link className="link" to="/administracion">
                 <img
                   src="public\icons\database-data-base-config-cog-options-svgrepo-com 1.png"
                   alt="perfil"
