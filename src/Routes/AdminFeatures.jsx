@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import "../Styles/adminCourts.css";
+import "../Styles/admin.css";
 import { useNavigate } from "react-router-dom";
 import { FaEdit, FaTrash, FaSearch } from "react-icons/fa";
 import API_BASE_URL from "../config";
@@ -66,8 +66,7 @@ const AdminFeatures = () => {
         </div>
         <button
           onClick={() => navigate("/create-feature")}
-          className="create-btn"
-        >
+          id="create-btn">
           Agregar característica
         </button>
       </div>
@@ -97,7 +96,7 @@ const AdminFeatures = () => {
                   <img
                     src={feature.imageUrl}
                     alt={feature.feature}
-                    className="feature-image"
+                    className="image"
                   />
                 </td>
                 <td>
