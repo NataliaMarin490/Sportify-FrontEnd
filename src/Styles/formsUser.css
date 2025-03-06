@@ -86,6 +86,7 @@
   background-color: rgba(32, 87, 90, 1);
   font-size: 15px;
   font-family: "Poppins", serif;
+  border-radius: 0.5rem;
 }
 
 .button-create {

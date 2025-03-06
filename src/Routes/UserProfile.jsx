@@ -3,23 +3,32 @@ import "../Styles/userProfile.css";
 import FormsUser from "../components/FormsUser.jsx";
 import UserAvatar from "../components/UserAvatar.jsx";
 import { useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const user = {
   name: "Juan",
   lastName: "Pérez",
   email: "juan@example.com",
   phoneNumber: "123456789",
-  cityId: 1,
   birthdate: "2000-12-01",
   password: "********",
   confirmpassword: "*******",
   country: 1,
-  region: 1,
 };
 
 const UserProfile = () => {
   const location = useLocation(); // Obtener la ruta actual
+
+  const [userData, setUserData] = useState({
+    name: user.name || "",
+    lastName: user.lastName || "",
+    email: user.email || "",
+    phoneNumber: user.phoneNumber || "",
+    birthdate: user.birthdate || "",
+    password: user.password || "",
+    confirmpassword: user.confirmpassword || "",
+    country: user.country || "",
+  });
 
   useEffect(() => {
     document.body.classList.add("hide-nav"); // Agrega la clase para ocultar el nav
@@ -30,6 +39,16 @@ const UserProfile = () => {
 
   const handleUpdate = (updatedUser) => {
     console.log("Actualizando usuario:", updatedUser);
+
+    const userToSend = {
+      name: userData.name,
+      lastName: userData.lastName,
+      email: userData.email,
+      password: userData.password,
+      phoneNumber: userData.phoneNumber,
+      birthdate: userData.birthdate,
+      countryId: parseInt(userData.country, 10),
+    };
 
     fetch("http://localhost:8080/api/auth/register", {
       method: "POST",
@@ -48,14 +67,10 @@ const UserProfile = () => {
           lastName: "",
           email: "",
           phoneNumber: "",
-          //cityId: "",
           birthdate: "",
           password: "",
           confirmpassword: "",
           country: "",
-          //region: "",
-          //idDocumentType: "",
-          //document: "",
         });
         setErrors({});
         setTimeout(() => {
