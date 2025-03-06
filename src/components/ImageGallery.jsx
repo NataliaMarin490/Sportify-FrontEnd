@@ -10,7 +10,7 @@ const ImageGallery = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    const selectedCourt = state.courts.find((court) => court.id === Number(id));
+    const selectedCourt = state?.courts?.data?.find((court) => court.id === Number(id));
 
     if (selectedCourt) {
       setImages(
