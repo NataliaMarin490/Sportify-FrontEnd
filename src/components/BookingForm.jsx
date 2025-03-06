@@ -46,7 +46,7 @@ const BookingForm = () => {
     setTimeout(() => {
       setShowModal(false);
       navigate("/");
-    }, 3000);
+    }, 9000);
   };
 
   return (
