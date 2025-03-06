@@ -32,14 +32,14 @@ const UserAvatar = ({ userName, onLogout }) => {
           <div>
             <div className="detail-menu">
               <Link className="link" to="/profile">
-                <img src="/icons/user.png" alt="perfil" />
+                <img src="/icons/user-perfil-icon-2.svg" alt="perfil" />
                 <span>Ver Perfil</span>
               </Link>
             </div>
             <div className="detail-menu">
               <Link className="link" to="/administracion">
                 <img
-                  src="/icons/database-data-base-config-cog-options-svgrepo-com-1.png"
+                  src="/icons/panel-admin-icon-2.svg"
                   alt="perfil"
                 />
                 <span>Panel Admin</span>
@@ -47,7 +47,7 @@ const UserAvatar = ({ userName, onLogout }) => {
             </div>
             <div className="detail-menu" onClick={onLogout}>
               <Link className="link" to="/login">
-                <img src="/icons/log-out.png" alt="cerrar sesión" />
+                <img src="/icons/log-out-icon-2.svg" alt="cerrar sesión" />
                 <span>Cerrar sesión</span>
               </Link>
             </div>

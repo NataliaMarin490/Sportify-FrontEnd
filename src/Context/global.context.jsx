@@ -3,6 +3,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useState,
   useEffect,
   useReducer,
 } from "react";
@@ -22,6 +23,19 @@ const initialState = {
 
 const ContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser) {
+      setUser(storedUser);
+    }
+  }, []);
+
+  const logout = () => {
+    localStorage.removeItem("user");
+    setUser(null);
+  };
 
   const toggleSidebar = useCallback(
     (show) => {
@@ -77,7 +91,7 @@ const ContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <ContextGlobal.Provider value={{ state, dispatch, toggleSidebar }}>
+    <ContextGlobal.Provider value={{ state, dispatch, toggleSidebar, user, setUser, logout }}>
       {children}
     </ContextGlobal.Provider>
   );
