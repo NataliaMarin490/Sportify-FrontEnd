@@ -10,15 +10,11 @@ const Footer = () => {
           <p>ALLRIGHTS RESERVED - 2025 ©</p>
         </div>
         <div className="footerSocial">
-          <img className="Mensaje" src="\icons\message.png" alt="Mensaje"></img>
+          <img className="contact" src="\icons\message.png" alt="Mensaje"></img>
           <p>hello@sportify.com</p>
-          <img className="Social" src="\icons\social3.png" alt="Facebook"></img>
-          <img className="Social" src="\icons\social2.png" alt="Twitter"></img>
-          <img
-            className="Social"
-            src="\icons\social1.png"
-            alt="Instagram"
-          ></img>
+          <img className="Social" src="\icons\facebook-icon.svg" alt="Facebook"></img>
+          <img className="Social" src="\icons\twitter-x-icon.svg" alt="Twitter"></img>
+          <img className="Social" src="\icons\instagram-icon.svg" alt="Instagram"></img>
         </div>
       </div>
     </footer>
