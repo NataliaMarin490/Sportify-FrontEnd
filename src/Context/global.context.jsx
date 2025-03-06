@@ -32,6 +32,20 @@ const ContextProvider = ({ children }) => {
     }
   }, []);
 
+  const login = async (credentials) => {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/api/auth/login`, credentials);
+
+      if (response.status === 200) {
+        const userData = response.data;
+        setUser(userData);
+        localStorage.setItem("user", JSON.stringify(userData));
+      }
+    } catch (error) {
+      console.error("Error en el inicio de sesión:", error);
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem("user");
     setUser(null);
@@ -91,7 +105,7 @@ const ContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <ContextGlobal.Provider value={{ state, dispatch, toggleSidebar, user, setUser, logout }}>
+    <ContextGlobal.Provider value={{ state, dispatch, toggleSidebar, user, setUser, login, logout }}>
       {children}
     </ContextGlobal.Provider>
   );

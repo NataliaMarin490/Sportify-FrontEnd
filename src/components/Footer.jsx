@@ -12,9 +12,9 @@ const Footer = () => {
         <div className="footerSocial">
           <img className="contact" src="\icons\message.png" alt="Mensaje"></img>
           <p>hello@sportify.com</p>
-          <img className="Social" src="\icons\facebook-icon.svg" alt="Facebook"></img>
-          <img className="Social" src="\icons\twitter-x-icon.svg" alt="Twitter"></img>
-          <img className="Social" src="\icons\instagram-icon.svg" alt="Instagram"></img>
+          <img className="Social-face" src="\icons\facebook-icon-2.svg" alt="Facebook"></img>
+          <img className="Social" src="\icons\twitter-2.svg" alt="Twitter"></img>
+          <img className="Social-insta" src="\icons\instagram-2.svg" alt="Instagram"></img>
         </div>
       </div>
     </footer>
