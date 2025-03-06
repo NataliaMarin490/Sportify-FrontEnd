@@ -48,7 +48,7 @@ const UserAvatar = ({ userName, onLogout }) => {
               </div>
             )}
             <div className="detail-menu" onClick={onLogout}>
-              <Link className="link" to="/login">
+              <Link className="link" to="/">
                 <img src="/icons/log-out-icon-2.svg" alt="cerrar sesión" />
                 <span>Cerrar sesión</span>
               </Link>
