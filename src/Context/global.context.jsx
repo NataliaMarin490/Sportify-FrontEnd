@@ -79,7 +79,16 @@ const ContextProvider = ({ children }) => {
           ...court,
           imageUrl: transformImageUrls(court.imageUrl),
         }));
-        dispatch({ type: "GET_COURTS", payload: modifiedData });
+
+        const court = {
+          data: modifiedData,
+          totalPages: response.data.totalPages,
+          pageSize: response.data.pageSize,
+          currentPage: response.data.currentPage,
+        }; // Verifica si se transforman bien
+
+        console.log(court);
+        dispatch({ type: "GET_COURTS", payload: court });
       } catch (error) {
         console.error("Error al obtener las canchas:", error);
       }
