@@ -52,28 +52,26 @@ body {
 }
 
 .admin-view table td button {
-  margin: 6px; 
+  margin: 5px; 
   gap: 30px;
-  height: 25px;
-  width: 40px;
+  width: 50px;
+ 
+}
+.admin-view .icon-btn {
+  padding: 5px 5px;
 }
 
-.admin-view table td button{
-  padding: 2px 2px;
-}
+
 /* Estilos para las filas de la tabla */
 .admin-view tr:hover {
   background-color: #f1f1f1;
 }
 
-/* Estilos para los botones */
+/* Estilos para botón agregar */
 .admin-view button {
-  padding: 5px 2px;
-  margin-right: 5px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 10px;
   transition: background-color 0.3s ease;
 }
 
@@ -126,13 +124,13 @@ body {
 
 .search-container {
   width: 500px; /* Ancho reducido */
-  height: 30px;
-  color: black;
+  height: 35px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   border: 1px solid #ddd;
   border-radius: 8px;
-  padding: 4px;
+  padding: 4px 10px;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -161,3 +159,11 @@ body {
   height: 40px;
   margin: 4px 0;
 }
+
+/* ícono de cambio de usuario */
+.admin-view .access-icon{
+  font-size: 24px;
+  padding-top: 3px;
+  padding: 2px;
+}
+

@@ -84,6 +84,7 @@ function App() {
         <Route path="/createAccount" element={<CreateAccount />} />
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
         <Route path="/create-court" element={<CreateCourt />} />
+        <Route path="/create-feature" element={<CreateFeatures/>} />
         
         
         {/* Ruta protegida para perfil de usuario */}
