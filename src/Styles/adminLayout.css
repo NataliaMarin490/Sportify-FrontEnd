@@ -1,11 +1,14 @@
 .adminLayout {
-  width: 95%;
+  width: 90%;
+  height: 80vh;
   max-width: 1500px; 
   margin: 12px auto; 
+  display: flex;
+  justify-content: space-between;
   }
   
   .adminContent {
     flex: 1; 
-    margin-left: 200px;
+    margin-left: 50px;
     padding: 10px; 
   }
