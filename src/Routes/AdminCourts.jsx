@@ -47,9 +47,9 @@ const AdminCourts = () => {
   };
 
   const handleEdit = (id) => {
-    console.log("Editar court con ID:", id);
-    dispatch({ type: "UPDATE_COURT", payload: id });
+    navigate(`/edit-court/${id}`);
   };
+  
 
   return (
     <div className="admin-view">

@@ -1,5 +1,11 @@
 import "./App.css";
-import { Route, Routes, useLocation, Navigate, useNavigate } from "react-router-dom";
+import {
+  Route,
+  Routes,
+  useLocation,
+  Navigate,
+  useNavigate,
+} from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
 import Layout from "./Layouts/Layout ";
@@ -20,7 +26,6 @@ import AdminLayout from "./Layouts/AdminLayout.jsx";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ErrorBoundary from "./components/ErrorBoundary";
 
-
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -30,7 +35,7 @@ function App() {
     return storedUser ? JSON.parse(storedUser) : null;
   });
 
-/*  useEffect(() => {
+  /*  useEffect(() => {
     // Asegurarse de que el estado de 'user' siempre está sincronizado con localStorage
     const storedUser = localStorage.getItem("user");
     console.log("User desde localStorage:", storedUser);
@@ -40,7 +45,7 @@ function App() {
     }
 
     console.log("Estado de user actualizado:", user);
-  }, [user]);  */ 
+  }, [user]);  */
 
   useEffect(() => {
     if (user) {
@@ -62,63 +67,72 @@ function App() {
   // Manejar logout
   const handleLogout = () => {
     console.log("Cerrando sesión...");
-    
+
     setUser(null);
     localStorage.removeItem("user");
     console.log("Usuario después de logout:", user);
 
-    console.log("LocalStorage después de logout:", localStorage.getItem("user"));
+    console.log(
+      "LocalStorage después de logout:",
+      localStorage.getItem("user")
+    );
 
     navigate("/"); // Redirigir al inicio después del logout
-   };
+  };
 
   return (
     <ErrorBoundary>
-    <Routes>
-      {/* Rutas públicas */}
-      <Route path="/" element={<Layout user={user} onLogout={handleLogout} />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/category" element={<Category />} />
-        <Route path="/detail/:id" element={<Detail />} />
-        <Route path="/createAccount" element={<CreateAccount />} />
-        <Route path="/login" element={<Login onLogin={handleLogin} />} />
-        <Route path="/create-court" element={<CreateCourt />} />
-        
-        
-        {/* Ruta protegida para perfil de usuario */}
-        <Route 
-          path="/profile" 
+      <Routes>
+        {/* Rutas públicas */}
+        <Route
+          path="/"
+          element={<Layout user={user} onLogout={handleLogout} />}
+        >
+          <Route path="/" element={<Home />} />
+          <Route path="/category" element={<Category />} />
+          <Route path="/detail/:id" element={<Detail />} />
+          <Route path="/createAccount" element={<CreateAccount />} />
+          <Route path="/login" element={<Login onLogin={handleLogin} />} />
+          <Route
+            path="/edit-court/:id"
+            element={<CreateCourt isEditing={true} />}
+          />
+          <Route path="/create-court" element={<CreateCourt />} />
+
+          {/* Ruta protegida para perfil de usuario */}
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute
+                isAuthenticated={user}
+                redirectTo={location.state?.from || "/"}
+              >
+                <UserProfile />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
+
+        {/* Rutas de administración protegidas */}
+        <Route
+          path="/administracion"
           element={
-            <ProtectedRoute isAuthenticated={user} redirectTo={location.state?.from || "/"}>
-              <UserProfile />
+            <ProtectedRoute isAuthenticated={user} redirectTo="/login">
+              <AdminLayout />
             </ProtectedRoute>
-          } 
-        />
-      </Route>
+          }
+        >
+          <Route index element={<AdminCourts />} />
+          <Route path="categories" element={<AdminCategories />} />
+          <Route path="users" element={<AdminUsers />} />
+          <Route path="features" element={<AdminFeatures />} />
+        </Route>
 
-      {/* Rutas de administración protegidas */}
-      <Route 
-        path="/administracion" 
-        element={
-          <ProtectedRoute isAuthenticated={user} redirectTo="/login">
-            <AdminLayout />
-          </ProtectedRoute>
-        }
-      >
-        
-        <Route index element={<AdminCourts />} />
-        <Route path="categories" element={<AdminCategories />} />
-        <Route path="users" element={<AdminUsers />} />
-        <Route path="features" element={<AdminFeatures />} />
-      </Route>
-
-      {/* Redirigir rutas desconocidas al inicio */}
-      <Route path="*" element={<Navigate to="/" />} />
-    </Routes>
+        {/* Redirigir rutas desconocidas al inicio */}
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
     </ErrorBoundary>
   );
 }
-
-
 
 export default App;
