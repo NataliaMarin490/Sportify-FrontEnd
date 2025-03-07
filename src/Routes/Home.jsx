@@ -58,7 +58,6 @@ const Home = () => {
           currentPage: response.data.currentPage,
         };
 
-        dispatch({ type: "GET_COURTS", payload: court });
         setCurrentCourts(court.data);
       })
       .catch((error) => {
@@ -80,7 +79,6 @@ const Home = () => {
           currentPage: response.data.currentPage,
         };
 
-        dispatch({ type: "GET_COURTS", payload: court });
         setCurrentCourts(court.data);
       })
       .catch((error) => {

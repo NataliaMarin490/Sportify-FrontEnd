@@ -79,7 +79,7 @@ const AdminCourts = () => {
           </tr>
         </thead>
         <tbody>
-          {state.courts.map((court) => (
+          {state?.courts?.data?.map((court) => (
             <tr key={court.id}>
               <td>{court.id}</td>
               <td>{court.name}</td>
