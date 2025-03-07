@@ -74,6 +74,7 @@ function App() {
 
   return (
     <ErrorBoundary>
+      <div className="app-container">
     <Routes>
       {/* Rutas públicas */}
       <Route path="/" element={<Layout user={user} onLogout={handleLogout} />}>
@@ -116,6 +117,7 @@ function App() {
       {/* Redirigir rutas desconocidas al inicio */}
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
+    </div>
     </ErrorBoundary>
   );
 }

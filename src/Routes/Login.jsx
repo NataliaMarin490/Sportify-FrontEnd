@@ -43,9 +43,9 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 
         {/* <h2>Iniciar Sesión</h2> */}
 
-        <form className="form" onSubmit={handleSubmit}>
+        <form className="form-login" onSubmit={handleSubmit}>
           <div className="input-container">
-          <label>Email</label>
+          <label className="input-container-label">Email</label>
           <input
             className="input-mail"
             type="email"
@@ -59,7 +59,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
         <div className="input-container">
           <label>Contraseña</label>
           <input
-            className="password-container"
+            className="input-password"
             type={passwordVisible ? "text" : "password"}
             name="password"
             value={formData.password}
