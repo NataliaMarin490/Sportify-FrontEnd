@@ -4,6 +4,9 @@
   align-items: center;
   font-family: "Poppins", serif;
   font-weight: bold;
+  padding: 20px;
+  /* width: 100%;
+  margin: 5%; */
 }
 
 .form-width-create {
@@ -83,14 +86,20 @@
 .button-account {
   margin-top: 15px;
   margin-bottom: 10px;
-  background-color: rgba(32, 87, 90, 1);
+  background-color: #1b5e20;
   font-size: 15px;
   font-family: "Poppins", serif;
   border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.button-account:hover {
+  transform: scale(1.1);
 }
 
 .button-create {
-  width: 100%;
+  width: 80%;
+  height: 5vh;
 }
 
 .button-edit {
@@ -125,4 +134,44 @@
 
 select {
   border: none;
+}
+
+
+/* responsive */
+@media screen and (max-width: 768px) {
+  .form-account {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+  }
+
+  .form-width-create {
+    width: 100%; /* El formulario ocupa el 100% del ancho */
+  }
+
+  /* Si tienes una imagen a la izquierda que quieres ocultar */
+  .left-image {
+    display: none;
+  }
+
+  .titulo-account {
+    font-size: 28px; /* Ajustar tamaño de texto en móviles */
+    margin-bottom: 5%;
+  }
+
+  /* Ajustar el tamaño de los campos */
+  .input-container {
+    width: 100%; /* Los campos ocupan el 100% del ancho */
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .entrada-registrer {
+    font-size: 14px; /* Ajustar tamaño de texto de los inputs */
+  }
+
+  .button-account {
+    width: 80%; /* Asegurarse que el botón sea más grande en pantallas pequeñas */
+  }
 }

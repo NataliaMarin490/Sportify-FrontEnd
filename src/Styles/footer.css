@@ -68,7 +68,7 @@ footer {
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
-    padding: 5px 15px;
+    padding: 5px 0;
   }
 
   .footerLogo {

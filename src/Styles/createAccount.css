@@ -11,44 +11,93 @@
   justify-content: center;
   align-items: center;
   font-family: "Poppins", serif;
+  padding: 0 10px;
 }
 
 .details-register-container {
   display: flex;
   width: 95%;
-  height: 80%;
-  margin: 5%;
+  height: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
   background-color: white;
+  padding: 20px;
   justify-content: center;
 }
 
 .details-register-subcontainer {
   display: flex;
-  margin: 5%;
+  /* margin: 5%; */
   gap: 5%;
   width: 100%;
   justify-content: center;
+  /* align-items: center; */
+}
+
+.imagen-account {
+  width: auto;
+}
+
+.details-register-subcontainer .forms-title {
+  flex-basis: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .titulo-account {
   color: black;
   font-family: "Poppins", serif;
   font-size: 35px;
-  margin-bottom: 10%;
   font-weight: bold;
-  margin-left: 8%;
-  margin-right: 8%;
+  margin: 0 0 20px 0;
   text-align: center;
-  width: 95%;
+  width: 100%;
 }
 
 .imagen-account {
-  width: 100%;
+  max-width: 100%;
+  height: auto;
 }
 
 .forms-title {
   display: flex;
   flex-direction: column;
-  width: 95%;
-  align-items : center;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 20px;
+  margin: 0;
+}
+
+
+/* responsive */
+@media screen and (max-width: 768px) {
+  .details-register-subcontainer {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .details-register-subcontainer .imagen-account {
+    display: none;
+  }
+
+  .details-register-subcontainer .forms-title {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .account-container {
+    padding: 0 5px;
+  }
+
+  .titulo-account {
+    font-size: 28px;
+  }
+
+  .details-register-container {
+    padding: 15px;
+  }
 }
