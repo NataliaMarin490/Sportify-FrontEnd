@@ -7,14 +7,17 @@ import Slider from "react-slick";
 import "../Styles/home.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import axios from "axios";
+import API_BASE_URL from "../config";
 
 const Home = () => {
-  const { state } = useContextGlobal();
+  const { state, dispatch } = useContextGlobal();
   const [currentPage, setCurrentPage] = useState(
     state?.courts?.currentPage || 1
   );
-  const [currentCourts, setCurrentCourts] = useState([]);
+  const [currentCourts, setCurrentCourts] = useState(state?.courts?.data);
 
+  const newDataCourt = state?.courts?.data;
   const itemsPerPage = state?.courts?.pageSize;
   const totalPages = state?.courts?.totalPages;
 
@@ -26,9 +29,13 @@ const Home = () => {
     const indexOfLastCourt = currentPage * itemsPerPage;
     const indexOfFirstCourt = indexOfLastCourt - itemsPerPage;
 
-    setCurrentCourts(
-      state?.courts?.data?.slice(indexOfFirstCourt, indexOfLastCourt) || []
-    );
+    console.log(newDataCourt);
+    console.log(currentCourts?.length);
+    if (!currentCourts || currentCourts?.length === 0) {
+      setCurrentCourts(
+        state?.courts?.data?.slice(indexOfFirstCourt, indexOfLastCourt) || []
+      );
+    }
   }, [currentPage, state]);
 
   useEffect(() => {
@@ -37,6 +44,51 @@ const Home = () => {
       container.scrollIntoView({ behavior: "smooth" });
     }
   }, [currentPage]);
+
+  const handleFetchNextPage = () => {
+    console.log("Prueba");
+    const nextPage = Math.min(currentPage + 1, totalPages);
+    axios
+      .get(`${API_BASE_URL}/courts/search?page=${nextPage}&size=10`)
+      .then((response) => {
+        const court = {
+          data: response.data.data,
+          totalPages: response.data.totalPages,
+          pageSize: response.data.pageSize,
+          currentPage: response.data.currentPage,
+        };
+
+        dispatch({ type: "GET_COURTS", payload: court });
+        setCurrentCourts(court.data);
+      })
+      .catch((error) => {
+        console.error("Error al traer la siguiente página ", error);
+      });
+
+    setCurrentPage(nextPage);
+  };
+
+  const handleFetchPrevPage = () => {
+    const prevPage = Math.min(currentPage - 1, totalPages);
+    axios
+      .get(`${API_BASE_URL}/courts/search?page=${prevPage}&size=10`)
+      .then((response) => {
+        const court = {
+          data: response.data.data,
+          totalPages: response.data.totalPages,
+          pageSize: response.data.pageSize,
+          currentPage: response.data.currentPage,
+        };
+
+        dispatch({ type: "GET_COURTS", payload: court });
+        setCurrentCourts(court.data);
+      })
+      .catch((error) => {
+        console.error("Error al traer la anterior página ", error);
+      });
+
+    setCurrentPage(prevPage);
+  };
 
   const settings = {
     dots: true,
@@ -148,19 +200,14 @@ const Home = () => {
             {!currentCourts && <h1>No hay canchas disponibles</h1>}
           </div>
           <div className="home-cards-pagination">
-            <button
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
-            >
+            <button onClick={handleFetchPrevPage} disabled={currentPage === 1}>
               Anterior
             </button>
             <span>
               Página {currentPage} de {totalPages}
             </span>
             <button
-              onClick={() =>
-                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-              }
+              onClick={handleFetchNextPage}
               disabled={currentPage === totalPages}
             >
               Siguiente
