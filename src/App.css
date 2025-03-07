@@ -34,6 +34,8 @@
   --info-color: #17a2b8;
 }
 
+
+
 body {
   font-family: "Poppins", serif;
   font-weight: 400;
@@ -51,4 +53,15 @@ a {
 
 a:hover {
   transform: scale(1.1);
+}
+
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+footer {
+  margin-top: auto;
 }

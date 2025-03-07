@@ -12,3 +12,60 @@
   -moz-osx-font-smoothing: grayscale;
   
 }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+#root {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;  /* Asegura que el contenido principal ocupe el espacio disponible */
+}
+
+footer {
+  background-color: var(--footer-color); /* Ajustar el color de fondo del footer */
+  padding: 20px 0;  /* Asegúrate de que el footer tenga algo de relleno */
+  text-align: center;
+  width: 100%;
+  margin-top: auto;  /* El footer se empuja al fondo */
+}
+
+/* Estilos generales para pantallas pequeñas */
+@media (max-width: 480px) {
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    /* display: flex;
+    flex-direction: column; */
+  }
+
+  #root {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  main {
+    flex: 1;  /* El contenido ocupa el espacio restante */
+    padding: 20px;
+  }
+
+  footer {
+    background-color: var(--footer-color);
+    padding: 10px 0;  /* Ajusta el padding */
+    width: 100%;
+    /* text-align: center; */
+    margin-top: auto;
+  }
+}
+
