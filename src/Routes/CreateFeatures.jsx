@@ -22,11 +22,12 @@ const CreateFeatures = () => {
       return;
     }
     setIsLoading(true);
+    
     const formData = new FormData();
-    formData.append("feature", feature);
+    formData.append("feature", JSON.stringify({ feature: feature })); // Convertir el feature a un objeto JSON
     formData.append("statusId", 24);
     formData.append("image", image);
-
+  
     try {
       const response = await fetch(`${API_BASE_URL}/features/add`, {
         method: "POST",
@@ -42,7 +43,7 @@ const CreateFeatures = () => {
       setIsLoading(false);
     }
   };
-
+  
   return (
     <div className="create-features-container">
       <form className="form" onSubmit={handleSubmit}>
