@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import "../Styles/adminCourts.css";
+import "../Styles/admin.css";
 import { useContextGlobal } from "../Context/global.context";
 import { useNavigate } from "react-router-dom";
 import { FaEdit, FaTrash, FaSearch } from "react-icons/fa";
@@ -65,7 +65,7 @@ const AdminCourts = () => {
         </div>
         <button
           onClick={() => navigate("/create-court")}
-          className="create-btn"
+          id="create-btn"
         >
           Agregar cancha
         </button>
@@ -79,7 +79,7 @@ const AdminCourts = () => {
           </tr>
         </thead>
         <tbody>
-          {state.courts.map((court) => (
+          {state?.courts?.data?.map((court) => (
             <tr key={court.id}>
               <td>{court.id}</td>
               <td>{court.name}</td>

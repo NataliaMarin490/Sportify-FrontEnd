@@ -158,8 +158,8 @@ label {
 
 .password-toggle-btn {
   position: absolute;
-  right: 0;
-  top: 45%;
+  right: 15px;
+  top: 70%;
   transform: translateY(-50%);
   background: none;
   border: none;
