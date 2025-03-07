@@ -171,6 +171,39 @@ select:focus {
   margin-top: 5%;
 }
 
+.home-cards-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.home-cards-pagination button {
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  margin: 0 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.home-cards-pagination button:hover:not(:disabled) {
+  background-color: darken(var(--secondary-color), 10%);
+}
+
+.home-cards-pagination button:disabled {
+  background-color: grey;
+  cursor: not-allowed;
+}
+
+.home-cards-pagination span {
+  margin: 0 10px;
+  font-size: 16px;
+  color: #333;
+}
+
 .recommendations-title {
   color: black;
   justify-self: center;
@@ -222,6 +255,7 @@ select:focus {
 }
 
 .icon {
+  text-align: center;
   width: 40px;
   height: 40px;
 }

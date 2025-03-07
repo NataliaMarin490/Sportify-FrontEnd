@@ -1,19 +1,42 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useContextGlobal } from "../Context/global.context";
-import "../Styles/home.css";
+import { Link } from "react-router-dom";
 import Cards from "../components/Cards";
 import Recommendations from "../components/Recommendations";
-import { Link } from "react-router-dom";
 import Slider from "react-slick";
+import "../Styles/home.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 const Home = () => {
   const { state } = useContextGlobal();
+  const [currentPage, setCurrentPage] = useState(
+    state?.courts?.currentPage || 1
+  );
+  const [currentCourts, setCurrentCourts] = useState([]);
+
+  const itemsPerPage = state?.courts?.pageSize;
+  const totalPages = state?.courts?.totalPages;
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  useEffect(() => {
+    const indexOfLastCourt = currentPage * itemsPerPage;
+    const indexOfFirstCourt = indexOfLastCourt - itemsPerPage;
+
+    setCurrentCourts(
+      state?.courts?.data?.slice(indexOfFirstCourt, indexOfLastCourt) || []
+    );
+  }, [currentPage, state]);
+
+  useEffect(() => {
+    const container = document.querySelector(".searcher-container");
+    if (container && currentPage !== 1) {
+      container.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [currentPage]);
 
   const settings = {
     dots: true,
@@ -98,6 +121,7 @@ const Home = () => {
           <div className="categories-container">
             <div className="categories-slider-container">
               <Slider {...settings}>
+                {/* { state.courts && state?.courts?.data?.features?.map((category, index) => ( */}
                 {categories.map((category, index) => (
                   <Link key={index} to={`/category/${category.id}`}>
                     <img
@@ -117,9 +141,30 @@ const Home = () => {
         <div className="main-content">
           <h1>NUESTRAS RECOMENDACIONES</h1>
           <div className="home-cards-container">
-            {state.courts.map((court) => (
-              <Cards key={court.id} court={court} />
-            ))}
+            {currentCourts &&
+              currentCourts.map((court) => (
+                <Cards key={court.id} court={court} />
+              ))}
+            {!currentCourts && <h1>No hay canchas disponibles</h1>}
+          </div>
+          <div className="home-cards-pagination">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            >
+              Anterior
+            </button>
+            <span>
+              Página {currentPage} de {totalPages}
+            </span>
+            <button
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
+              disabled={currentPage === totalPages}
+            >
+              Siguiente
+            </button>
           </div>
         </div>
         <div className="extra-info-container">
