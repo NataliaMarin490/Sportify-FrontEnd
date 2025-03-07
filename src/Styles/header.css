@@ -16,14 +16,16 @@ header {
   height: 70px;
 }
 
-nav {
+.nav-container {
   width: 20%;
-  padding: 0;
+  padding: 0 30px;
   display: flex;
-  justify-content: space-evenly;
+  /* justify-content: flex-end; */
+  gap: 20px;
+  align-items: center;
 }
 
-nav ul {
+.auth-links {
   list-style: none;
   padding: 0;
   margin: 0;
@@ -33,6 +35,7 @@ nav ul {
   justify-content: space-between;
   gap: 20px;
 }
+
 
 .link-header {
   cursor: pointer;

@@ -3,6 +3,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useState,
   useEffect,
   useReducer,
 } from "react";
@@ -22,6 +23,33 @@ const initialState = {
 
 const ContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser) {
+      setUser(storedUser);
+    }
+  }, []);
+
+  const login = async (credentials) => {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/api/auth/login`, credentials);
+
+      if (response.status === 200) {
+        const userData = response.data;
+        setUser(userData);
+        localStorage.setItem("user", JSON.stringify(userData));
+      }
+    } catch (error) {
+      console.error("Error en el inicio de sesión:", error);
+    }
+  };
+
+  const logout = () => {
+    localStorage.removeItem("user");
+    setUser(null);
+  };
 
   const toggleSidebar = useCallback(
     (show) => {
@@ -51,7 +79,16 @@ const ContextProvider = ({ children }) => {
           ...court,
           imageUrl: transformImageUrls(court.imageUrl),
         }));
-        dispatch({ type: "GET_COURTS", payload: modifiedData });
+
+        const court = {
+          data: modifiedData,
+          totalPages: response.data.totalPages,
+          pageSize: response.data.pageSize,
+          currentPage: response.data.currentPage,
+        }; // Verifica si se transforman bien
+
+        console.log(court);
+        dispatch({ type: "GET_COURTS", payload: court });
       } catch (error) {
         console.error("Error al obtener las canchas:", error);
       }
@@ -77,7 +114,7 @@ const ContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <ContextGlobal.Provider value={{ state, dispatch, toggleSidebar }}>
+    <ContextGlobal.Provider value={{ state, dispatch, toggleSidebar, user, setUser, login, logout }}>
       {children}
     </ContextGlobal.Provider>
   );
