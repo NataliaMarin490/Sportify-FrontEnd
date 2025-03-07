@@ -72,3 +72,45 @@
   transition: background-color 0.3s ease;
   transform: scale(1.2);
 }
+
+/* responsive */
+@media (max-width: 767px) {
+  .user-avatar-container {
+    margin-right: 10px; 
+    padding-left: 5px;
+  }
+
+  .user-avatar {
+    width: 45px;
+    height: 45px; 
+    font-size: 14px;
+  }
+
+  .dropdown-menu {
+    width: 120px;
+    top: 50px;
+  }
+
+  .link img {
+    height: 16px;
+    width: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .user-avatar {
+    width: 40px; 
+    height: 40px;
+    font-size: 12px; 
+  }
+
+  .dropdown-menu {
+    width: 100px; 
+    top: 45px; 
+  }
+
+  .link img {
+    height: 14px; 
+    width: 14px;
+  }
+}
