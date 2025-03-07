@@ -1,81 +1,105 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useContextGlobal } from "../Context/global.context";
 import "../Styles/bookingForm.css";
 
 const BookingForm = () => {
-  const [user, setUser] = useState({
+  const { user } = useContextGlobal();
+  const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
+  const [error, setError] = useState("");
+
+  const [reserva, setReserva] = useState({
     name: "",
     phone: "",
     participants: "",
     address: "",
   });
-  const [show, setShow] = useState(false);
-  const [error, setError] = useState(false);
-
-  const navigate = useNavigate();
+  
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const regexNum = /[0-9]/;
+    const regexNum = /[0-9]+$/;
 
-    if (
-      user.name.trim().length >= 3 &&
-      user.phone.includes(" ") &&
-      user.participants.includes(" ") &&
-      regexNum.test(user.phone)
-    ) {
-      setShow(true);
-      setError(false);
-      setTimeout(() => {
-        navigate("/");
-      }, 3000);
-    } else {
-      setError(true);
+    if (!user) {
+      navigate("/login"); // Redirige a login si no está loguedo
+      return;
     }
+
+    // Validaciones
+    if (reserva.name.trim().length < 3) {
+      setError("El nombre debe tener al menos 3 caracteres.");
+      return;
+    }
+    if (!regexNum.test(reserva.phone)) {
+      setError("El número de contacto debe contener solo números.");
+      return;
+    }
+    if (!regexNum.test(reserva.participants) || reserva.participants <= 0) {
+      setError("Debe ingresar un número válido de participantes.");
+      return;
+    }
+
+    setError("");
+    setShowModal(true);
+
+    setTimeout(() => {
+      setShowModal(false);
+      navigate("/");
+    }, 9000);
   };
 
   return (
     <div className="booking-form-container">
-      <h4 className="tituloForm">Datos de Reserva</h4>
-      {show ? (
-        <>
-          <div>{user.name}</div>
-          <div>{user.address} </div>
-        </>
-      ) : (
-        <form className="formReserva" onSubmit={handleSubmit}>
-          <label>Número Participantes: </label>
+      <h4 className="titleForm">Datos de Reserva</h4>
+      
+        <form className="formBooking" onSubmit={handleSubmit}>
+          <label className="input-name">Número Participantes: </label>
           <input
             placeholder="Cantidad de personas"
+            className="input"
             type="number"
+            value={reserva.participants}
             onChange={(event) =>
-              setUser({ ...user, address: event.target.value })
+              setReserva({ ...reserva, participants: event.target.value })
             }
           />
           <label>Nombre Contacto: </label>
           <input
             placeholder="Nombre del representante"
+            className="input"
             type="text"
+            value={reserva.name}
             onChange={(event) =>
-              setUser({ ...user, nombre: event.target.value })
+              setReserva({ ...reserva, name: event.target.value })
             }
           />
           <label>Número Contacto: </label>
           <input
             placeholder="Número de telefono"
-            type="number"
+            className="input"
+            type="text"
+            value={reserva.phone}
             onChange={(event) =>
-              setUser({ ...user, direccion: event.target.value })
+              setReserva({ ...reserva, phone: event.target.value })
             }
           />
 
-          <button>Reservar</button>
-          {error ? (
-            <h4 className="title" style={{ color: "red" }}>
+          <button className="button-reserve">Reservar</button>
+          {error && <h4 className="error-message">{error}</h4>}
+
+          {/* {error ? (<h4 className="title" style={{ color: "red" }}>
               Por favor coloque la información correctamente
-            </h4>
-          ) : null}
+            </h4>) : null} */}
         </form>
+        {showModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>¡Reserva Exitosa!</h2>
+            <p>Tu reserva ha sido confirmada.</p>
+            <button className="button-modal" onClick={() => setShowModal(false)}>Cerrar</button>
+          </div>
+        </div>
       )}
     </div>
   );

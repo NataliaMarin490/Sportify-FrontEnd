@@ -1,17 +1,20 @@
 import React, { useState } from "react";
 import "../Styles/userAvatar.css"; // Estilos personalizados para el componente
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
+import { useContextGlobal } from "../Context/global.context";
 
-const UserAvatar = ({ userName }) => {
+const UserAvatar = ({ userName, onLogout }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user } = useContextGlobal(); 
 
-  // Función para obtener las iniciales del usuario
+  // Función para obtener las iniciales del usuario con validación
   const getInitials = (name) => {
-    const nameParts = name.split(" ");
-    const initials = nameParts
+    if (!name || typeof name !== "string") return "?"; // Si name es undefined o no es string, devuelve "?"
+    return name
+      .split(" ")
       .map((part) => part.charAt(0).toUpperCase())
-      .join(""); // Obtiene las primeras letras de cada parte del nombre
-    return initials;
+      .join("");
   };
 
   const handleAvatarClick = () => {
@@ -31,22 +34,22 @@ const UserAvatar = ({ userName }) => {
           <div>
             <div className="detail-menu">
               <Link className="link" to="/profile">
-                <img src="public\icons\user.png" alt="perfil" />
+                <img src="/icons/user-perfil-icon-2.svg" alt="perfil" />
                 <span>Ver Perfil</span>
               </Link>
             </div>
-            <div className="detail-menu">
-              <Link className="link" to="/administrador">
-                <img
-                  src="public\icons\database-data-base-config-cog-options-svgrepo-com 1.png"
-                  alt="perfil"
-                />
-                <span>Panel Admin</span>
-              </Link>
-            </div>
-            <div className="detail-menu">
-              <Link className="link" to="/login">
-                <img src="public\icons\log-out.png" alt="perfil" />
+            {/* Mostrar solo si el usuario es ADMIN */}
+            {(user?.role === "ROLE_ADMIN" || user?.role === "ROLE_SUPER_ADMIN") && (
+              <div className="detail-menu">
+                <Link className="link" to="/administracion">
+                  <img src="/icons/panel-admin-icon-2.svg" alt="perfil" />
+                  <span>Panel Admin</span>
+                </Link>
+              </div>
+            )}
+            <div className="detail-menu" onClick={onLogout}>
+              <Link className="link" to="/">
+                <img src="/icons/log-out-icon-2.svg" alt="cerrar sesión" />
                 <span>Cerrar sesión</span>
               </Link>
             </div>
@@ -55,6 +58,12 @@ const UserAvatar = ({ userName }) => {
       )}
     </div>
   );
+};
+
+
+UserAvatar.propTypes = {
+  userName: PropTypes.string.isRequired,
+  onLogout: PropTypes.func.isRequired,
 };
 
 export default UserAvatar;

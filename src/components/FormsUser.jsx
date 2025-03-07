@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import API_BASE_URL from "../config";
 
+
 const FormsUser = ({ user = {}, onSubmit }) => {
   const location = useLocation();
   const isRegisterPage = location.pathname === "/createAccount";

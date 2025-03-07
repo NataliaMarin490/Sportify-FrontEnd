@@ -4,7 +4,7 @@
       rgba(138, 135, 135, 0.5),
       rgba(129, 129, 131, 0.5)
     ),
-    url("public/images/crearCuenta/Fondo.jpg");
+    url("public/images/crearCuenta/Fondo.jpg") ;
   background-size: cover;
   background-position: center;
   min-height: 100vh;
@@ -43,7 +43,7 @@
 }
 
 .imagen-account {
-  width: 50%;
+  width: 100%;
 }
 
 .forms-title {
