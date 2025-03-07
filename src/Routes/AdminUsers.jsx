@@ -38,21 +38,35 @@ const AdminUsers = () => {
 
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      await axios.put(
-        `${API_BASE_URL}/api/roles/update/${userId}?newRole=${newRole}`,
-        {},
+      const storedUser = localStorage.getItem("user");
+      const token = storedUser ? JSON.parse(storedUser).token : null;
+
+      if (!token) {
+        alert(
+          "No se encontró un token de autenticación. Inicia sesión nuevamente."
+        );
+        setLoading(false);
+        return;
+      }
+
+      const response = await fetch(
+        `http://localhost:8080/api/roles/update/${userId}?newRole=${newRole}`,
         {
+          method: "PUT",
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
+
+      if (!response.ok) {
+        throw new Error(`Error HTTP: ${response.status}`);
+      }
+
       alert("Rol actualizado correctamente");
       fetchUsers();
     } catch (error) {
       console.error("Error al actualizar el rol:", error);
-      alert("No se pudo actualizar el rol");
     } finally {
       setLoading(false);
     }
