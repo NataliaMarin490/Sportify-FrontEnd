@@ -1,18 +1,31 @@
-import { useState } from "react";
+import React, { useState, useRef } from "react";
 import API_BASE_URL from "../config";
-import "../Styles/addFeatureCategory.css"
+import "../Styles/addFeatureCategory.css";
+import { FaImage, FaTimes } from "react-icons/fa";
 
 const CreateFeatures = () => {
   const [feature, setFeature] = useState("");
   const [image, setImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const fileInputRef = useRef(null);
 
   const handleChange = (e) => {
-    if (e.target.name === "feature") {
-      setFeature(e.target.value);
-    } else if (e.target.name === "image" && e.target.files.length > 0) {
-      setImage(e.target.files[0]);
+    setFeature(e.target.value);
+  };
+
+  const handleImageChange = (e) => {
+    if (e.target.files.length > 0) {
+      setImage(e.target.files[0]); // Almacena la imagen seleccionada
+      e.target.value = null; // Restablece el input de archivo
     }
+  };
+
+  const handleIconClick = () => {
+    fileInputRef.current.click(); // Abre el explorador de archivos
+  };
+
+  const handleRemoveImage = () => {
+    setImage(null); // Elimina la imagen seleccionada
   };
 
   const handleSubmit = async (e) => {
@@ -59,20 +72,28 @@ const CreateFeatures = () => {
         </label>
         <label>
           Imagen:
+          <div className="image-upload-icon" onClick={handleIconClick}>
+            <FaImage />
+          </div>
           <input
             type="file"
             name="image"
             accept="image/*"
-            onChange={handleChange}
+            onChange={handleImageChange}
+            style={{ display: "none" }}
+            ref={fileInputRef}
             required
           />
         </label>
         {image && (
-          <img
-            src={URL.createObjectURL(image)}
-            alt="Preview"
-            className="preview"
-          />
+          <div className="image-preview-container">
+            <img
+              src={URL.createObjectURL(image)}
+              alt="Preview"
+              className="preview"
+            />
+            <FaTimes className="remove-image-icon" onClick={handleRemoveImage} />
+          </div>
         )}
         <button type="submit" disabled={isLoading}>
           {isLoading ? "Guardando..." : "Guardar"}

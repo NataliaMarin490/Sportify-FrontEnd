@@ -136,9 +136,9 @@ const AdminUsers = () => {
                         className="access-icon"
                       >
                         {user.roles.includes("ROLE_ADMIN") ? (
-                          <FaUserCog />
-                        ) : (
                           <FaUserShield />
+                        ) : (
+                          <FaUserCog /> 
                         )}
                       </button>
                     )}
