@@ -16,8 +16,8 @@ const Detail = () => {
   }, []);
 
   const product =
-    state.courts && Array.isArray(state.courts)
-      ? state.courts.find((item) => item.id === parseInt(id))
+    state?.courts?.data && Array.isArray(state?.courts?.data)
+      ? state?.courts?.data?.find((item) => item.id === parseInt(id))
       : null;
 
   return (
