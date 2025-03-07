@@ -126,7 +126,7 @@ const CourtForm = ({ onSubmit, courtId, isEditing }) => {
       sportId: formData.sport,
       cityId: formData.city,
       statusId: 1,
-      featuresIds: selectedFeatures,
+      featureIds: selectedFeatures,
     };
 
     formDataToSend.append("court", JSON.stringify(courtData));

@@ -10,6 +10,10 @@ const AdminCourts = () => {
   const { state, dispatch } = useContextGlobal();
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1); // Estado para la página actual
+  const [courts, setCourts] = useState([]);
+  const itemsPerPage = 10; // Cuántos elementos por página
+  const totalPages = state?.courts?.totalPages || 1;
 
   function checkScreenSize() {
     if (window.innerWidth < 890) {
@@ -29,7 +33,20 @@ const AdminCourts = () => {
       }
     }
   }, [navigate]);
-  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    // Aquí simulas la carga de canchas al cambiar de página
+    axios
+      .get(
+        `${API_BASE_URL}/courts/search?page=${currentPage}&size=${itemsPerPage}`
+      )
+      .then((response) => {
+        setCourts(response.data.data);
+      })
+      .catch((error) => {
+        console.error("Error al obtener los datos de las canchas:", error);
+      });
+  }, [currentPage]);
 
   const handleDelete = (id) => {
     if (window.confirm("¿Estás seguro de que quieres eliminar esta cancha?")) {
@@ -49,7 +66,16 @@ const AdminCourts = () => {
   const handleEdit = (id) => {
     navigate(`/edit-court/${id}`);
   };
-  
+
+  const handleFetchNextPage = () => {
+    const nextPage = Math.min(currentPage + 1, totalPages);
+    setCurrentPage(nextPage);
+  };
+
+  const handleFetchPrevPage = () => {
+    const prevPage = Math.max(currentPage - 1, 1);
+    setCurrentPage(prevPage);
+  };
 
   return (
     <div className="admin-view">
@@ -63,10 +89,7 @@ const AdminCourts = () => {
           />
           <FaSearch className="search-icon" />
         </div>
-        <button
-          onClick={() => navigate("/create-court")}
-          id="create-btn"
-        >
+        <button onClick={() => navigate("/create-court")} id="create-btn">
           Agregar cancha
         </button>
       </div>
@@ -79,14 +102,13 @@ const AdminCourts = () => {
           </tr>
         </thead>
         <tbody>
-          {state?.courts?.data?.map((court) => (
+          {courts?.map((court) => (
             <tr key={court.id}>
               <td>{court.id}</td>
               <td>{court.name}</td>
               <td>
                 <button
                   onClick={() => handleEdit(court.id)}
-                  disabled={loading}
                   className="icon-btn"
                 >
                   <FaEdit />
@@ -102,6 +124,20 @@ const AdminCourts = () => {
           ))}
         </tbody>
       </table>
+      <div className="pagination">
+        <button onClick={handleFetchPrevPage} disabled={currentPage === 1}>
+          Anterior
+        </button>
+        <span>
+          Página {currentPage} de {totalPages}
+        </span>
+        <button
+          onClick={handleFetchNextPage}
+          disabled={currentPage === totalPages}
+        >
+          Siguiente
+        </button>
+      </div>
     </div>
   );
 };
