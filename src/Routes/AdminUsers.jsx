@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import "../Styles/adminUsers.css";
-import { FaUserShield, FaUserSlash, FaSearch } from "react-icons/fa";
+import "../Styles/admin.css";
+import { FaUserShield, FaUserCog, FaSearch } from "react-icons/fa";
 import API_BASE_URL from "../config";
 
 const AdminUsers = () => {
@@ -119,10 +119,10 @@ const AdminUsers = () => {
                           )
                         }
                         disabled={loading}
-                        className="icon-btn"
+                        className="access-icon"
                       >
                         {user.roles.includes("ROLE_ADMIN") ? (
-                          <FaUserSlash />
+                          <FaUserCog />
                         ) : (
                           <FaUserShield />
                         )}
