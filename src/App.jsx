@@ -125,28 +125,10 @@ function App() {
           <Route path="features" element={<AdminFeatures />} />
         </Route>
 
-      {/* Rutas de administración protegidas */}
-      <Route 
-        path="/administracion" 
-        element={
-          <ProtectedRoute isAuthenticated={user} redirectTo="/login">
-            <AdminLayout />
-          </ProtectedRoute>
-        }
-      >
-        
-        <Route index element={<AdminCourts />} />
-        <Route path="categories" element={<AdminCategories />} />
-        <Route path="users" element={<AdminUsers />} />
-        <Route path="features" element={<AdminFeatures />} />
-      </Route>
-
-      {/* Redirigir rutas desconocidas al inicio */}
-      <Route path="*" element={<Navigate to="/" />} />
-    </Routes>
-    </div>
+        {/* Redirigir rutas desconocidas al inicio */}
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
     </ErrorBoundary>
   );
 }
-
 export default App;
