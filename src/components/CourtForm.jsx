@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import "../Styles/CreateCourt.css";
 import API_BASE_URL from "../config";
 
-const CourtForm = ({ onSubmit }) => {
+const CourtForm = ({ onSubmit, courtId, isEditing }) => {
   const [formData, setFormData] = useState({
     name: "",
     sport: "",
@@ -21,7 +21,9 @@ const CourtForm = ({ onSubmit }) => {
   const [countries, setCountries] = useState([]);
   const [regions, setRegions] = useState([]);
   const [cities, setCities] = useState([]);
-  const [isLoading, setIsLoading] = useState(false); // Estado para manejar la carga
+  const [isLoading, setIsLoading] = useState(false);
+  const [features, setFeatures] = useState([]);
+  const [selectedFeatures, setSelectedFeatures] = useState([]);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/sports/status/5`)
@@ -71,6 +73,36 @@ const CourtForm = ({ onSubmit }) => {
     }
   };
 
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/features`)
+      .then((response) => response.json())
+      .then((data) => setFeatures(data))
+      .catch((error) => console.error("Error fetching features:", error));
+  }, []);
+
+  useEffect(() => {
+    if (isEditing && courtId) {
+      fetch(`${API_BASE_URL}/courts/search/${courtId}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setFormData({
+            ...formData,
+            name: data.name,
+            sport: data.sport,
+            city: data.city,
+            address: data.address,
+            description: data.description,
+            price: data.pricePerHour,
+            capacity: data.capacity,
+            neighborhood: data.neighborhood,
+          });
+          // Convertir características activas en IDs
+          setSelectedFeatures(data.features);
+        })
+        .catch((error) => console.error("Error fetching court:", error));
+    }
+  }, [courtId, isEditing]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -94,6 +126,7 @@ const CourtForm = ({ onSubmit }) => {
       sportId: formData.sport,
       cityId: formData.city,
       statusId: 1,
+      featureIds: selectedFeatures,
     };
 
     formDataToSend.append("court", JSON.stringify(courtData));
@@ -130,6 +163,7 @@ const CourtForm = ({ onSubmit }) => {
         neighborhood: "",
         images: [],
       });
+      setSelectedFeatures([]);
     } catch (error) {
       console.error("Error:", error);
       alert("Hubo un error al crear la cancha.");
@@ -278,11 +312,37 @@ const CourtForm = ({ onSubmit }) => {
             />
           </label>
         </div>
-
+        <div className="features-section">
+          <h3>Características</h3>
+          <div className="features-grid">
+            {features.map((feature) => (
+              <label key={feature.idFeature} className="feature-item">
+                <input
+                  type="checkbox"
+                  checked={selectedFeatures.includes(feature.idFeature)}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setSelectedFeatures([
+                        ...selectedFeatures,
+                        feature.idFeature,
+                      ]);
+                    } else {
+                      setSelectedFeatures(
+                        selectedFeatures.filter((f) => f !== feature.idFeature)
+                      );
+                    }
+                  }}
+                />
+                <img src={feature.imageUrl} alt={feature.feature} />
+                {feature.feature}
+              </label>
+            ))}
+          </div>
+        </div>
         <div className="image-section">
           <label>Seleccionar imagen</label>
           <label className="image-upload">
-            <i className="fas fa-image"></i> Subir imágenes
+            <i className="fas fa-image"></i>
             <input
               type="file"
               name="images"

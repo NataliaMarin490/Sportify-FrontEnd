@@ -64,9 +64,7 @@ const AdminFeatures = () => {
           />
           <FaSearch className="search-icon" />
         </div>
-        <button
-          onClick={() => navigate("/create-feature")}
-          id="create-btn">
+        <button onClick={() => navigate("/create-feature")} id="create-btn">
           Agregar característica
         </button>
       </div>
