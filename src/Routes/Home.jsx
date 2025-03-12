@@ -9,8 +9,25 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import axios from "axios";
 import API_BASE_URL from "../config";
+import SearchBox from "../components/SearchBox";
 
 const Home = () => {
+  const [filteredCourts, setFilteredCourts] = useState([]);
+
+  // Función que recibe los valores del buscador y hace la búsqueda en la API
+  const handleSearch = (filters) => {
+    console.log("Buscando con filtros:", filters);
+    
+    axios.get(`${API_BASE_URL}/courts/search`, { params: filters })
+      .then(response => {
+        console.log("Respuesta de la API:", response.data); 
+        setFilteredCourts(response.data.data);
+      })
+      .catch(error => {
+        console.error("Error al buscar canchas:", error);
+      });
+  };
+
   const { state, dispatch } = useContextGlobal();
   const [currentPage, setCurrentPage] = useState(
     state?.courts?.currentPage || 1
@@ -21,6 +38,7 @@ const Home = () => {
   const itemsPerPage = state?.courts?.pageSize;
   const totalPages = state?.courts?.totalPages;
 
+  
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -153,47 +171,21 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="searcher">
-            <img
-              className="reset-icon"
-              src="../public/icons/reset-icon-3.svg"
-              alt="reset-search"
-            />
-            <select className="searcher-input" name="city" id="city-select">
-              <option value="" disabled selected>
-                Ciudad
-              </option>
-            </select>
-            <select className="searcher-input" name="sport" id="sport-select">
-              <option value="" disabled selected>
-                Deporte
-              </option>
-            </select>
-            
-            <select className="searcher-input" name="date" id="date-select">
-              <option value="" disabled selected>
-                Fecha
-              </option>
-            </select>
-            <select className="searcher-input" name="hour" id="hour-select">
-              <option value="" disabled selected>
-                Hora
-              </option>
-            </select>
-            <button className="searcher-button">Buscar</button>
-          </div>
-          
+          <SearchBox onSearch={handleSearch} />
+                    
         </div>
       </div>
       <main>
         <div className="main-content">
           <h1>NUESTRAS RECOMENDACIONES</h1>
           <div className="home-cards-container">
-            {currentCourts &&
-              currentCourts.map((court) => (
-                <Cards key={court.id} court={court} />
-              ))}
-            {!currentCourts && <h1>No hay canchas disponibles</h1>}
+          {filteredCourts.length > 0 ? (
+            filteredCourts.map((court) => <Cards key={court.id} court={court} />)
+          ) : currentCourts && currentCourts.length > 0 ? (
+            currentCourts.map((court) => <Cards key={court.id} court={court} />)
+          ) : (
+            <h1>No hay canchas disponibles</h1>
+          )}
           </div>
           <div className="home-cards-pagination">
             <button onClick={handleFetchPrevPage} disabled={currentPage === 1}>

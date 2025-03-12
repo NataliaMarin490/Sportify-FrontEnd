@@ -73,50 +73,7 @@ main {
   }
 
 
-.searcher {
-  display: flex;
-  align-items: center;
-  gap: 25px;
 
-  width: 80%;
-  height: 13%;
-  padding: 0 20px;
-  margin: 0 5%;
-  background-color: #252625;
-  color: #f6f6e9;
-  border-radius: 15px;
-}
-
-.reset-icon {
-  width: 25px;
-}
-
-.searcher-input {
-  background-color: #252625;
-  color: #f6f6e9;
-  border: 0.5px solid #f6f6e9;
-  border-radius: 10px;
-  padding: 8px 2px;
-  width: 70%;
-}
-
-.searcher-input::placeholder {
-  color: #f6f6e9;
-}
-
-select:focus {
-  outline: none;
-}
-
-.searcher-button {
-  width: 60%;
-  padding: 10px;
-  border-radius: 10px;
-  background-color: var(--secondary-color);
-  margin: 0;
-  border: 0px;
-  cursor: pointer;
-}
 
 .home-cards-container {
   display: grid;
