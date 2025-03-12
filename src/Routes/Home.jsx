@@ -127,7 +127,7 @@ const Home = () => {
         <div className="searcher-container">
           <div className="main-text-container">
             <h1>BIENVENIDO A SPORTIFY</h1>
-            <p className="text">
+            <p className="text-welcome">
               Ofrecemos una amplia selección de canchas en todo el país, con{" "}
               <br />
               precios accesibles y condiciones óptimas para que disfrutes al{" "}
@@ -161,7 +161,7 @@ const Home = () => {
             />
             <select className="searcher-input" name="city" id="city-select">
               <option value="" disabled selected>
-                Dirección
+                Ciudad
               </option>
             </select>
             <select className="searcher-input" name="sport" id="sport-select">
@@ -169,11 +169,7 @@ const Home = () => {
                 Deporte
               </option>
             </select>
-            <select className="searcher-input" name="price" id="price-select">
-              <option value="" disabled selected>
-                Precio
-              </option>
-            </select>
+            
             <select className="searcher-input" name="date" id="date-select">
               <option value="" disabled selected>
                 Fecha
@@ -217,7 +213,7 @@ const Home = () => {
         <div className="extra-info-container">
           <div className="box-1">
             <h4 className="box-title">ENCUENTRA</h4>
-            <p className="text">
+            <p className="text-box">
               En Sportify tienes la posibilidad de encontrar la cancha que mejor
               se adapte a lo que buscas para disfrutar al alcance de un click.
             </p>
@@ -229,7 +225,7 @@ const Home = () => {
           </div>
           <div className="box-2">
             <h4 className="box-title">RESERVA</h4>
-            <p className="text">
+            <p className="text-box">
               Sólo es necesario tener un usuario registrado para reservar la
               cancha que elijas en cualquiera de los horarios disponibles.
             </p>
@@ -241,7 +237,7 @@ const Home = () => {
           </div>
           <div className="box-1">
             <h4 className="box-title">JUEGA</h4>
-            <p className="text">
+            <p className="text-box">
               Y listo! Solo resta prepararte para jugar ese partido tan esperado
               junto con tus amigos{" "}
             </p>
