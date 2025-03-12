@@ -135,11 +135,29 @@ const Home = () => {
               máximo tu actividad física.
             </p>
           </div>
+          <div className="categories-container">
+            <div className="categories-slider-container">
+              <Slider {...settings}>
+                {/* { state.courts && state?.courts?.data?.features?.map((category, index) => ( */}
+                {categories.map((category, index) => (
+                  <Link key={index} to={`/category/${category.id}`}>
+                    <img
+                      className="category-icon"
+                      src={category.icon}
+                      alt={category.name}
+                    />
+                    <span>{category.name}</span>
+                  </Link>
+                ))}
+              </Slider>
+            </div>
+          </div>
+
           <div className="searcher">
             <img
-              className="filter-icon"
-              src="../public/icons/filter-icon.svg"
-              alt="filterIcon"
+              className="reset-icon"
+              src="../public/icons/reset-icon-3.svg"
+              alt="reset-search"
             />
             <select className="searcher-input" name="city" id="city-select">
               <option value="" disabled selected>
@@ -168,23 +186,7 @@ const Home = () => {
             </select>
             <button className="searcher-button">Buscar</button>
           </div>
-          <div className="categories-container">
-            <div className="categories-slider-container">
-              <Slider {...settings}>
-                {/* { state.courts && state?.courts?.data?.features?.map((category, index) => ( */}
-                {categories.map((category, index) => (
-                  <Link key={index} to={`/category/${category.id}`}>
-                    <img
-                      className="category-icon"
-                      src={category.icon}
-                      alt={category.name}
-                    />
-                    <span>{category.name}</span>
-                  </Link>
-                ))}
-              </Slider>
-            </div>
-          </div>
+          
         </div>
       </div>
       <main>

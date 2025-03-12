@@ -24,7 +24,7 @@ main {
 }
 
 .searcher-container {
-  height: 75vh;
+  height: 90vh;
 
   display: flex;
   flex-direction: column;
@@ -37,20 +37,21 @@ main {
 }
 
 .searcher-container h1 {
-  margin: 0 0 10px 0;
+  margin: 50px 0 5px 0;
 }
 
 .main-text-container {
   text-align: left;
 
   h1 {
-    font-size: 48px;
+    font-size: 50px;
     font-weight: 700;
     color: #f6f6e9;
   }
 
   p {
     color: rgb(206, 199, 199);
+    font-size: larger;
   }
 }
 
@@ -61,15 +62,15 @@ main {
 
   width: 80%;
   height: 13%;
-  padding: 0 10px;
+  padding: 0 20px;
   margin: 0 5%;
   background-color: #252625;
   color: #f6f6e9;
   border-radius: 15px;
 }
 
-.filter-icon {
-  width: 30px;
+.reset-icon {
+  width: 25px;
 }
 
 .searcher-input {
@@ -118,8 +119,8 @@ select:focus {
   justify-content: center;
   align-items: flex-start;
   width: 50%;
-
-  margin: 2% 0 0 21%;
+  
+  margin: 1% 0 2% 21%;
 }
 
 .categories-slider-container {
@@ -133,7 +134,7 @@ select:focus {
 
   .slick-prev,
   .slick-next {
-    top: 50px !important;
+    top: 80px !important;
   }
 
   .slick-prev:before,
