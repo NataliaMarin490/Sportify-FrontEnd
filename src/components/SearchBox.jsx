@@ -1,6 +1,10 @@
 import "../Styles/searchBox.css";
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+/* import { Calendar } from 'primereact/calendar'; */
+/* import Calendar from 'react-calendar'; */
+import CalendarPlain from "./Calendar";
+import TimePicker from "./TimePicker"
 
 const SearchBox = ({ onSearch }) => {
   // Estados locales para manejar las selecciones del usuario
@@ -8,10 +12,18 @@ const SearchBox = ({ onSearch }) => {
   const [sport, setSport] = useState("");
   const [date, setDate] = useState("");
   const [hour, setHour] = useState("");
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false);
 
   // Estados para almacenar las opciones de ciudad y deporte
   const [cities, setCities] = useState([]);
   const [sports, setSports] = useState([]);
+
+  // UseEffect para hacer las peticiones cuando el componente se monta
+  useEffect(() => {
+    fetchCities();
+    fetchSports();
+  }, []);
 
   // Función para obtener las ciudades desde el backend
   const fetchCities = async () => {
@@ -35,11 +47,7 @@ const SearchBox = ({ onSearch }) => {
     }
   };
 
-  // UseEffect para hacer las peticiones cuando el componente se monta
-  useEffect(() => {
-    fetchCities();
-    fetchSports();
-  }, []);
+  
 
   // Función para limpiar los filtros
   const resetFilters = () => {
@@ -57,6 +65,20 @@ const SearchBox = ({ onSearch }) => {
     if (name === "date") setDate(value);
     if (name === "hour") setHour(value);
   }; */
+
+  // Función para manejar el cambio de fecha
+  const handleDateChange = (selectedDate) => {
+    const formattedDate = selectedDate.toLocaleDateString(); // Formato DD/MM/YYYY
+    setDate(formattedDate);
+    setShowCalendar(false);
+  };
+
+  // Función para manejar el cambio de hora
+  const handleTimeChange = (selectedHour, selectedPeriod) => {
+    const formattedTime = `${selectedHour}:00 ${selectedPeriod}`;
+    setHour(formattedTime);
+    setShowTimePicker(false);
+  };
 
   // Función para enviar los datos a Home.jsx
   const handleSearch = () => {
@@ -103,14 +125,45 @@ return (
         ))}
       </select>
 
-      <input type="date" className="searcher-input" value={date} onChange={(e) => setDate(e.target.value)} />
+      <div className="calendar-container">
+        <input
+            type="text"
+            className="searcher-input"
+            value={date}
+            placeholder="Fecha"
+            readOnly
+            onClick={() => setShowCalendar(!showCalendar)}
+        />
+            {showCalendar && (
+                <CalendarPlain
+                onDateChange={handleDateChange}
+                />
+            )}
+        </div>
 
-      <input type="time" className="searcher-input" value={hour} onChange={(e) => setHour(e.target.value)} />
-        <button className="searcher-button" onClick={handleSearch}>Buscar</button>
-      </div>
+      {/* Input para seleccionar hora */}
+      <div className="time-container">
+        <input
+          type="text"
+          className="searcher-input"
+          value={hour}
+          placeholder="Hora"
+          readOnly
+          onClick={() => setShowTimePicker(!showTimePicker)}
+        />
+        {showTimePicker && (
+        <div className="custom-timepicker">
+            <TimePicker onTimeChange={handleTimeChange} />
+        </div>
+        )}
+        </div>
 
-      );
-    };
+      <button className="searcher-button" onClick={handleSearch}>
+        Buscar
+      </button>
+    </div>
+  );
+};
 
     SearchBox.propTypes = {
         onSearch: PropTypes.func.isRequired,
