@@ -12,8 +12,8 @@ const SearchBox = ({ onSearch }) => {
   const [sport, setSport] = useState("");
   const [date, setDate] = useState("");
   const [hour, setHour] = useState("");
-  /* const [showCalendar, setShowCalendar] = useState(false); */
-  /* const [showTimePicker, setShowTimePicker] = useState(false); */
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false);
 
   // Estados para almacenar las opciones de ciudad y deporte
   const [cities, setCities] = useState([]);
@@ -87,20 +87,11 @@ const SearchBox = ({ onSearch }) => {
     }
   };
 
-  // Función para manejar los cambios de los select
-  /* const handleSelectChange = (e) => {
-    const { name, value } = e.target;
-    if (name === "city") setCity(value);
-    if (name === "sport") setSport(value);
-    if (name === "date") setDate(value);
-    if (name === "hour") setHour(value);
-  }; */
-
   // Función para manejar el cambio de fecha
   const handleDateChange = (selectedDate) => {
     const formattedDate = selectedDate.toLocaleDateString();
     setDate(formattedDate);
-    /* setShowCalendar(false); */
+    setShowCalendar(false);
     setActiveDropdown(null);
   };
 
@@ -108,7 +99,7 @@ const SearchBox = ({ onSearch }) => {
   const handleTimeChange = (selectedHour, selectedPeriod) => {
     const formattedTime = `${selectedHour}:00 ${selectedPeriod}`;
     setHour(formattedTime);
-    /* setShowTimePicker(false); */
+    setShowTimePicker(false);
     setActiveDropdown(null);
   };
 
@@ -117,59 +108,66 @@ const SearchBox = ({ onSearch }) => {
     onSearch({ city, sport, date, hour });
   };
 
-  // Funciones para que se abran y cierren inputs
-  const handleInputClick = (dropdownName) => {
-    if (activeDropdown === dropdownName) {
-      setActiveDropdown(null);
-    } else {
-      setActiveDropdown(dropdownName);
+  // Manejo global para que se abran y cierren inputs
+  
+  const handleInputClick = (inputType) => {
+    if (inputType === "city") {
+      setShowCitiesDropdown((prev) => !prev);
+      setShowSportsDropdown(false);
+      setShowCalendar(false);
+      setShowTimePicker(false);
+    } else if (inputType === "sport") {
+      setShowSportsDropdown((prev) => !prev);
+      setShowCitiesDropdown(false);
+      setShowCalendar(false);
+      setShowTimePicker(false);
+    } else if (inputType === "date") {
+      setShowCalendar(true);
+      setShowCitiesDropdown(false);
+      setShowSportsDropdown(false);
+      setShowTimePicker(false);
+    } else if (inputType === "hour") {
+      setShowTimePicker(true);
+      setShowCitiesDropdown(false);
+      setShowSportsDropdown(false);
+      setShowCalendar(false);
     }
-  };
-
-  const handleDateClick = () => {
-    setActiveDropdown(null);
-    setActiveDropdown("calendarDropdown");
-  };
-
-  const handleTimeClick = () => {
-    setActiveDropdown(null);
-    setActiveDropdown("timePickerDropdown");
   };
 
 
 return (
     <div className="searcher">
-        <img
-          className="reset-icon"
-          src="../public/icons/reset-icon-3.svg"
-          alt="reset-search"
-          onClick={resetFilters}
-        />
-        <div className="searcher-input-container">
+      <img
+        className="reset-icon"
+        src="../public/icons/reset-icon-3.svg"
+        alt="reset-search"
+        onClick={resetFilters}
+      />
+      <div className="searcher-input-container">
         <input
           type="text"
           className="searcher-input"
           placeholder="Ciudad"
           value={city}
           onChange={(e) => setCity(e.target.value)}
-          onClick={() => handleInputClick("cityDropdown")}
+          onFocus={() => handleInputClick("city")}
         />
-       {city ? (
-    <img
-      src="../public/icons/dropdown-close-icon-2.svg"
-      alt="Clear"
-      className="icon-button"
-      onClick={() => resetField("city")}
-    />
-  ) : (
-    <img
-      src="../public/icons/dropdown-arrow-icon-2.svg"
-      alt="Dropdown"
-      className="icon-button"
-      onClick={() => setShowCitiesDropdown(!showCitiesDropdown)}
-    />
+        {city ? (
+          <img
+            src="../public/icons/dropdown-close-icon-2.svg"
+            alt="Clear"
+            className="icon-button"
+            onClick={() => resetField("city")}
+          />
+        ) : (
+          <img
+            src="../public/icons/dropdown-arrow-icon-2.svg"
+            alt="Dropdown"
+            className="icon-button"
+            onClick={() => handleInputClick("city")}
+          />
         )}
-        {activeDropdown === "cityDropdown" && (
+        {showCitiesDropdown && (
           <ul className="dropdown">
             {filteredCities.map((c, index) => (
               <li
@@ -177,7 +175,7 @@ return (
                 onClick={() => {
                   if (c !== "Sin coincidencias") {
                     setCity(c);
-                    setActiveDropdown(null);
+                    setShowCitiesDropdown(false);
                   }
                 }}
                 className={c === "Sin coincidencias" ? "disabled-option" : ""}
@@ -196,24 +194,24 @@ return (
           placeholder="Deporte"
           value={sport}
           onChange={(e) => setSport(e.target.value)}
-          onClick={() => handleInputClick("sportDropdown")}
+          onFocus={() => handleInputClick("sport")}
         />
         {sport ? (
-            <img
+          <img
             src="../public/icons/dropdown-close-icon-2.svg"
             alt="Clear"
             className="icon-button"
             onClick={() => resetField("sport")}
-            />
+          />
         ) : (
-        <img
-        src="../public/icons/dropdown-arrow-icon-2.svg"
-        alt="Dropdown"
-        className="icon-button"
-        onClick={() => setShowSportsDropdown(!showSportsDropdown)}
-        />
+          <img
+            src="../public/icons/dropdown-arrow-icon-2.svg"
+            alt="Dropdown"
+            className="icon-button"
+            onClick={() => handleInputClick("sport")}
+          />
         )}
-        {activeDropdown === "sportDropdown" && (
+        {showSportsDropdown && (
           <ul className="dropdown">
             {filteredSports.map((s, index) => (
               <li
@@ -221,7 +219,7 @@ return (
                 onClick={() => {
                   if (s !== "Sin coincidencias") {
                     setSport(s);
-                    setActiveDropdown(null);
+                    setShowSportsDropdown(false);
                   }
                 }}
                 className={s === "Sin coincidencias" ? "disabled-option" : ""}
@@ -236,50 +234,53 @@ return (
 
       <div className="calendar-container">
         <input
-            type="text"
-            className="searcher-input"
-            value={date}
-            placeholder="Fecha"
-            readOnly
-            onClick={handleDateClick}
-        />
-            {date && (
-          <img
-            src="../public/icons/dropdown-close-icon-2.svg"
-            alt="Clear Date"
-            className="icon-button"
-            onClick={() => setDate("")} // Limpiar la selección de fecha
-          />
-        )}
-        {activeDropdown === "calendarDropdown" && (
-          <CalendarPlain onDateChange={handleDateChange} />
-        )}
-      </div>
-
-      <div className="time-container">
-        <input
           type="text"
           className="searcher-input"
-          value={hour}
-          placeholder="Hora"
+          value={date}
+          placeholder="Fecha"
           readOnly
-          onClick={handleTimeClick}
+          onClick={() => handleInputClick("date")}
         />
-        {hour && (
-          <img
-            src="../public/icons/dropdown-close-icon-2.svg"
-            alt="Clear Time"
-            className="icon-button"
-            onClick={() => setHour("")} // Limpiar la selección de hora
-          />
-        )}
-        {activeDropdown === "timePickerDropdown" && (
-          <div className="custom-timepicker">
-            <TimePicker onTimeChange={handleTimeChange} />
-          </div>
-        )}
-      </div>
+        {date && (
+    <img
+      src="../public/icons/dropdown-close-icon-2.svg"
+      alt="Clear"
+      className="icon-button"
+      onClick={() => {
+        setDate(""); // Resetea la fecha
+        setShowCalendar(false); // Cierra el calendario
+      }}
+    />
+  )}
+  {showCalendar && <CalendarPlain onDateChange={handleDateChange} />}
+</div>
 
+<div className="time-container">
+  <input
+    type="text"
+    className="searcher-input"
+    value={hour}
+    placeholder="Hora"
+    readOnly
+    onClick={() => handleInputClick("hour")}
+  />
+  {hour && (
+    <img
+      src="../public/icons/dropdown-close-icon-2.svg"
+      alt="Clear"
+      className="icon-button"
+      onClick={() => {
+        setHour(""); // Resetea la hora
+        setShowTimePicker(false); // Cierra el selector de hora
+      }}
+    />
+  )}
+  {showTimePicker && (
+    <div className="custom-timepicker">
+      <TimePicker onTimeChange={handleTimeChange} />
+    </div>
+  )}
+</div>
       <button className="searcher-button" onClick={handleSearch}>
         Buscar
       </button>
