@@ -1,0 +1,66 @@
+.time-picker {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    margin-top: 5px;
+    justify-content: center;
+    padding: 15px;
+    background-color: #252625;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    border-color: #f5f5eb;
+    position: relative;
+  }
+  
+  .time-picker select {
+    font-family: "Poppins", serif;
+    background-color: #363836;
+    border: 1px solid #e46115;
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    color: rgb(184, 181, 181);
+    width: 70%;
+    align-content: center;
+  }
+  
+  .time-picker select:hover {
+    background-color: #494b49;
+  }
+  
+  .time-picker select:focus {
+    outline: none;
+    border-color: #4caf50;
+  }
+  
+  .selected-info {
+    font-family: "Poppins", serif;
+    margin-top: 10px;
+    font-size: 18px;
+    color: #686868;
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+  }
+  
+  .tituloHour {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    color:gray;
+    font-size: 12px;
+  }
+  
+  .react-calendar__tile--active {
+    background-color: rgba(
+      0,
+      66,
+      37,
+      1
+    ) !important; /* Fondo blanco para el día seleccionado */
+    border-radius: 25px;
+    color: white !important; /* Color de texto gris para el día seleccionado */
+  }
+  

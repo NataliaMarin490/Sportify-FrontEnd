@@ -1,0 +1,159 @@
+header {
+  background: var(--header-color);
+  color: #fff;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 40px;
+
+  position: sticky;
+  top: 0;
+
+  z-index: 1000;
+
+  padding: 5px 20px;
+  height: 70px;
+}
+
+.nav-container {
+  width: 20%;
+  padding: 0 30px;
+  display: flex;
+  /* justify-content: flex-end; */
+  gap: 20px;
+  align-items: center;
+}
+
+.auth-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+
+.link-header {
+  cursor: pointer;
+  color: white;
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+nav ul li:hover {
+  cursor: pointer;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  span {
+    font-style: italic;
+  }
+}
+
+.logo-header {
+  height: 60px;
+  width: 60px;
+
+  padding: 3px 10px;
+}
+
+@media screen and (max-width: 890px) {
+  header {
+    padding: 5px 15px;
+    position: sticky;
+    height: 60px;
+  }
+
+  .logo-container {
+    width: auto;
+    display: flex;
+    align-items: center;
+  }
+
+  .logo-header {
+    height: 50px;
+    width: 50px;
+    padding: 2px 5px;
+  }
+  nav {
+    width: auto;
+    display: flex;
+    align-items: center;
+    background: var(--header-color);
+    padding: 0;
+  }
+
+  nav ul {
+    justify-content: flex-end;
+    gap: 15px;
+    white-space: nowrap;
+    padding: 0 10px;
+  }
+
+  .links {
+    width: auto;
+    flex-direction: row;
+  }
+  .logo-container span {
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  header {
+    padding: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 55px;
+    nav span {
+      display: none;
+    }
+  }
+
+  nav {
+    width: 65%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  nav ul {
+    flex-wrap: nowrap;
+    gap: 10px;
+    justify-content: flex-end;
+    white-space: nowrap;
+    padding: 0;
+  }
+
+  .logo-container {
+    width: 30%;
+    display: flex;
+    align-items: center;
+  }
+
+  .logo-header {
+    height: 40px;
+    width: 40px;
+    padding: 2px 5px;
+  }
+
+  .links {
+    width: auto;
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  .logo-container span {
+    display: none;
+  }
+}

@@ -1,0 +1,110 @@
+.calendar-container {
+  /* min-width: 200px; */
+  text-align: center;
+  padding: 0 15px;
+  border-radius: 10px;
+  border-color: #f5f5eb;
+  color: --var(--text-secondary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  
+}
+
+.custom-calendar {
+  font-family: "Poppins", serif;
+  border: none;
+  background-color: #252625 !important;
+  padding: 10px;
+  border-radius: 8px;
+  min-width: 290px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-container.active .custom-calendar {
+  opacity: 1;
+  transform: scale(1);
+  visibility: visible;
+}
+
+.react-calendar__tile {
+  color: #f6f6e9 !important; /* Cambiar el color de los números a gris */
+}
+
+/* .react-calendar__tile--active {
+  background-color: #f0592a !important;
+  color: #252625 !important;
+} */
+
+.react-calendar__tile--active {
+  font-family: "Poppins", serif;
+  background-color: #f0592a !important;
+  border-radius: 15px;
+  color: white !important;
+}
+
+/* .react-calendar__tile--inactive {
+  background-color: #abacab !important;
+  color: white !important;
+} */
+
+.react-calendar__tile:hover {
+  background-color: #f6f6e9 !important;
+  color: #252625 !important;
+  border-radius: 15px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+
+.selected-info {
+  font-family: "Poppins", serif;
+  margin-top: 10px;
+  font-size: 18px;
+  color: #686868;
+  background-color: white;
+  padding: 0 10px;
+  border-radius: 10px;
+}
+
+/* .react-calendar__month-view__weekdays {
+  text-decoration: none !important;
+  font-weight: normal;
+  border-bottom: none !important;
+} */
+
+
+.react-calendar__month-view__days__day {
+  color: #f6f6e9 !important;
+}
+.react-calendar__navigation {
+  color: #949494 !important;
+}
+
+.react-calendar__navigation__arrow {
+  color: #9b9b9b !important;
+}
+
+.react-calendar__navigation__prev2-button {
+  color: #a2a2a2 !important;
+}
+
+.react-calendar__navigation__label__labelText {
+  font-family: "Poppins", serif;
+  color: #686868 !important;
+}
+.react-calendar__navigation__label__labelText--from {
+  font-family: "Poppins", serif;
+  color: #cccccc !important;
+}
+
+.tituloCalendar {
+  margin-top: 15px;
+  margin-bottom: 5px;
+  color:gray;
+  font-size: 15px;
+}
+
+
+

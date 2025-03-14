@@ -1,0 +1,125 @@
+import axios from "axios";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useState,
+  useEffect,
+  useReducer,
+} from "react";
+import { reducer } from "../reducers/reducer";
+import API_BASE_URL from "../config";
+import { courts } from "./courts";
+
+const DEFAULT_IMAGE = "https://i.imgur.com/WYy9SAr.jpeg"; // Nueva imagen por defecto de Imgur
+
+const ContextGlobal = createContext();
+
+const initialState = {
+  courts: [],
+  recommendedCourts: [],
+  toggleSidebar: false,
+};
+
+const ContextProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser) {
+      setUser(storedUser);
+    }
+  }, []);
+
+  const login = async (credentials) => {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/api/auth/login`, credentials);
+
+      if (response.status === 200) {
+        const userData = response.data;
+        setUser(userData);
+        localStorage.setItem("user", JSON.stringify(userData));
+      }
+    } catch (error) {
+      console.error("Error en el inicio de sesión:", error);
+    }
+  };
+
+  const logout = () => {
+    localStorage.removeItem("user");
+    setUser(null);
+  };
+
+  const toggleSidebar = useCallback(
+    (show) => {
+      dispatch({ type: "TOGGLE_SIDEBAR", payload: show });
+    },
+    [dispatch]
+  );
+
+  function transformImageUrls(imageUrls) {
+    if (!imageUrls) return DEFAULT_IMAGE;
+
+    if (Array.isArray(imageUrls)) {
+      return imageUrls.map((url) => (url ? url : DEFAULT_IMAGE));
+    }
+
+    return typeof imageUrls === "string" ? imageUrls : DEFAULT_IMAGE;
+  }
+
+  useEffect(() => {
+    const fetchCourts = async () => {
+      try {
+        const response = await axios.get(
+          `${API_BASE_URL}/courts/search?page=1&size=10`
+        );
+
+        const modifiedData = response.data.data.map((court) => ({
+          ...court,
+          imageUrl: transformImageUrls(court.imageUrl),
+        }));
+
+        const court = {
+          data: modifiedData,
+          totalPages: response.data.totalPages,
+          pageSize: response.data.pageSize,
+          currentPage: response.data.currentPage,
+        }; // Verifica si se transforman bien
+
+        console.log(court);
+        dispatch({ type: "GET_COURTS", payload: court });
+      } catch (error) {
+        console.error("Error al obtener las canchas:", error);
+      }
+    };
+
+    const fetchRecommendedCourts = async () => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}/courts/random`);
+
+        const modifiedData = response.data.map((court) => ({
+          ...court,
+          imageUrl: transformImageUrls(court.imageUrl),
+        }));
+
+        dispatch({ type: "GET_RECOMMENDED_COURTS", payload: modifiedData });
+      } catch (error) {
+        console.error("Error al obtener las recomendaciones:", error);
+      }
+    };
+
+    fetchCourts();
+    fetchRecommendedCourts();
+  }, []);
+
+  return (
+    <ContextGlobal.Provider value={{ state, dispatch, toggleSidebar, user, setUser, login, logout }}>
+      {children}
+    </ContextGlobal.Provider>
+  );
+};
+
+export default ContextProvider;
+
+export const useContextGlobal = () => useContext(ContextGlobal);

@@ -1,0 +1,116 @@
+/* UserAvatar.css */
+
+.user-avatar-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-left: auto;
+  padding-left: 10px; 
+  margin-right: 40px;
+}
+
+.user-avatar {
+  width: 55px;
+  height: 55px;
+  background-color: black; 
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Cambio de color al hacer hover sobre el avatar */
+.user-avatar:hover {
+  background-color: #45a049;
+  transform: scale(1.1);
+}
+
+/* Estilos del menú desplegable */
+.dropdown-menu {
+  position: absolute;
+  top: 65px; /* Se coloca justo debajo del avatar */
+  right: 0;
+  background-color: rgba(127, 191, 157, 1);
+  border: 1px solid #ddd;
+  color: white;
+  border-radius: 5px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  width: 150px;
+  z-index: 1000; /* Asegura que el menú esté por encima de otros elementos */
+}
+
+.detail-menu {
+  display: flex;
+
+  margin: 5%;
+}
+
+.link:hover {
+  background-color: rgba(69, 125, 88, 1);
+}
+
+.link {
+  cursor: pointer;
+  color: white;
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.link img {
+  height: 20px;
+  width: 20px;
+}
+
+.detail-menu img:hover {
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  transform: scale(1.2);
+}
+
+/* responsive */
+@media (max-width: 767px) {
+  .user-avatar-container {
+    margin-right: 10px; 
+    padding-left: 5px;
+  }
+
+  .user-avatar {
+    width: 45px;
+    height: 45px; 
+    font-size: 14px;
+  }
+
+  .dropdown-menu {
+    width: 120px;
+    top: 50px;
+  }
+
+  .link img {
+    height: 16px;
+    width: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .user-avatar {
+    width: 40px; 
+    height: 40px;
+    font-size: 12px; 
+  }
+
+  .dropdown-menu {
+    width: 100px; 
+    top: 45px; 
+  }
+
+  .link img {
+    height: 14px; 
+    width: 14px;
+  }
+}
