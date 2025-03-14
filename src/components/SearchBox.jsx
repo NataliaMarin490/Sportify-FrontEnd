@@ -18,6 +18,10 @@ const SearchBox = ({ onSearch }) => {
   // Estados para almacenar las opciones de ciudad y deporte
   const [cities, setCities] = useState([]);
   const [sports, setSports] = useState([]);
+  const [filteredCities, setFilteredCities] = useState([]);
+  const [filteredSports, setFilteredSports] = useState([]);
+  const [showCitiesDropdown, setShowCitiesDropdown] = useState(false);
+  const [showSportsDropdown, setShowSportsDropdown] = useState(false);
 
   // UseEffect para hacer las peticiones cuando el componente se monta
   useEffect(() => {
@@ -47,7 +51,20 @@ const SearchBox = ({ onSearch }) => {
     }
   };
 
-  
+  // Filtrar ciudades y deporte cuando el usuario escribe
+  useEffect(() => {
+    const filtered = cities.filter((c) =>
+      c.toLowerCase().includes(city.toLowerCase())
+    );
+    setFilteredCities(filtered.length > 0 ? filtered : ["Sin coincidencias"]);
+  }, [city, cities]);
+
+  useEffect(() => {
+    const filtered = sports.filter((s) =>
+      s.toLowerCase().includes(sport.toLowerCase())
+    );
+    setFilteredSports(filtered.length > 0 ? filtered : ["Sin coincidencias"]);
+  }, [sport, sports]);
 
   // Función para limpiar los filtros
   const resetFilters = () => {
@@ -55,6 +72,17 @@ const SearchBox = ({ onSearch }) => {
     setSport("");
     setDate("");
     setHour("");
+  };
+
+  const resetField = (field) => {
+    if (field === "city") {
+      setCity("");
+      setShowCitiesDropdown(false);
+    }
+    if (field === "sport") {
+      setSport("");
+      setShowSportsDropdown(false);
+    }
   };
 
   // Función para manejar los cambios de los select
@@ -68,7 +96,7 @@ const SearchBox = ({ onSearch }) => {
 
   // Función para manejar el cambio de fecha
   const handleDateChange = (selectedDate) => {
-    const formattedDate = selectedDate.toLocaleDateString(); // Formato DD/MM/YYYY
+    const formattedDate = selectedDate.toLocaleDateString();
     setDate(formattedDate);
     setShowCalendar(false);
   };
@@ -95,35 +123,94 @@ return (
           alt="reset-search"
           onClick={resetFilters}
         />
-        <select
-        className="searcher-input"
-        value={city}
-        onChange={(e) => setCity(e.target.value)}
-      >
-        <option value="" disabled>
-          Ciudad
-        </option>
-        {cities.map((cityOption) => (
-          <option key={cityOption} value={cityOption}>
-            {cityOption}
-          </option>
-        ))}
-      </select>
+        <div className="searcher-input-container">
+        <input
+          type="text"
+          className="searcher-input"
+          placeholder="Ciudad"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          onFocus={() => setShowCitiesDropdown(true)}
+        />
+       {city ? (
+    <img
+      src="../public/icons/dropdown-close-icon-2.svg"
+      alt="Clear"
+      className="icon-button"
+      onClick={() => resetField("city")}
+    />
+  ) : (
+    <img
+      src="../public/icons/dropdown-arrow-icon-2.svg"
+      alt="Dropdown"
+      className="icon-button"
+      onClick={() => setShowCitiesDropdown(!showCitiesDropdown)}
+    />
+        )}
+        {showCitiesDropdown && (
+          <ul className="dropdown">
+            {filteredCities.map((c, index) => (
+              <li
+                key={index}
+                onClick={() => {
+                  if (c !== "Sin coincidencias") {
+                    setCity(c);
+                    setShowCitiesDropdown(false);
+                  }
+                }}
+                className={c === "Sin coincidencias" ? "disabled-option" : ""}
+              >
+                {c}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
 
-      <select
-        className="searcher-input"
-        value={sport}
-        onChange={(e) => setSport(e.target.value)}
-      >
-        <option value="" disabled>
-          Deporte
-        </option>
-        {sports.map((sportOption) => (
-          <option key={sportOption} value={sportOption}>
-            {sportOption}
-          </option>
-        ))}
-      </select>
+      <div className="searcher-input-container">
+        <input
+          type="text"
+          className="searcher-input"
+          placeholder="Deporte"
+          value={sport}
+          onChange={(e) => setSport(e.target.value)}
+          onFocus={() => setShowSportsDropdown(true)}
+        />
+        {sport ? (
+          <img
+          src="../public/icons/dropdown-close-icon-2.svg"
+          alt="Clear"
+          className="icon-button"
+          onClick={() => resetField("sport")}
+        />
+      ) : (
+        <img
+          src="../public/icons/dropdown-arrow-icon-2.svg"
+          alt="Dropdown"
+          className="icon-button"
+          onClick={() => setShowSportsDropdown(!showSportsDropdown)}
+        />
+        )}
+        {showSportsDropdown && (
+          <ul className="dropdown">
+            {filteredSports.map((s, index) => (
+              <li
+                key={index}
+                onClick={() => {
+                  if (s !== "Sin coincidencias") {
+                    setSport(s);
+                    setShowSportsDropdown(false);
+                  }
+                }}
+                className={s === "Sin coincidencias" ? "disabled-option" : ""}
+              >
+                {s}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
 
       <div className="calendar-container">
         <input

@@ -6,29 +6,29 @@
     margin-top: 5px;
     justify-content: center;
     padding: 15px;
-    background-color: white;
+    background-color: #252625;
     border-radius: 8px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     width: 100%;
-  border-color: #f5f5eb;
-  position: relative;
+    border-color: #f5f5eb;
+    position: relative;
   }
   
   .time-picker select {
     font-family: "Poppins", serif;
-    background-color: white;
+    background-color: #363836;
     border: 1px solid #e46115;
     padding: 8px;
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
-    color: grey;
+    color: rgb(184, 181, 181);
     width: 70%;
-    text-align: center;
+    align-content: center;
   }
   
   .time-picker select:hover {
-    background-color: #f1eded;
+    background-color: #494b49;
   }
   
   .time-picker select:focus {

@@ -1,76 +1,62 @@
 .calendar-container {
-  max-width: 400px;
-  margin: auto;
+  /* min-width: 200px; */
   text-align: center;
-  padding: 5px;
+  padding: 0 15px;
   border-radius: 10px;
   border-color: #f5f5eb;
-  color: #686868;
+  color: --var(--text-secondary);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   position: relative;
-  z-index: 100;
+  
 }
 
 .custom-calendar {
   font-family: "Poppins", serif;
   border: none;
-  background-color: gr#f5f5eb;
+  background-color: #252625 !important;
   padding: 10px;
-  border-radius: 10px;
+  border-radius: 8px;
+  min-width: 290px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-container.active .custom-calendar {
+  opacity: 1;
+  transform: scale(1);
+  visibility: visible;
 }
 
 .react-calendar__tile {
-  color: #f0eded !important; /* Cambiar el color de los números a gris */
+  color: #f6f6e9 !important; /* Cambiar el color de los números a gris */
 }
 
+/* .react-calendar__tile--active {
+  background-color: #f0592a !important;
+  color: #252625 !important;
+} */
+
 .react-calendar__tile--active {
-  background-color: rgba(0, 126, 71, 1) !important;
+  font-family: "Poppins", serif;
+  background-color: #f0592a !important;
+  border-radius: 15px;
   color: white !important;
 }
 
+/* .react-calendar__tile--inactive {
+  background-color: #abacab !important;
+  color: white !important;
+} */
+
 .react-calendar__tile:hover {
-  background-color: #f1eded;
-  border-radius: 25px;
+  background-color: #f6f6e9 !important;
+  color: #252625 !important;
+  border-radius: 15px;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-.time-picker {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  margin-top: 5px;
-  justify-content: center;
-  padding: 15px;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  width: 60%;
-}
-
-.time-picker select {
-  font-family: "Poppins", serif;
-  background-color: white;
-  border: 1px solid #e46115;
-  padding: 8px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-  color: grey;
-  width: 70%;
-  text-align: center;
-}
-
-.time-picker select:hover {
-  background-color: #f1eded;
-}
-
-.time-picker select:focus {
-  outline: none;
-  border-color: #4caf50;
-}
 
 .selected-info {
   font-family: "Poppins", serif;
@@ -78,30 +64,39 @@
   font-size: 18px;
   color: #686868;
   background-color: white;
-  padding: 10px;
+  padding: 0 10px;
   border-radius: 10px;
 }
 
+/* .react-calendar__month-view__weekdays {
+  text-decoration: none !important;
+  font-weight: normal;
+  border-bottom: none !important;
+} */
+
+
 .react-calendar__month-view__days__day {
-  color: #686868 !important;
+  color: #f6f6e9 !important;
 }
 .react-calendar__navigation {
-  color: #686868 !important;
+  color: #949494 !important;
 }
 
 .react-calendar__navigation__arrow {
-  color: #686868 !important;
+  color: #9b9b9b !important;
 }
 
 .react-calendar__navigation__prev2-button {
-  color: #686868 !important;
+  color: #a2a2a2 !important;
 }
 
 .react-calendar__navigation__label__labelText {
+  font-family: "Poppins", serif;
   color: #686868 !important;
 }
 .react-calendar__navigation__label__labelText--from {
-  color: #686868 !important;
+  font-family: "Poppins", serif;
+  color: #cccccc !important;
 }
 
 .tituloCalendar {
@@ -111,20 +106,5 @@
   font-size: 15px;
 }
 
-.tituloHour {
-  margin-top: 5px;
-  margin-bottom: 5px;
-  color:gray;
-  font-size: 12px;
-}
 
-.react-calendar__tile--active {
-  background-color: rgba(
-    0,
-    66,
-    37,
-    1
-  ) !important; /* Fondo blanco para el día seleccionado */
-  border-radius: 25px;
-  color: white !important; /* Color de texto gris para el día seleccionado */
-}
+

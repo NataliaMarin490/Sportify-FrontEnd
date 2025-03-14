@@ -6,7 +6,7 @@
     width: 80%;
     height: 10%;
     padding: 15px;
-    margin: 0 5%;
+    margin: 0;
     background-color: #252625;
     color: #f6f6e9;
     border-radius: 15px;
@@ -20,52 +20,98 @@
  }
   
 .reset-icon:active {
-    transform: rotate(180deg);  /* Rota el icono al hacer clic */
+    transform: rotate(180deg);
   }
 
-  .searcher-input {
+  .searcher-input-container {
+    position: relative;
+    width: 100%;
+    align-items: center;
+}
+
+.searcher-input-container input {
+    width: 90%;
+    padding: 10px;
+    border: 1px solid #f6f6e9;
+    border-radius: 10px;
+    background-color: #252625;
+    color: #f6f6e9;
+    text-align: center;
+}
+
+.searcher-input,
+.searcher select {
     font-family: "Poppins", serif;
     background-color: #252625;
     color: #f6f6e9;
-    border: 0.5px solid #f6f6e9;
+    border: 1px solid #f6f6e9;
     border-radius: 10px;
-    padding: 8px 2px;
+    padding: 10px 15px;
     width: 100%;
-  }
+    cursor: pointer;
+    transition: none;
+}
+
+.searcher-input:focus,
+.searcher select:focus {
+    outline: none;
+    border-color: #f6f6e9;
+    
+}
 
   .searcher-input::placeholder {
     color: #f6f6e9;
+    opacity: 0.7;
   }
-  
-  /* .searcher input {
-    font-family: "Poppins", serif;
-    background-color: #252625;
+
+
+.icon-button {
+    position: absolute;
+    top: 10px;
+    right: 7px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+
+.icon-button:hover {
+    opacity: 0.7;
+}
+
+
+.dropdown {
+    position: absolute;
+    width: 100%;
+    background: #252625;
     color: #f6f6e9;
     border: 1px solid #f6f6e9;
     border-radius: 10px;
+    max-height: 150px;
+    overflow-y: auto;
+    list-style: none;
+    padding: 0;
+    margin: 5px 0;
+    z-index: 100;
+}
+
+.dropdown li {
     padding: 10px;
-    width: 100%;
-    height: 25%;
     cursor: pointer;
+    transition: background 0.3s;
+}
+
+.dropdown li:hover {
+    background: #f6f6e9;
+    color: #252625;
+}
+
+.disabled-option {
+    cursor: not-allowed;
+    opacity: 0.5;
     text-align: center;
-} */
-  
-  /* .searcher select {
-    font-family: "Poppins", serif;
-    background-color: #252625;
-    color: #f6f6e9;
-    border: 1px solid #f6f6e9;
-    border-radius: 10px;
-    padding: 10px;
-    width: 100%;
-    height: 60%;
-    cursor: pointer;
-    text-align: center;
-} */
-  
-  select:focus {
-    outline: none;
-  }
+    font-style: italic;
+}
 
 .calendar-container {
       position: relative;
@@ -73,17 +119,21 @@
   }
   
 .custom-calendar {
-      position: absolute;
-      top: 20px;
-      left: 0;
-      z-index: 100;
-      
-  }
+    position: absolute;
+    top: 20px;
+    left: 0;
+    z-index: 100;
+}
 
 .calendar-container
 select {
   width: 100%;
   max-width: 300px;
+}
+
+.time-container {
+    position: relative;
+    width: 100%;
 }
 
 .custom-timepicker {
@@ -103,19 +153,15 @@ select {
   max-width: 500px;
 }
 
-.time-container {
-    position: relative;
-    width: 100%;
-}
-
-  
-  .searcher-button {
+.searcher-button {
     font-family: "Poppins", serif;
-    width: 60%;
+    font-size: large;
+    font-weight: 500;
+    width: 750px;
     padding: 10px;
     border-radius: 10px;
     background-color: var(--secondary-color);
-    margin: 0;
+    margin: 25px;
     border: none;
     cursor: pointer;
     transition: transform .1s;
@@ -126,10 +172,7 @@ select {
   }
 
 
-
-
-
- .react-calendar {
+/* .react-calendar {
     width: 300px;
     background-color: white;
     border-radius: 10px;
@@ -141,9 +184,4 @@ select {
     text-align: center;
     padding: 10px;
   }
-
-/*  .time-picker {
-    background-color: white !important;
-    z-index: 110;
-  } */
-  
+ */
