@@ -113,19 +113,19 @@
     font-style: italic;
 }
 
-.calendar-container {
+.search-calendar-container {
       position: relative;
       width: 100%;
   }
   
-.custom-calendar {
+.search-custom-calendar {
     position: absolute;
     top: 20px;
     left: 0;
     z-index: 100;
 }
 
-.calendar-container
+.search-calendar-container
 select {
   width: 100%;
   max-width: 300px;

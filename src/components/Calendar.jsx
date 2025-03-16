@@ -14,9 +14,9 @@ const CalendarPlain = ({ onDateChange }) => {
   
 
   return (
-    <div className="calendar-container">
+    <div className="search-calendar-container">
       {/* <h2 className="tituloCalendar">Seleccionar Fecha</h2> */}
-      <Calendar onChange={handleDateSelection} value={date} className="custom-calendar" />
+      <Calendar onChange={handleDateSelection} value={date} className="search-custom-calendar" />
 
       
       

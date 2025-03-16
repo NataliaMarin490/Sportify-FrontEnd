@@ -232,7 +232,7 @@ return (
       </div>
 
 
-      <div className="calendar-container">
+      <div className="search-calendar-container">
         <input
           type="text"
           className="searcher-input"

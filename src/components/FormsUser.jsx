@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import "../Styles/formsUser.css";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
