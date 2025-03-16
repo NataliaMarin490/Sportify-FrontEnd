@@ -32,6 +32,12 @@ export const reducer = (state, action) => {
         showSidebar: action.payload,
       };
 
+      case "GET_COURTS_BY_CATEGORY":
+      return {
+        ...state,
+        courtsByCategory: action.payload,
+      };
+
     default:
       throw new Error("Acción no existente");
   }

@@ -19,6 +19,7 @@ const initialState = {
   courts: [],
   recommendedCourts: [],
   toggleSidebar: false,
+  courtsByCategory: [],
 };
 
 const ContextProvider = ({ children }) => {
@@ -113,8 +114,26 @@ const ContextProvider = ({ children }) => {
     fetchRecommendedCourts();
   }, []);
 
+  // Función para filtrar las canchas por categoría
+  const fetchCourtsByCategory = async (categoryName) => {
+    try {
+      const response = await axios.get(
+        `${API_BASE_URL}/courts/search?category=${categoryName}&page=1&size=10`
+      );
+
+      const modifiedData = response.data.data.map((court) => ({
+        ...court,
+        imageUrl: transformImageUrls(court.imageUrl),
+      }));
+
+      dispatch({ type: "GET_COURTS_BY_CATEGORY", payload: modifiedData });
+    } catch (error) {
+      console.error(`Error al obtener las canchas de la categoría ${categoryName}:`, error);
+    }
+  };
+
   return (
-    <ContextGlobal.Provider value={{ state, dispatch, toggleSidebar, user, setUser, login, logout }}>
+    <ContextGlobal.Provider value={{ state, dispatch, toggleSidebar, user, setUser, login, logout, fetchCourtsByCategory }}>
       {children}
     </ContextGlobal.Provider>
   );

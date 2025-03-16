@@ -1,4 +1,4 @@
-.time-picker {
+.searcher-time-picker {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -14,7 +14,7 @@
     position: relative;
   }
   
-  .time-picker select {
+  .searcher-time-picker select {
     font-family: "Poppins", serif;
     background-color: #363836;
     border: 1px solid #e46115;
@@ -27,11 +27,11 @@
     align-content: center;
   }
   
-  .time-picker select:hover {
+  .searcher-time-picker select:hover {
     background-color: #494b49;
   }
   
-  .time-picker select:focus {
+  .searcher-time-picker select:focus {
     outline: none;
     border-color: #4caf50;
   }

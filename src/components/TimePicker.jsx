@@ -30,7 +30,7 @@ const TimePicker = ({ onTimeChange }) => {
   };
 
   return (
-    <div className="time-picker">
+    <div className="searcher-time-picker">
       <select value={hour} onChange={handleHourChange}>
         {generateHourOptions().map((h) => (
           <option key={h} value={h}>
