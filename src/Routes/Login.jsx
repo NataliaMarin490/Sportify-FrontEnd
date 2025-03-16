@@ -12,9 +12,14 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
     const location = useLocation(); // para ir a la anterior pagina
     const from = location.state?.from || "/";
 
+    const refreshPage = ( ) => {
+      navigate(0);
+    }
+
     const { formData, error, handleChange, handleSubmit } =     useLogin((userData) => {
     onLogin(userData);
-    navigate(from, { replace: true }); 
+    navigate(from, { replace: true });
+    refreshPage(); 
     });
 
     const [passwordVisible, setPasswordVisible] = useState(false);
