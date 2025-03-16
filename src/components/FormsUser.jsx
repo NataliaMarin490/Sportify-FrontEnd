@@ -212,7 +212,6 @@ const FormsUser = ({ user = {}, onSubmit }) => {
 
   return (
     <>
-      {" "}
       <form
         onSubmit={handleSubmit}
         className={`form-account ${
