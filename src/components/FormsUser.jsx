@@ -2,7 +2,7 @@ import "../Styles/formsUser.css";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import API_BASE_URL from "../config";
-
+import { sendEmail } from "../components/SendEmail.jsx";
 
 const FormsUser = ({ user = {}, onSubmit }) => {
   const location = useLocation();
@@ -10,6 +10,11 @@ const FormsUser = ({ user = {}, onSubmit }) => {
   const [isEditing, setIsEditing] = useState(Object.keys(user).length === 0);
   const [countries, setCountries] = useState([]);
   const [errors, setErrors] = useState({});
+  const [emailSent, setEmailSent] = useState(false);
+  const [emailForResend, setEmailForResend] = useState(""); // Estado para guardar el correo ingresado para reenviar
+  const [isResendVisible, setIsResendVisible] = useState(false); // Para controlar si se muestra el formulario de reenvío
+  const [hasReceivedEmail, setHasReceivedEmail] = useState(null); // Estado para saber si el usuario recibió el correo
+  const [modalVisible, setModalVisible] = useState(false); // Para controlar la visibilidad del modal
 
   const [userData, setUserData] = useState({
     name: user.name || "",
@@ -140,6 +145,20 @@ const FormsUser = ({ user = {}, onSubmit }) => {
       .then((data) => {
         console.log("Registro exitoso:", data);
         setSuccessMessage("Usuario registrado correctamente!");
+
+        console.log(userData.name);
+
+        // Llamar a la función para enviar el correo sin await
+        sendEmail(userData.email, userData.name)
+          .then((emailSent) => {
+            if (emailSent) {
+              console.log("Correo de bienvenida enviado correctamente.");
+            } else {
+              console.log("Hubo un problema al enviar el correo.");
+            }
+          })
+          .catch((error) => console.error("Error enviando el correo:", error));
+
         setUserData({
           name: "",
           lastName: "",
@@ -160,390 +179,503 @@ const FormsUser = ({ user = {}, onSubmit }) => {
       });
   };
 
+  const handleResendEmail = () => {
+    // Mostrar el formulario para que el usuario ingrese un correo
+    setModalVisible(true);
+  };
+
+  const handleResendSubmit = () => {
+    if (!/\S+@\S+\.\S+/.test(emailForResend)) {
+      setErrors({ email: "Correo electrónico inválido" });
+      return;
+    }
+
+    // Llamar a la función para reenviar el correo con el nuevo correo proporcionado
+    sendEmail(emailForResend, userData.name)
+      .then((emailSent) => {
+        if (emailSent) {
+          console.log("Correo de bienvenida reenviado correctamente.");
+          //setSuccessMessage("Correo de bienvenida reenviado correctamente.");
+          setEmailSent(true); // Cambiar el estado cuando el correo se haya reenviado
+        } else {
+          console.log("Hubo un problema al reenviar el correo.");
+        }
+      })
+      .catch((error) => console.error("Error reenviando el correo:", error));
+    setModalVisible(false);
+  };
+
+  const handleCloseModal = () => {
+    // Cerrar el modal sin hacer nada
+    setModalVisible(false);
+  };
+
   return (
-    <form
-      onSubmit={handleSubmit}
-      className={`form-account ${
-        isRegisterPage ? "form-width-create" : "form-width-profile"
+    <>
+      {" "}
+      <form
+        onSubmit={handleSubmit}
+        className={`form-account ${
+          isRegisterPage ? "form-width-create" : "form-width-profile"
+        }`}
+      >
+        {/* Campo Nombres */}
+        <div
+          className={`input-container ${
+            isRegisterPage ? "input-color-create" : "input-color-profile"
+          }`}
+        >
+          <label className="label">Nombres</label>
+          <input
+            className={`entrada-registrer ${
+              isRegisterPage ? "border-green-500" : "border-red-500"
+            }`}
+            type="text"
+            name="name"
+            placeholder="ej. Juan Miguel"
+            value={userData.name}
+            onChange={handleChange}
+            disabled={!isEditing}
+            required
+          />
+          {errors.name && <p className="error-message">{errors.name}</p>}
+        </div>
+
+        {/* Campo Apellidos */}
+        <div
+          className={`input-container ${
+            isRegisterPage ? "input-color-create" : "input-color-profile"
+          }`}
+        >
+          <label className="label">Apellidos</label>
+          <input
+            className={`entrada-registrer ${
+              isRegisterPage ? "border-green-500" : "border-red-500"
+            }`}
+            type="text"
+            name="lastName"
+            placeholder="ej. Pérez Rodríguez"
+            value={userData.lastName}
+            onChange={handleChange}
+            disabled={!isEditing}
+            required
+          />
+          {errors.lastName && (
+            <p className="error-message">{errors.lastName}</p>
+          )}
+        </div>
+
+        {/*Campo tipo doc
+    <div
+      className={`input-container ${
+        isRegisterPage ? "input-color-create" : "input-color-profile"
       }`}
     >
-      {/* Campo Nombres */}
-      <div
-        className={`input-container ${
-          isRegisterPage ? "input-color-create" : "input-color-profile"
+      <label className="label">Tipo de Documento</label>
+      <select
+        className={`entrada-registrer ${
+          isRegisterPage ? "border-green-500" : "border-red-500"
         }`}
+        name="idDocumentType"
+        value={userData.idDocumentType}
+        onChange={handleChange}
+        disabled={!isEditing}
+        required
       >
-        <label className="label">Nombres</label>
-        <input
+        <option
           className={`entrada-registrer ${
             isRegisterPage ? "border-green-500" : "border-red-500"
           }`}
-          type="text"
-          name="name"
-          placeholder="ej. Juan Miguel"
-          value={userData.name}
-          onChange={handleChange}
-          disabled={!isEditing}
-          required
-        />
-        {errors.name && <p className="error-message">{errors.name}</p>}
-      </div>
-
-      {/* Campo Apellidos */}
-      <div
-        className={`input-container ${
-          isRegisterPage ? "input-color-create" : "input-color-profile"
-        }`}
-      >
-        <label className="label">Apellidos</label>
-        <input
-          className={`entrada-registrer ${
-            isRegisterPage ? "border-green-500" : "border-red-500"
-          }`}
-          type="text"
-          name="lastName"
-          placeholder="ej. Pérez Rodríguez"
-          value={userData.lastName}
-          onChange={handleChange}
-          disabled={!isEditing}
-          required
-        />
-        {errors.lastName && <p className="error-message">{errors.lastName}</p>}
-      </div>
-
-      {/*Campo tipo doc
-      <div
-        className={`input-container ${
-          isRegisterPage ? "input-color-create" : "input-color-profile"
-        }`}
-      >
-        <label className="label">Tipo de Documento</label>
-        <select
-          className={`entrada-registrer ${
-            isRegisterPage ? "border-green-500" : "border-red-500"
-          }`}
-          name="idDocumentType"
-          value={userData.idDocumentType}
-          onChange={handleChange}
-          disabled={!isEditing}
-          required
+          value=""
         >
+          Seleccione un tipo
+        </option>
+        {documentTypes.map((type) => (
           <option
             className={`entrada-registrer ${
               isRegisterPage ? "border-green-500" : "border-red-500"
             }`}
-            value=""
+            key={type.id}
+            value={type.id}
           >
-            Seleccione un tipo
+            {type.document_type}
           </option>
-          {documentTypes.map((type) => (
-            <option
+        ))}
+      </select>
+      {errors.idDocumentType && (
+        <p className="error-message">{errors.idDocumentType}</p>
+      )}
+    </div>
+  {/*Documento}
+    <div
+      className={`input-container ${
+        isRegisterPage ? "input-color-create" : "input-color-profile"
+      }`}
+    >
+      <label className="label">Documento</label>
+      <input
+        className={`entrada-registrer ${
+          isRegisterPage ? "border-green-500" : "border-red-500"
+        }`}
+        type="text"
+        name="document"
+        value={userData.document}
+        placeholder="ej. 123456789"
+        onChange={handleChange}
+        disabled={!isEditing}
+        required
+      />
+      {errors.document && <p className="error-message">{errors.document}</p>}
+    </div>*/}
+
+        {/* Campo Correo Electrónico */}
+        <div
+          className={`input-container ${
+            isRegisterPage ? "input-color-create" : "input-color-profile"
+          }`}
+        >
+          <label className="label">Correo electrónico</label>
+          <input
+            className={`entrada-registrer ${
+              isRegisterPage ? "border-green-500" : "border-red-500"
+            }`}
+            type="email"
+            name="email"
+            placeholder="ej. ejemplo@gmail.com"
+            value={userData.email}
+            onChange={handleChange}
+            disabled={!isEditing}
+            required
+          />
+          {errors.email && <p className="error-message">{errors.email}</p>}
+        </div>
+
+        {/* Campo Teléfono */}
+        <div
+          className={`input-container ${
+            isRegisterPage ? "input-color-create" : "input-color-profile"
+          }`}
+        >
+          <label className="label">Número celular</label>
+          <input
+            className={`entrada-registrer ${
+              isRegisterPage ? "border-green-500" : "border-red-500"
+            }`}
+            type="tel"
+            name="phoneNumber"
+            placeholder="ej. +XXX XXXX XXXX"
+            value={userData.phoneNumber}
+            onChange={handleChange}
+            disabled={!isEditing}
+            required
+          />
+          {errors.phoneNumber && (
+            <p className="error-message">{errors.phoneNumber}</p>
+          )}
+        </div>
+
+        {/* Campo Fecha Nacimiento */}
+        <div
+          className={`input-container ${
+            isRegisterPage ? "input-color-create" : "input-color-profile"
+          }`}
+        >
+          <label className="label">Fecha Nacimiento</label>
+          <input
+            className={`entrada-registrer ${
+              isRegisterPage ? "border-green-500" : "border-red-500"
+            }`}
+            type="date"
+            name="birthdate"
+            placeholder="ej. 01/01/2000"
+            value={userData.birthdate}
+            onChange={handleChange}
+            disabled={!isEditing}
+            required
+          />
+
+          {errors.birthdate && (
+            <p className="error-message">{errors.birthdate}</p>
+          )}
+        </div>
+
+        {/* Campo Paìs*/}
+        <div
+          className={`input-container ${
+            isRegisterPage ? "input-color-create" : "input-color-profile"
+          }`}
+        >
+          <label className="label">
+            País:
+            <select
               className={`entrada-registrer ${
                 isRegisterPage ? "border-green-500" : "border-red-500"
               }`}
-              key={type.id}
-              value={type.id}
+              name="country"
+              value={userData.country}
+              onChange={handleChange}
+              required
+              disabled={!isEditing}
             >
-              {type.document_type}
-            </option>
-          ))}
-        </select>
-        {errors.idDocumentType && (
-          <p className="error-message">{errors.idDocumentType}</p>
-        )}
-      </div>
-    {/*Documento}
-      <div
-        className={`input-container ${
-          isRegisterPage ? "input-color-create" : "input-color-profile"
-        }`}
-      >
-        <label className="label">Documento</label>
-        <input
-          className={`entrada-registrer ${
-            isRegisterPage ? "border-green-500" : "border-red-500"
-          }`}
-          type="text"
-          name="document"
-          value={userData.document}
-          placeholder="ej. 123456789"
-          onChange={handleChange}
-          disabled={!isEditing}
-          required
-        />
-        {errors.document && <p className="error-message">{errors.document}</p>}
-      </div>*/}
-
-      {/* Campo Correo Electrónico */}
-      <div
-        className={`input-container ${
-          isRegisterPage ? "input-color-create" : "input-color-profile"
-        }`}
-      >
-        <label className="label">Correo electrónico</label>
-        <input
-          className={`entrada-registrer ${
-            isRegisterPage ? "border-green-500" : "border-red-500"
-          }`}
-          type="email"
-          name="email"
-          placeholder="ej. ejemplo@gmail.com"
-          value={userData.email}
-          onChange={handleChange}
-          disabled={!isEditing}
-          required
-        />
-        {errors.email && <p className="error-message">{errors.email}</p>}
-      </div>
-
-      {/* Campo Teléfono */}
-      <div
-        className={`input-container ${
-          isRegisterPage ? "input-color-create" : "input-color-profile"
-        }`}
-      >
-        <label className="label">Número celular</label>
-        <input
-          className={`entrada-registrer ${
-            isRegisterPage ? "border-green-500" : "border-red-500"
-          }`}
-          type="tel"
-          name="phoneNumber"
-          placeholder="ej. +XXX XXXX XXXX"
-          value={userData.phoneNumber}
-          onChange={handleChange}
-          disabled={!isEditing}
-          required
-        />
-        {errors.phoneNumber && (
-          <p className="error-message">{errors.phoneNumber}</p>
-        )}
-      </div>
-
-      {/* Campo Fecha Nacimiento */}
-      <div
-        className={`input-container ${
-          isRegisterPage ? "input-color-create" : "input-color-profile"
-        }`}
-      >
-        <label className="label">Fecha Nacimiento</label>
-        <input
-          className={`entrada-registrer ${
-            isRegisterPage ? "border-green-500" : "border-red-500"
-          }`}
-          type="date"
-          name="birthdate"
-          placeholder="ej. 01/01/2000"
-          value={userData.birthdate}
-          onChange={handleChange}
-          disabled={!isEditing}
-          required
-        />
-
-        {errors.birthdate && (
-          <p className="error-message">{errors.birthdate}</p>
-        )}
-      </div>
-
-      {/* Campo Paìs*/}
-      <div
-        className={`input-container ${
-          isRegisterPage ? "input-color-create" : "input-color-profile"
-        }`}
-      >
-        <label className="label">
-          País:
-          <select
-            className={`entrada-registrer ${
-              isRegisterPage ? "border-green-500" : "border-red-500"
-            }`}
-            name="country"
-            value={userData.country}
-            onChange={handleChange}
-            required
-            disabled={!isEditing}
-          >
-            {isEditing || isRegisterPage ? (
-              <>
-                <option value="">Selecciona un país</option>
-                {countries.map((country) => (
-                  <option key={country.idCountry} value={country.idCountry}>
-                    {country.countryName}
-                  </option>
-                ))}
-              </>
-            ) : (
-              <>
-                {countries.map((country) =>
-                  parseInt(country.idCountry) === parseInt(userData.country) ? (
+              {isEditing || isRegisterPage ? (
+                <>
+                  <option value="">Selecciona un país</option>
+                  {countries.map((country) => (
                     <option key={country.idCountry} value={country.idCountry}>
                       {country.countryName}
                     </option>
-                  ) : null
-                )}
-              </>
-            )}
-          </select>
-        </label>
-      </div>
+                  ))}
+                </>
+              ) : (
+                <>
+                  {countries.map((country) =>
+                    parseInt(country.idCountry) ===
+                    parseInt(userData.country) ? (
+                      <option key={country.idCountry} value={country.idCountry}>
+                        {country.countryName}
+                      </option>
+                    ) : null
+                  )}
+                </>
+              )}
+            </select>
+          </label>
+        </div>
 
-      {/* Campo Region
-      <div
-        className={`input-container ${
-          isRegisterPage ? "input-color-create" : "input-color-profile"
-        }`}
-      >
-        <label className="label">
-          Región/Estado:
-          <select
-            className={`entrada-registrer ${
-              isRegisterPage ? "border-green-500" : "border-red-500"
-            }`}
-            name="region"
-            value={userData.region}
-            onChange={handleChange}
-            required
-            disabled={!isEditing}
-          >
-            {isEditing || isRegisterPage ? (
-              <>
-                <option value="">Selecciona una región</option>
-                {regions.map((region) => (
+        {/* Campo Region
+    <div
+      className={`input-container ${
+        isRegisterPage ? "input-color-create" : "input-color-profile"
+      }`}
+    >
+      <label className="label">
+        Región/Estado:
+        <select
+          className={`entrada-registrer ${
+            isRegisterPage ? "border-green-500" : "border-red-500"
+          }`}
+          name="region"
+          value={userData.region}
+          onChange={handleChange}
+          required
+          disabled={!isEditing}
+        >
+          {isEditing || isRegisterPage ? (
+            <>
+              <option value="">Selecciona una región</option>
+              {regions.map((region) => (
+                <option key={region.id} value={region.id}>
+                  {region.name}
+                </option>
+              ))}
+            </>
+          ) : (
+            <>
+              {regions.map((region) =>
+                region.id === userData.region ? (
                   <option key={region.id} value={region.id}>
                     {region.name}
                   </option>
-                ))}
-              </>
-            ) : (
-              <>
-                {regions.map((region) =>
-                  region.id === userData.region ? (
-                    <option key={region.id} value={region.id}>
-                      {region.name}
-                    </option>
-                  ) : null
-                )}
-              </>
-            )}
-          </select>
-        </label>
-      </div>
+                ) : null
+              )}
+            </>
+          )}
+        </select>
+      </label>
+    </div>
 
-      {/* Campo Ciudad
-      <div
-        className={`input-container ${
-          isRegisterPage ? "input-color-create" : "input-color-profile"
-        }`}
-      >
-        <label className="label">
-          Ciudad:
-          <select
-            className={`entrada-registrer ${
-              isRegisterPage ? "border-green-500" : "border-red-500"
-            }`}
-            name="cityId"
-            value={userData.cityId}
-            onChange={handleChange}
-            required
-            disabled={!isEditing}
-          >
-            {isEditing || isRegisterPage ? (
-              <>
-                <option value="">Selecciona una ciudad</option>
-                {cities.map((city) => (
+    {/* Campo Ciudad
+    <div
+      className={`input-container ${
+        isRegisterPage ? "input-color-create" : "input-color-profile"
+      }`}
+    >
+      <label className="label">
+        Ciudad:
+        <select
+          className={`entrada-registrer ${
+            isRegisterPage ? "border-green-500" : "border-red-500"
+          }`}
+          name="cityId"
+          value={userData.cityId}
+          onChange={handleChange}
+          required
+          disabled={!isEditing}
+        >
+          {isEditing || isRegisterPage ? (
+            <>
+              <option value="">Selecciona una ciudad</option>
+              {cities.map((city) => (
+                <option key={city.id} value={city.id}>
+                  {city.name}
+                </option>
+              ))}
+            </>
+          ) : (
+            <>
+              {cities.map((city) =>
+                city.id === userData.cityId ? (
                   <option key={city.id} value={city.id}>
                     {city.name}
                   </option>
-                ))}
-              </>
-            ) : (
-              <>
-                {cities.map((city) =>
-                  city.id === userData.cityId ? (
-                    <option key={city.id} value={city.id}>
-                      {city.name}
-                    </option>
-                  ) : null
-                )}
-              </>
-            )}
-          </select>
-        </label>
+                ) : null
+              )}
+            </>
+          )}
+        </select>
+      </label>
 
-        {errors.cityId && <p className="error-message">{errors.cityId}</p>}
-      </div>*/}
+      {errors.cityId && <p className="error-message">{errors.cityId}</p>}
+    </div>*/}
 
-      {/* Campo Contraseña */}
-      <div
-        className={`input-container ${
-          isRegisterPage ? "input-color-create" : "input-color-profile"
-        }`}
-      >
-        <label className="label">Contraseña</label>
-        <input
-          className={`entrada-registrer ${
-            isRegisterPage ? "border-green-500" : "border-red-500"
+        {/* Campo Contraseña */}
+        <div
+          className={`input-container ${
+            isRegisterPage ? "input-color-create" : "input-color-profile"
           }`}
-          type="password"
-          name="password"
-          placeholder="***********"
-          value={userData.password}
-          onChange={handleChange}
-          disabled={!isEditing}
-          required
-        />
-        {errors.password && <p className="error-message">{errors.password}</p>}
-      </div>
+        >
+          <label className="label">Contraseña</label>
+          <input
+            className={`entrada-registrer ${
+              isRegisterPage ? "border-green-500" : "border-red-500"
+            }`}
+            type="password"
+            name="password"
+            placeholder="***********"
+            value={userData.password}
+            onChange={handleChange}
+            disabled={!isEditing}
+            required
+          />
+          {errors.password && (
+            <p className="error-message">{errors.password}</p>
+          )}
+        </div>
 
-      {/* Campo Confirmar Contraseña */}
-      <div
-        className={`input-container ${
-          isRegisterPage ? "input-color-create" : "input-color-profile"
-        }`}
-      >
-        <label className="label">Confirma Contraseña</label>
-        <input
-          className={`entrada-registrer ${
-            isRegisterPage ? "border-green-500" : "border-red-500"
+        {/* Campo Confirmar Contraseña */}
+        <div
+          className={`input-container ${
+            isRegisterPage ? "input-color-create" : "input-color-profile"
           }`}
-          type="password"
-          name="confirmpassword"
-          placeholder="***********"
-          value={userData.confirmpassword}
-          onChange={handleChange}
-          disabled={!isEditing}
-          required
-        />
-        {errors.confirmpassword && (
-          <p className="error-message">{errors.confirmpassword}</p>
+        >
+          <label className="label">Confirma Contraseña</label>
+          <input
+            className={`entrada-registrer ${
+              isRegisterPage ? "border-green-500" : "border-red-500"
+            }`}
+            type="password"
+            name="confirmpassword"
+            placeholder="***********"
+            value={userData.confirmpassword}
+            onChange={handleChange}
+            disabled={!isEditing}
+            required
+          />
+          {errors.confirmpassword && (
+            <p className="error-message">{errors.confirmpassword}</p>
+          )}
+        </div>
+
+        {/* Botón de Submit */}
+        {isEditing ? (
+          <button
+            type="submit"
+            className={`button-account ${
+              isRegisterPage ? "button-create" : "button-edit"
+            }`}
+          >
+            {Object.keys(user).length === 0 ? "Registrar" : "Guardar"}
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setIsEditing(true)}
+            className={`button-account ${
+              !isRegisterPage && isEditing
+                ? "border-green-500"
+                : "border-red-500"
+            }`}
+          >
+            Editar
+          </button>
         )}
-      </div>
 
-      {/* Botón de Submit */}
-      {isEditing ? (
-        <button
-          type="submit"
-          className={`button-account ${
-            isRegisterPage ? "button-create" : "button-edit"
-          }`}
-        >
-          {Object.keys(user).length === 0 ? "Registrar" : "Guardar"}
-        </button>
-      ) : (
-        <button
-          type="button"
-          onClick={() => setIsEditing(true)}
-          className={`button-account ${
-            !isRegisterPage && isEditing ? "border-green-500" : "border-red-500"
-          }`}
-        >
-          Editar
-        </button>
+        {/* Mensaje de éxito */}
+        {successMessage && <p className="success-message">{successMessage}</p>}
+
+        {/* Pregunta si el usuario recibió el correo */}
+        {true && (
+          <div className="reenviar-contenedor">
+            <p
+              className={`input-container ${
+                isRegisterPage ? "input-color-create" : "input-color-profile"
+              }`}
+            >
+              ¿No has recibido el correo de bienvenida?
+            </p>
+            <button
+              className={`button-account ${
+                !isRegisterPage && isEditing
+                  ? "border-green-500"
+                  : "border-red-500"
+              }`}
+              type="button"
+              onClick={handleResendEmail}
+            >
+              No, no lo he recibido
+            </button>
+          </div>
+        )}
+      </form>
+      {/* Modal de reenvío de correo */}
+      {modalVisible && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div
+              className={`input-container ${
+                isRegisterPage ? "input-color-create" : "input-color-profile"
+              }`}
+            >
+              <label className="label">
+                Ingresa tu correo para reenviar el mensaje:
+              </label>
+              <input
+                className={`entrada-registrer ${
+                  isRegisterPage ? "border-green-500" : "border-red-500"
+                }`}
+                type="email"
+                value={emailForResend}
+                onChange={(e) => setEmailForResend(e.target.value)}
+                placeholder="Ingresa tu correo"
+                required
+              />
+            </div>
+
+            <button
+              className={`button-account ${
+                !isRegisterPage && isEditing
+                  ? "border-green-500"
+                  : "border-red-500"
+              }`}
+              onClick={handleResendSubmit}
+            >
+              Enviar correo
+            </button>
+            <button
+              className={`button-account ${
+                !isRegisterPage && isEditing
+                  ? "border-green-500"
+                  : "border-red-500"
+              }`}
+              onClick={handleCloseModal}
+            >
+              Cerrar
+            </button>
+            {errors.email && <p className="error-message">{errors.email}</p>}
+          </div>
+        </div>
       )}
-
-      {/* Mensaje de éxito */}
-      {successMessage && <p className="success-message">{successMessage}</p>}
-    </form>
+    </>
   );
 };
 
