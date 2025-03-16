@@ -1,0 +1,134 @@
+.calendar-container {
+  max-width: 400px;
+  margin: auto;
+  text-align: center;
+  border-radius: 10px;
+  border-color: #f5f5eb;
+  color: #686868;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-calendar {
+  border: none;
+  background-color: white;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.react-calendar__tile {
+  color: #f0eded !important; /* Cambiar el color de los números a gris */
+}
+
+.react-calendar__tile--active {
+  background-color: rgba(0, 126, 71, 1) !important;
+  color: white !important;
+}
+
+.react-calendar__tile:hover {
+  background-color: #f1eded;
+}
+
+.time-picker {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  border-radius: 10px;
+  border-color: white;
+  background-color: white;
+}
+
+.time-button {
+  background-color: white;
+  border: 1px solid #e46115;
+  padding: 5px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 10px;
+  color: #e46115;
+  width: 19%;
+  display: flex;
+  text-align: center;
+  margin: 5px;
+}
+
+.time-button:hover {
+  background-color: #e0e0e0;
+}
+
+.selected {
+  background-color: #4caf50;
+  color: white;
+}
+
+.selected-info {
+  margin-top: 15px;
+  font-size: 18px;
+  color: #686868;
+}
+
+.react-calendar__month-view__days__day {
+  color: #686868 !important;
+}
+.react-calendar__navigation {
+  color: #686868 !important;
+}
+
+.react-calendar__navigation__arrow {
+  color: #686868 !important;
+}
+
+.react-calendar__navigation__prev2-button {
+  color: #686868 !important;
+}
+
+.react-calendar__navigation__label__labelText {
+  color: #686868 !important;
+}
+.react-calendar__navigation__label__labelText--from {
+  color: #686868 !important;
+}
+
+.tituloCalendar {
+  color: rgba(0, 66, 37, 1);
+  font-size: 15px;
+}
+
+.react-calendar__tile--active {
+  background-color: rgba(0, 66, 37, 1) !important;
+  color: white !important;
+}
+
+/* Estilo para fechas totalmente reservadas */
+.fully-reserved-date {
+  background-color: darkorange !important;
+  color: white !important;
+}
+
+/* Estilo para fechas parcialmente reservadas */
+.partially-reserved-date {
+  background-color: rgb(245, 210, 12) !important;
+  color: white !important;
+}
+
+/* Estilo para las horas reservadas */
+.reserved-time {
+  background-color: orange;
+  color: white;
+  cursor: not-allowed; /* Cambia el cursor para que parezca deshabilitado */
+}
+
+/* Estilo cuando se selecciona una fecha y está reservada (si está reservada, se marca en un color diferente) */
+.react-calendar__tile--active.fully-reserved-date {
+  background-color: rgba(0, 66, 37, 1) !important;
+  color: white !important;
+}
+
+/* Estilo cuando se selecciona una fecha y está parcialmente reservada (se resalta con un color específico) */
+.react-calendar__tile--active.partially-reserved-date {
+  background-color: rgba(0, 66, 37, 1) !important;
+  color: white !important;
+}

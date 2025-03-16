@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import BookingForm from "../components/BookingForm";
 import Map from "../components/Map";
@@ -6,10 +6,18 @@ import "../Styles/detail.css";
 import ImageGallery from "../components/ImageGallery";
 import BackButton from "../components/BackButton";
 import { useContextGlobal } from "../Context/global.context";
+import Calendar from "../components/CalendarDetail.jsx";
 
 const Detail = () => {
   const { state } = useContextGlobal();
   const { id } = useParams();
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedTime, setSelectedTime] = useState("7:00");
+
+  const handleDateTimeChange = (date, time) => {
+    setSelectedDate(date);
+    setSelectedTime(time);
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -69,11 +77,21 @@ const Detail = () => {
                     ))}
                 </div>
               </div>
+              <div>
+                <div>Politicas</div>
+                <div>Reseñas y puntuación</div>
+              </div>
             </div>
-
-            <BookingForm />
+            <div>
+              <Calendar onDateTimeChange={handleDateTimeChange} />
+              <BookingForm
+                selectedDate={selectedDate}
+                selectedTime={selectedTime}
+              />
+            </div>
           </div>
         </div>
+
         <div className="map">
           <h4 className="title-product"> Ubicación </h4>
           <Map />
