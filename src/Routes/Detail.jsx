@@ -77,21 +77,46 @@ const Detail = () => {
                     ))}
                 </div>
               </div>
-              <div>
-                <div>Politicas</div>
-                <div>Reseñas y puntuación</div>
+              <div className="detail-product-container">
+                <div className="detail-header">
+                  <h4 className="title-product"> Políticas </h4>
+                </div>
+                <div className="policies-content">
+                  <div className="policy-column">
+                    <h5>Normas de la cancha</h5>
+                    <p>
+                      No se permite el ingreso con alimentos o bebidas. Uso
+                      obligatorio de calzado deportivo adecuado. Respetar el
+                      horario de reserva asignado.
+                    </p>
+                  </div>
+                  <div className="policy-column">
+                    <h5>Política de cancelación</h5>
+                    <p>
+                      Cancelación gratuita hasta 24 horas antes. 50% de
+                      reembolso hasta 12 horas antes. Sin reembolso en
+                      cancelaciones posteriores.
+                    </p>
+                  </div>
+                  <div className="policy-column">
+                    <h5>Información adicional</h5>
+                    <p>
+                      Presentarse 15 minutos antes de la reserva. Documento de
+                      identidad requerido. Se debe realizar el pago completo por
+                      adelantado.
+                    </p>
+                  </div>
+                </div>
               </div>
+              <div>Reseñas y puntuación</div>
             </div>
-            <div>
-              <Calendar onDateTimeChange={handleDateTimeChange} />
-              <BookingForm
+            <Calendar onDateTimeChange={handleDateTimeChange} />
+            <BookingForm
                 selectedDate={selectedDate}
                 selectedTime={selectedTime}
               />
-            </div>
           </div>
         </div>
-
         <div className="map">
           <h4 className="title-product"> Ubicación </h4>
           <Map />

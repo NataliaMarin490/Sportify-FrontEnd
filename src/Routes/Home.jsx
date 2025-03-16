@@ -11,7 +11,7 @@ import axios from "axios";
 import API_BASE_URL from "../config";
 
 const Home = () => {
-  const { state, dispatch } = useContextGlobal();
+  const { state } = useContextGlobal();
   const [currentPage, setCurrentPage] = useState(
     state?.courts?.currentPage || 1
   );
@@ -29,8 +29,6 @@ const Home = () => {
     const indexOfLastCourt = currentPage * itemsPerPage;
     const indexOfFirstCourt = indexOfLastCourt - itemsPerPage;
 
-    console.log(newDataCourt);
-    console.log(currentCourts?.length);
     if (!currentCourts || currentCourts?.length === 0) {
       setCurrentCourts(
         state?.courts?.data?.slice(indexOfFirstCourt, indexOfLastCourt) || []
@@ -46,7 +44,6 @@ const Home = () => {
   }, [currentPage]);
 
   const handleFetchNextPage = () => {
-    console.log("Prueba");
     const nextPage = Math.min(currentPage + 1, totalPages);
     axios
       .get(`${API_BASE_URL}/courts/search?page=${nextPage}&size=10`)
