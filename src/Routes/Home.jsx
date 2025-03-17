@@ -211,6 +211,9 @@ const Home = () => {
               máximo tu actividad física.
             </p>
           </div>
+
+          <SearchBox onSearch={handleSearch} />
+          
           <div className="categories-container">
             <div className="categories-slider-container">
               <Slider {...settings}>
@@ -229,7 +232,7 @@ const Home = () => {
             </div>
           </div>
 
-          <SearchBox onSearch={handleSearch} />
+          
                     
         </div>
       </div>

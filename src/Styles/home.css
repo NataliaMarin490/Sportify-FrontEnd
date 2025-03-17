@@ -16,12 +16,7 @@ main {
   justify-content: center;
 }
 
-.main-content {
-  display: flex;
-  flex-direction: column;
-  justify-items: center;
-  margin-top: 20px;
-}
+
 
 .searcher-container {
   height: 90vh;
@@ -49,6 +44,20 @@ main {
   width: 100%;
 }
 
+.main-text-container h1 {
+  font-size: 50px;
+  font-weight: 700;
+  color: #f6f6e9;
+  margin-bottom: 10px;
+}
+
+.main-text-container p {
+  color: rgb(206, 199, 199);
+  font-size: larger;
+  max-width: 700px;
+}
+
+
 /* .text-welcome {
   text-align: justify;
   max-width: 80%;
@@ -58,43 +67,12 @@ main {
   align-items: center;
 } */
 
-
-.main-text-container h1 {
-    font-size: 50px;
-    font-weight: 700;
-    color: #f6f6e9;
-    margin-bottom: 10px;
-  }
-
-  .main-text-container p {
-    color: rgb(206, 199, 199);
-    font-size: larger;
-    max-width: 700px;
-  }
-
-
-
-
-.home-cards-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-
-  justify-self: center;
-  justify-items: center;
-  align-items: center;
-
-  margin-top: 50px;
-
-  gap: 80px 0;
-}
-
 .categories-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 50%;
-  
   margin: 20px 0;
 }
 
@@ -104,12 +82,12 @@ main {
   height: 100%;
 
   .slick-prev {
-    left: -100px !important;
+    left: -40px !important;
   }
 
   .slick-prev,
   .slick-next {
-    top: 80px !important;
+    top: 100px !important;
   }
 
   .slick-prev:before,
@@ -124,19 +102,77 @@ main {
 
   span {
     color: #f6f6e9;
-    font-size: 20px;
-    font-weight: 700;
-    margin-left: 8%;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 8px;
     text-transform: uppercase;
   }
+}
+
+.category-button {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: transparent;
+  border: none;
+  padding: 40px;
+  cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.category-button:hover {
+  transform: scale(1.05);
+  background-color: rgba(255, 255, 255, 0);
 }
 
 .category-icon {
   width: 80px;
   height: 80px;
   border-radius: 10px;
-  padding: 20px 10px;
+  margin-bottom: 15px;
 }
+
+.category-button span {
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #f6f6e9;
+}
+
+
+  .main-content {
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    margin-top: 20px;
+  }
+
+.home-cards-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+
+  /* justify-self: center; */
+  justify-items: center;
+  align-items: center;
+
+  margin-top: 50px;
+
+  gap: 80px 0;
+  min-height: 100px;
+}
+
+.home-cards-container h1 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 30px;
+  font-weight: 600;
+  color: #20575A;
+  text-align: center;
+  grid-column: span 2; /* Hace que el mensaje ocupe las 2 columnas */
+  justify-self: center;
+}
+
 
 .home-recommendations-container {
   display: flex;
