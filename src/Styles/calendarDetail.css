@@ -1,6 +1,4 @@
 .calendar-container {
-  max-width: 400px;
-  margin: auto;
   text-align: center;
   border-radius: 10px;
   border-color: #f5f5eb;
@@ -16,6 +14,7 @@
   background-color: white;
   padding: 10px;
   border-radius: 8px;
+  width: 100% !important;
 }
 
 .react-calendar__tile {
@@ -35,10 +34,10 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  width: 90%;
   border-radius: 10px;
   border-color: white;
   background-color: white;
+  width: 100%;
 }
 
 .time-button {
@@ -60,7 +59,7 @@
 }
 
 .selected {
-  background-color: #4caf50;
+  background-color: #474947;
   color: white;
 }
 
@@ -95,6 +94,7 @@
 .tituloCalendar {
   color: rgba(0, 66, 37, 1);
   font-size: 15px;
+  margin-top: 0;
 }
 
 .react-calendar__tile--active {

@@ -25,11 +25,43 @@ const CalendarWithTime = ({ onDateTimeChange }) => {
         // throw new Error('No se pudo obtener la información de las fechas.');
 
         setReservedDates([
-          { date: "2025-03-16", time: "9:00" },
+          { date: "2025-03-16", time: "09:00" },
           { date: "2025-03-17", time: "10:00" },
           { date: "2025-03-17", time: "15:00" },
           { date: "2025-03-18", time: "14:00" },
+          { date: "2025-03-22", time: "09:00" },
+          { date: "2025-03-22", time: "10:00" },
+          { date: "2025-03-23", time: "15:00" },
+          { date: "2025-03-23", time: "14:00" },
+          { date: "2025-03-24", time: "09:00" },
+          { date: "2025-03-24", time: "10:00" },
+          { date: "2025-03-25", time: "07:00" },
+          { date: "2025-03-25", time: "08:00" },
+          { date: "2025-03-25", time: "09:00" },
+          { date: "2025-03-25", time: "10:00" },
+          { date: "2025-03-25", time: "11:00" },
+          { date: "2025-03-25", time: "12:00" },
+          { date: "2025-03-25", time: "13:00" },
+          { date: "2025-03-25", time: "14:00" },
+          { date: "2025-03-25", time: "15:00" },
+          { date: "2025-03-25", time: "16:00" },
+          { date: "2025-03-25", time: "17:00" },
+          { date: "2025-03-25", time: "18:00" },
+          { date: "2025-03-25", time: "19:00" },
+          { date: "2025-03-25", time: "20:00" },
+          { date: "2025-03-25", time: "21:00" },
+          { date: "2025-03-25", time: "22:00" },
+          { date: "2025-03-26", time: "14:00" },
+          { date: "2025-03-26", time: "09:00" },
+          { date: "2025-03-27", time: "10:00" },
+          { date: "2025-03-27", time: "15:00" },
+          { date: "2025-03-28", time: "14:00" },
+          { date: "2025-03-29", time: "09:00" },
+          { date: "2025-03-29", time: "10:00" },
+          { date: "2025-03-30", time: "15:00" },
+          { date: "2025-03-30", time: "14:00" },
         ]);
+        console.log(reservedDates);
         setIsLoading(false);
       }, 2000); // Simulando un retraso en la obtención de datos
     } catch (error) {
