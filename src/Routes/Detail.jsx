@@ -110,11 +110,13 @@ const Detail = () => {
               </div>
               <div>Reseñas y puntuación</div>
             </div>
-            <Calendar onDateTimeChange={handleDateTimeChange} />
-            <BookingForm
+            <div className="container-booking-calendar">
+              <Calendar onDateTimeChange={handleDateTimeChange} />
+              <BookingForm
                 selectedDate={selectedDate}
                 selectedTime={selectedTime}
               />
+            </div>
           </div>
         </div>
         <div className="map">

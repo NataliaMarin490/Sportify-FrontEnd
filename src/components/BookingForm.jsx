@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useContextGlobal } from "../Context/global.context";
 import "../Styles/bookingForm.css";
@@ -8,39 +8,41 @@ const BookingForm = ({ selectedDate, selectedTime }) => {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState("");
-
   const [reserva, setReserva] = useState({
-    name: user.name || "",
-    phoneNumber: user.phoneNumber || "",
-    date: selectedDate.toLocaleDateString() || "",
+    name: "",
+    phoneNumber: "",
+    date: selectedDate ? selectedDate.toLocaleDateString() : "",
     time: selectedTime || "",
-    number: user.number || "",
+    number: "",
   });
 
+  // Se asegura de que los valores de reserva se actualicen si selectedDate o selectedTime cambian
+  useEffect(() => {
+    setReserva((prevReserva) => ({
+      ...prevReserva,
+      date: selectedDate ? selectedDate.toLocaleDateString() : prevReserva.date,
+      time: selectedTime || prevReserva.time,
+    }));
+  }, [selectedDate, selectedTime]);
+
   const handleChange = (e) => {
-    setReserva({ ...reserva, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setReserva((prevReserva) => ({
+      ...prevReserva,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Aquí podrías realizar la lógica de envío (por ejemplo, llamar a una API)
 
-    const formData = {
-      name: reserva.name,
-      phoneNumber: reserva.phoneNumber,
-      date: selectedDate.toLocaleDateString(),
-      time: selectedTime,
-      number: reserva.number,
-    };
-
-    const regexNum = /[0-9]+$/;
+    const regexNum = /^[0-9]+$/;
 
     if (!user) {
-      navigate("/login"); // Redirige a login si no está loguedo
+      navigate("/login"); // Redirige a login si no está logueado
       return;
     }
 
-    let newError = {};
     // Validaciones
     if (reserva.name.trim().length < 3) {
       setError("El nombre debe tener al menos 3 caracteres.");
@@ -55,20 +57,15 @@ const BookingForm = ({ selectedDate, selectedTime }) => {
       return;
     }
 
-    // Si hay errores, no enviamos el formulario
-    if (Object.keys(newError).length > 0) {
-      setSuccessMessage("Revisa los datos ingresados");
-      console.log(newError);
-      setError(newError);
-      return;
-    }
+    setError(""); // Limpiar error en caso de que todo esté bien
 
-    setError("");
+    // Mostrar modal de éxito
     setShowModal(true);
 
+    // Redirigir después de 9 segundos
     setTimeout(() => {
       setShowModal(false);
-      navigate("/");
+      navigate("/"); // Redirige a la página principal o donde desees
     }, 9000);
   };
 
@@ -82,57 +79,45 @@ const BookingForm = ({ selectedDate, selectedTime }) => {
           placeholder="Cantidad de personas"
           className="input"
           type="number"
+          name="number"
           value={reserva.number}
-          onChange={(event) =>
-            setReserva({ ...reserva, number: event.target.value })
-          }
+          onChange={handleChange}
         />
         <label>Nombre Contacto: </label>
         <input
           placeholder="Nombre del representante"
           className="input"
-          type="name"
+          type="text"
+          name="name"
           value={reserva.name}
-          onChange={(event) =>
-            setReserva({ ...reserva, name: event.target.value })
-          }
+          onChange={handleChange}
         />
         <label>Número Contacto: </label>
         <input
-          placeholder="Número de telefono"
+          placeholder="Número de teléfono"
           className="input"
-          type="phoneNumber"
+          type="text"
+          name="phoneNumber"
           value={reserva.phoneNumber}
-          onChange={(event) =>
-            setReserva({ ...reserva, phoneNumber: event.target.value })
-          }
+          onChange={handleChange}
         />
 
         <div>
-          <p>Fecha seleccionada: {selectedDate.toLocaleDateString()}</p>
-          <p>Hora seleccionada: {selectedTime}</p>
+          <p>Fecha seleccionada: {selectedDate ? selectedDate.toLocaleDateString() : "No disponible"}</p>
+          <p>Hora seleccionada: {selectedTime || "No disponible"}</p>
         </div>
 
-        <button className="button-reserve">Reservar</button>
-        {error && <h4 className="error-message">{error}</h4>}
+        <button className="button-reserve" type="submit">Reservar</button>
 
-        {console.log(
-          reserva.name,
-          reserva.phoneNumber,
-          reserva.number,
-          selectedDate.toLocaleDateString(),
-          selectedTime
-        )}
+        {error && <h4 className="error-message">{error}</h4>}
       </form>
+
       {showModal && (
         <div className="modal">
           <div className="modal-content">
             <h2>¡Reserva Exitosa!</h2>
             <p>Tu reserva ha sido confirmada.</p>
-            <button
-              className="button-modal"
-              onClick={() => setShowModal(false)}
-            >
+            <button className="button-modal" onClick={() => setShowModal(false)}>
               Cerrar
             </button>
           </div>
