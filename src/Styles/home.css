@@ -58,22 +58,18 @@ main {
   align-items: center;
 } */
 
-
 .main-text-container h1 {
-    font-size: 50px;
-    font-weight: 700;
-    color: #f6f6e9;
-    margin-bottom: 10px;
-  }
+  font-size: 50px;
+  font-weight: 700;
+  color: #f6f6e9;
+  margin-bottom: 10px;
+}
 
-  .main-text-container p {
-    color: rgb(206, 199, 199);
-    font-size: larger;
-    max-width: 700px;
-  }
-
-
-
+.main-text-container p {
+  color: rgb(206, 199, 199);
+  font-size: larger;
+  max-width: 700px;
+}
 
 .home-cards-container {
   display: grid;
@@ -94,7 +90,7 @@ main {
   justify-content: center;
   align-items: center;
   width: 50%;
-  
+
   margin: 20px 0;
 }
 
@@ -132,10 +128,38 @@ main {
 }
 
 .category-icon {
-  width: 80px;
-  height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 120px;
+  height: 120px;
   border-radius: 10px;
-  padding: 20px 10px;
+  padding: 15px;
+  font-size: 60px;
+  color: black;
+  text-align: center;
+}
+
+.category-icon i {
+  font-size: 80px;
+}
+
+.category-icon span {
+  text-align: center;
+  display: block;
+  width: 100%;
+}
+
+.categories-slider-container span {
+  color: #f6f6e9;
+  font-size: 20px;
+  font-weight: 700;
+  margin-left: 8%;
+  text-transform: uppercase;
+  text-align: center;
+  display: block;
+  width: 100%;
 }
 
 .home-recommendations-container {
@@ -195,7 +219,6 @@ main {
   justify-self: left;
 }
 
-
 .extra-info-container {
   display: flex;
   justify-content: center;
@@ -247,7 +270,7 @@ main {
 
   .searcher-container {
     height: 50vh;
-  
+
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -257,7 +280,7 @@ main {
     background-size: cover;
     background-repeat: no-repeat;
   }
-  
+
   .searcher {
     width: 70%;
     height: auto;
