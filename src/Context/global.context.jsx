@@ -116,6 +116,7 @@ const ContextProvider = ({ children }) => {
 
   // Función para filtrar las canchas por categoría
   const fetchCourtsByCategory = async (categoryName) => {
+    console.log(`Ejecutando fetchCourtsByCategory para: ${categoryName}`);
     try {
       const response = await axios.get(
         `${API_BASE_URL}/courts/search?category=${categoryName}&page=1&size=10`
