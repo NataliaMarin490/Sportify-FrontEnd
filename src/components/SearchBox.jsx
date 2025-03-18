@@ -4,7 +4,8 @@ import PropTypes from "prop-types";
 /* import { Calendar } from 'primereact/calendar'; */
 /* import Calendar from 'react-calendar'; */
 import CalendarPlain from "./Calendar";
-import TimePicker from "./TimePicker"
+import TimePicker from "./TimePicker";
+import API_BASE_URL from "../config";
 
 const SearchBox = ({ onSearch }) => {
   // Estados locales para manejar las selecciones del usuario
@@ -34,9 +35,14 @@ const SearchBox = ({ onSearch }) => {
   // Función para obtener las ciudades desde el backend
   const fetchCities = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/cities");
+      const response = await fetch(`${API_BASE_URL}/cities/all`);
       const data = await response.json();
-      setCities(data);  // Asumiendo que la respuesta es un array de ciudades
+      const formattedCities = data.map((city) => ({
+        id: city.id,
+        name: `${city.name}, ${city.region.country.countryName}`,
+      }));
+
+      setCities(formattedCities);
     } catch (error) {
       console.error("Error fetching cities:", error);
     }
@@ -45,7 +51,7 @@ const SearchBox = ({ onSearch }) => {
   // Función para obtener los deportes desde el backend
   const fetchSports = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/sports");
+      const response = await fetch(`${API_BASE_URL}/sports/status/5`);
       const data = await response.json();
       setSports(data);  // Asumiendo que la respuesta es un array de deportes
     } catch (error) {
@@ -56,14 +62,14 @@ const SearchBox = ({ onSearch }) => {
   // Filtrar ciudades y deporte cuando el usuario escribe
   useEffect(() => {
     const filtered = cities.filter((c) =>
-      c.toLowerCase().includes(city.toLowerCase())
+      c.name.toLowerCase().includes(city.toLowerCase())
     );
     setFilteredCities(filtered.length > 0 ? filtered : ["Sin coincidencias"]);
   }, [city, cities]);
 
   useEffect(() => {
     const filtered = sports.filter((s) =>
-      s.toLowerCase().includes(sport.toLowerCase())
+      s.name.toLowerCase().includes(sport.toLowerCase())
     );
     setFilteredSports(filtered.length > 0 ? filtered : ["Sin coincidencias"]);
   }, [sport, sports]);
@@ -173,14 +179,14 @@ return (
               <li
                 key={index}
                 onClick={() => {
-                  if (c !== "Sin coincidencias") {
-                    setCity(c);
+                  if (c.name !== "Sin coincidencias") {
+                    setCity(c.name);
                     setShowCitiesDropdown(false);
                   }
                 }}
-                className={c === "Sin coincidencias" ? "disabled-option" : ""}
+                className={c.name === "Sin coincidencias" ? "disabled-option" : ""}
               >
-                {c}
+                {c.name}
               </li>
             ))}
           </ul>
@@ -213,18 +219,18 @@ return (
         )}
         {showSportsDropdown && (
           <ul className="dropdown">
-            {filteredSports.map((s, index) => (
+            {filteredSports.map((s) => (
               <li
-                key={index}
+                key={s.id}
                 onClick={() => {
-                  if (s !== "Sin coincidencias") {
-                    setSport(s);
+                  if (s.name !== "Sin coincidencias") {
+                    setSport(s.name);
                     setShowSportsDropdown(false);
                   }
                 }}
-                className={s === "Sin coincidencias" ? "disabled-option" : ""}
+                className={s.name === "Sin coincidencias" ? "disabled-option" : ""}
               >
-                {s}
+                {s.name}
               </li>
             ))}
           </ul>
@@ -242,45 +248,45 @@ return (
           onClick={() => handleInputClick("date")}
         />
         {date && (
-    <img
-      src="../public/icons/dropdown-close-icon-2.svg"
-      alt="Clear"
-      className="icon-button"
-      onClick={() => {
-        setDate(""); // Resetea la fecha
-        setShowCalendar(false); // Cierra el calendario
-      }}
-    />
-  )}
-  {showCalendar && <CalendarPlain onDateChange={handleDateChange} />}
-</div>
-
-<div className="time-container">
-  <input
-    type="text"
-    className="searcher-input"
-    value={hour}
-    placeholder="Hora"
-    readOnly
-    onClick={() => handleInputClick("hour")}
-  />
-  {hour && (
-    <img
-      src="../public/icons/dropdown-close-icon-2.svg"
-      alt="Clear"
-      className="icon-button"
-      onClick={() => {
-        setHour(""); // Resetea la hora
-        setShowTimePicker(false); // Cierra el selector de hora
-      }}
-    />
-  )}
-  {showTimePicker && (
-    <div className="custom-timepicker">
-      <TimePicker onTimeChange={handleTimeChange} />
+          <img
+          src="../public/icons/dropdown-close-icon-2.svg"
+          alt="Clear"
+          className="icon-button"
+          onClick={() => {
+            setDate(""); // Resetea la fecha
+            setShowCalendar(false); // Cierra el calendario
+          }}
+       />
+     )}
+      {showCalendar && <CalendarPlain onDateChange={handleDateChange} />}
     </div>
-  )}
-</div>
+
+    <div className="time-container">
+      <input
+        type="text"
+        className="searcher-input"
+        value={hour}
+        placeholder="Hora"
+        readOnly
+        onClick={() => handleInputClick("hour")}
+      />
+      {hour && (
+        <img
+          src="../public/icons/dropdown-close-icon-2.svg"
+          alt="Clear"
+          className="icon-button"
+          onClick={() => {
+            setHour(""); // Resetea la hora
+            setShowTimePicker(false); // Cierra el selector de hora
+          }}
+        />
+      )}
+      {showTimePicker && (
+        <div className="custom-timepicker">
+          <TimePicker onTimeChange={handleTimeChange} />
+        </div>
+      )}
+    </div>
       <button className="searcher-button" onClick={handleSearch}>
         Buscar
       </button>
@@ -288,8 +294,8 @@ return (
   );
 };
 
-    SearchBox.propTypes = {
-        onSearch: PropTypes.func.isRequired,
-      };
+SearchBox.propTypes = {
+  onSearch: PropTypes.func.isRequired,
+};
 
 export default SearchBox;

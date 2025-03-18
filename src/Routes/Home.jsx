@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useContextGlobal } from "../Context/global.context";
-import { Link } from "react-router-dom";
+/* import { Link } from "react-router-dom"; */
 import Cards from "../components/Cards";
 import Recommendations from "../components/Recommendations";
 import Slider from "react-slick";
@@ -15,9 +15,12 @@ const Home = () => {
   const { state, fetchCourtsByCategory } = useContextGlobal();
   const [filteredCourts, setFilteredCourts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [currentPage, setCurrentPage] = useState(state?.courts?.currentPage || 1 );
+  const [currentPage, setCurrentPage] = useState(
+    state?.courts?.currentPage || 1
+  );
   const [currentCourts, setCurrentCourts] = useState(state?.courts?.data);
   const [error, setError] = useState(null); // Estado para errores
+  const [categories, setCategories] = useState([]);
 
   const newDataCourt = state?.courts?.data;
   const itemsPerPage = state?.courts?.pageSize;
@@ -26,25 +29,34 @@ const Home = () => {
   const token = localStorage.getItem("authToken");
   console.log("Token:", token);
 
-  
   useEffect(() => {
     // Limpiar la categoría seleccionada al refrescar la página
     localStorage.removeItem("selectedCategory");
     setSelectedCategory(null);
     setFilteredCourts([]);
   }, []);
-  
+
+  useEffect(() => {
+    axios
+      .get(`${API_BASE_URL}/sports/status/5`)
+      .then((response) => {
+        setCategories(response.data);
+      })
+      .catch((error) => {
+        console.error("Error al obtener categorías:", error);
+      });
+  }, []);
 
   // Filtra las canchas de acuerdo con la categoría seleccionada
   useEffect(() => {
     if (selectedCategory) {
-
-       axios.get(`${API_BASE_URL}/courts/category/${selectedCategory}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        }
-      })
-        .then(response => {
+      axios
+        .get(`${API_BASE_URL}/courts/category/${selectedCategory}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
           if (response.data.data.length > 0) {
             setFilteredCourts(response.data.data);
             setCurrentCourts(response.data.data);
@@ -53,10 +65,13 @@ const Home = () => {
             setFilteredCourts([]);
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.error("Error al obtener canchas por categoría:", error);
           setError("Error al obtener canchas. Intenta nuevamente.");
-          console.log("Detalles del error:", error.response ? error.response.data : error);
+          console.log(
+            "Detalles del error:",
+            error.response ? error.response.data : error
+          );
         });
     } else {
       setCurrentCourts(state?.courts?.data || []);
@@ -69,7 +84,6 @@ const Home = () => {
       setSelectedCategory(storedCategory);
     }
   }, []);
-
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -87,25 +101,26 @@ const Home = () => {
     localStorage.setItem("selectedCategory", categoryName);
     setCurrentPage(1);
 
-    axios.get(`${API_BASE_URL}/courts/category/${sportId}`, {
-    headers: {
-      'Authorization': `Bearer ${token}`,
-    }
-  })
-    .then(response => {
-      if (response.data && response.data.length > 0) {
-        setCurrentCourts(response.data);
-        setFilteredCourts(response.data);
-      } else {
-        setError("No hay canchas disponibles para esta categoría.");
-        setFilteredCourts([]);
-      }
-    })
-    .catch(error => {
-      console.error("Error al obtener canchas por categoría:", error);
-      setError("Error al obtener canchas. Intenta nuevamente.");
-    });
-};
+    axios
+      .get(`${API_BASE_URL}/courts/category/${sportId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        if (response.data && response.data.length > 0) {
+          setCurrentCourts(response.data);
+          setFilteredCourts(response.data);
+        } else {
+          setError("No hay canchas disponibles para esta categoría.");
+          setFilteredCourts([]);
+        }
+      })
+      .catch((error) => {
+        console.error("Error al obtener canchas por categoría:", error);
+        setError("Error al obtener canchas. Intenta nuevamente.");
+      });
+  };
 
   /* useEffect(() => {
     if (filteredCourts.length > 0) {
@@ -117,21 +132,20 @@ const Home = () => {
     }
   }, [filteredCourts, selectedCategory, state]);  */
 
-  
   // Función que recibe los valores del buscador y hace la búsqueda en la API
   const handleSearch = (filters) => {
     console.log("Buscando con filtros:", filters);
-    
-    axios.get(`${API_BASE_URL}/courts/search`, { params: filters })
-      .then(response => {
-        console.log("Respuesta de la API:", response.data); 
+
+    axios
+      .get(`${API_BASE_URL}/courts/search`, { params: filters })
+      .then((response) => {
+        console.log("Respuesta de la API:", response.data);
         setFilteredCourts(response.data.data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error al buscar canchas:", error);
       });
-  }; 
-  
+  };
 
   useEffect(() => {
     if (!Array.isArray(state?.courts?.data)) {
@@ -142,12 +156,18 @@ const Home = () => {
 
     console.log(newDataCourt);
     console.log(currentCourts?.length);
-    const dataToPaginate = filteredCourts.length > 0 ? filteredCourts : state?.courts?.data;
-    
-    setCurrentCourts(dataToPaginate.slice(indexOfFirstCourt, indexOfLastCourt));
-  }, [currentCourts?.length, currentPage, filteredCourts, itemsPerPage, newDataCourt, state]);
+    const dataToPaginate =
+      filteredCourts.length > 0 ? filteredCourts : state?.courts?.data;
 
-  
+    setCurrentCourts(dataToPaginate.slice(indexOfFirstCourt, indexOfLastCourt));
+  }, [
+    currentCourts?.length,
+    currentPage,
+    filteredCourts,
+    itemsPerPage,
+    newDataCourt,
+    state,
+  ]);
 
   const handleFetchNextPage = () => {
     const nextPage = Math.min(currentPage + 1, totalPages);
@@ -169,34 +189,6 @@ const Home = () => {
     cssEase: "linear",
   };
 
-  const categories = [
-    {
-      id: 1,
-      name: "futbol",
-      icon: "../public/icons/futbol-icon.svg",
-    },
-    {
-      id: 2,
-      name: "volley",
-      icon: "../public/icons/volley-icon.svg",
-    },
-    {
-      id: 3,
-      name: "tenis",
-      icon: "../public/icons/tenis-icon.svg",
-    },
-    {
-      id: 4,
-      name: "basket",
-      icon: "../public/icons/basket-icon.svg",
-    },
-    {
-      id: 5,
-      name: "rugby",
-      icon: "../public/icons/rugby.svg",
-    },
-  ];
-
   return (
     <>
       <div className="home-container">
@@ -211,46 +203,49 @@ const Home = () => {
               máximo tu actividad física.
             </p>
           </div>
-
           <SearchBox onSearch={handleSearch} />
-          
           <div className="categories-container">
             <div className="categories-slider-container">
               <Slider {...settings}>
                 {/* { state.courts && state?.courts?.data?.features?.map((category, index) => ( */}
                 {categories.map((category, index) => (
                   <button
-                  key={index}
-                  className="category-button"
-                  onClick={() => handleCategorySelect(category.name, category.id)}
-                >
-                  <img className="category-icon" src={category.icon} alt={category.name} />
-                  <span>{category.name}</span>
-                </button>
+                    key={index}
+                    className="category-button"
+                    onClick={() =>
+                      handleCategorySelect(category.name, category.id)
+                    }
+                  >
+                    <i className={`fa ${category.icon} category-icon`}></i>
+                    <span>{category.name}</span>
+                  </button>
                 ))}
               </Slider>
             </div>
           </div>
 
           
-                    
         </div>
       </div>
       <main>
         <div className="main-content">
-        <h1>{selectedCategory ? `CANCHAS DE ${selectedCategory.toUpperCase()}` : 'NUESTRAS RECOMIENDACIONES'}</h1>
+          <h1>
+            {selectedCategory
+              ? `CANCHAS DE ${selectedCategory.toUpperCase()}`
+              : "NUESTRAS RECOMIENDACIONES"}
+          </h1>
 
-        <div className="home-cards-container">
-          {error ? (
-            <h1>{error}</h1>
-          ) : currentCourts && currentCourts.length > 0 ? (
-            currentCourts.map((court) => <Cards key={court.id} court={court} />)
-          ) : (
-          <h1>No hay canchas disponibles</h1>
-          )}
+          <div className="home-cards-container">
+            {error ? (
+              <h1>{error}</h1>
+            ) : currentCourts && currentCourts.length > 0 ? (
+              currentCourts.map((court) => (
+                <Cards key={court.id} court={court} />
+              ))
+            ) : (
+              <h1>No hay canchas disponibles</h1>
+            )}
           </div>
-
-
 
           <div className="home-cards-pagination">
             <button onClick={handleFetchPrevPage} disabled={currentPage === 1}>
