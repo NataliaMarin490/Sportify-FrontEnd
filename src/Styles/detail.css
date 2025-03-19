@@ -36,6 +36,24 @@
   justify-content: center;
 }
 
+.detail-buttons {
+  display: flex;
+  gap: 5px;
+}
+
+.court-button {
+  background-color: #457d58;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s ease-in-out;
+  height: 100%;
+  padding-top: 5px;
+}
+
+.court-button:hover {
+  background-color: #d1d5db;
+  cursor: pointer;
+}
+
 .product {
   color: rgba(32, 87, 90, 1);
   display: flex;
@@ -68,7 +86,7 @@
 }
 
 .image-detail:hover {
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 
 .title-product {

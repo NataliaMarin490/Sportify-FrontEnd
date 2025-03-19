@@ -7,12 +7,18 @@ import ImageGallery from "../components/ImageGallery";
 import BackButton from "../components/BackButton";
 import { useContextGlobal } from "../Context/global.context";
 import Calendar from "../components/CalendarDetail.jsx";
+import { Heart } from "lucide-react";
+import { Share2 } from "lucide-react";
+import ShareCourtModal from "../components/ShareCourtModal.jsx";
 
 const Detail = () => {
   const { state } = useContextGlobal();
   const { id } = useParams();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState("7:00");
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+
+  const currentUrl = window.location.href;
 
   const handleDateTimeChange = (date, time) => {
     setSelectedDate(date);
@@ -33,6 +39,17 @@ const Detail = () => {
       <div className="detail-container">
         <BackButton />
         <div className="detail">
+          <div className="detail-buttons">
+            <button className="court-button" onClick>
+              <Heart size={20} />
+            </button>
+            <button
+              className="court-button"
+              onClick={() => setIsShareModalOpen(true)}
+            >
+              <Share2 size={20} />
+            </button>
+          </div>
           <div className="product">
             <div className="gallery">
               <img
@@ -124,6 +141,12 @@ const Detail = () => {
           <Map />
         </div>
       </div>
+      <ShareCourtModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        product={product}
+        currentUrl={currentUrl}
+      />
     </>
   );
 };
