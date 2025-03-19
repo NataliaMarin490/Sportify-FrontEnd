@@ -119,7 +119,7 @@ const ContextProvider = ({ children }) => {
     console.log(`Ejecutando fetchCourtsByCategory para: ${categoryName}`);
     try {
       const response = await axios.get(
-        `${API_BASE_URL}/courts/search?category=${categoryName}&page=1&size=10`
+        `${API_BASE_URL}/bookings/search?page=1&size=10&sportId=${categoryName}`
       );
 
       const modifiedData = response.data.data.map((court) => ({
