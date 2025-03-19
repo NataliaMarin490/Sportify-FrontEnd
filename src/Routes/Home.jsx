@@ -15,14 +15,14 @@ const Home = () => {
   const { state } = useContextGlobal();
   const [filteredCourts, setFilteredCourts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(state?.courts?.currentPage || 1 );
   const [currentCourts, setCurrentCourts] = useState([]);
   const [error, setError] = useState(null); // Estado para errores
   const [categories, setCategories] = useState([]);
 
   /* const newDataCourt = state?.courts?.data; */
   const itemsPerPage = state?.courts?.pageSize || 10;
-  const totalPages = Math.ceil((filteredCourts.length || state?.courts?.data?.length || 0) / itemsPerPage);
+  const totalPages = state?.courts?.totalPages;
 
   const token = localStorage.getItem("authToken");
  /*  console.log("Token:", token); */
@@ -158,14 +158,25 @@ useEffect(() => {
 
   // useEffect para paginar los datos
   useEffect(() => {
+    if (!itemsPerPage || isNaN(itemsPerPage)) return;
+    
     const dataToPaginate = filteredCourts.length > 0 
       ? filteredCourts 
       : state?.courts?.data?.length > 0 
         ? state?.courts?.data 
         : state?.recommendedCourts || [];
+
+     if (!dataToPaginate.length) return;
   
-    const indexOfLastCourt = currentPage * itemsPerPage;
-    const indexOfFirstCourt = indexOfLastCourt - itemsPerPage;
+     const indexOfLastCourt = Math.min(currentPage * itemsPerPage, dataToPaginate.length);
+  const indexOfFirstCourt = Math.min(indexOfLastCourt - itemsPerPage, dataToPaginate.length);
+
+    console.log("🚀 Current Page:", currentPage);
+  console.log("🛠 Items per Page:", itemsPerPage);
+  console.log("📊 Data to Paginate:", dataToPaginate.length);
+  console.log("🔢 Slice indexes:", indexOfFirstCourt, indexOfLastCourt);
+  console.log("📃 Courts on this page:", dataToPaginate.slice(indexOfFirstCourt, indexOfLastCourt));
+
     setCurrentCourts(dataToPaginate.slice(indexOfFirstCourt, indexOfLastCourt));
   }, [currentPage, filteredCourts, state?.courts?.data, state?.recommendedCourts, itemsPerPage]);   
 
