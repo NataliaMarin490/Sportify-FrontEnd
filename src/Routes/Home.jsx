@@ -139,23 +139,6 @@ useEffect(() => {
   };
   
 
-  // Determinar los datos a paginar según filtros aplicados
-  /* const dataToPaginate = filteredCourts.length > 0 
-    ? filteredCourts 
-    : state?.courts?.data?.length > 0 
-      ? state?.courts?.data 
-      : state?.recommendedCourts || []; */
-
-  /* useEffect(() => {
-    if (filteredCourts.length > 0) {
-      setCurrentCourts(filteredCourts);
-    } else if (selectedCategory) {
-      setCurrentCourts([]);
-    } else {
-      setCurrentCourts(state?.courts?.data || []);
-    }
-  }, [filteredCourts, selectedCategory, state]);  */
-
   // useEffect para paginar los datos
   useEffect(() => {
     if (!itemsPerPage || isNaN(itemsPerPage)) return;
@@ -169,13 +152,7 @@ useEffect(() => {
      if (!dataToPaginate.length) return;
   
      const indexOfLastCourt = Math.min(currentPage * itemsPerPage, dataToPaginate.length);
-  const indexOfFirstCourt = Math.min(indexOfLastCourt - itemsPerPage, dataToPaginate.length);
-
-    console.log("🚀 Current Page:", currentPage);
-  console.log("🛠 Items per Page:", itemsPerPage);
-  console.log("📊 Data to Paginate:", dataToPaginate.length);
-  console.log("🔢 Slice indexes:", indexOfFirstCourt, indexOfLastCourt);
-  console.log("📃 Courts on this page:", dataToPaginate.slice(indexOfFirstCourt, indexOfLastCourt));
+     const indexOfFirstCourt = Math.min(indexOfLastCourt - itemsPerPage, dataToPaginate.length);
 
     setCurrentCourts(dataToPaginate.slice(indexOfFirstCourt, indexOfLastCourt));
   }, [currentPage, filteredCourts, state?.courts?.data, state?.recommendedCourts, itemsPerPage]);   
@@ -237,10 +214,18 @@ useEffect(() => {
       <main>
         <div className="main-content">
         <h1>
-  {selectedCategory
-    ? `CANCHAS DE ${categories.find(c => c.id === selectedCategory)?.name.toUpperCase() || "DESCONOCIDO"}`
-    : "NUESTRAS RECOMENDACIONES"}
-</h1>
+          {selectedCategory
+          ? `CANCHAS DE ${categories.find(c => c.id === selectedCategory)?.name.toUpperCase() || "DESCONOCIDO"}`
+          : "NUESTRAS RECOMENDACIONES"}
+          </h1>
+
+          {/* Mostrar cantidad de resultados si hay canchas */}
+          {selectedCategory && (
+            <p>{filteredCourts.length > 0
+              ? `Se encontraron ${filteredCourts.length} canchas disponibles.`
+              : ""}
+              </p>
+            )}
 
 
           <div className="home-cards-container">
