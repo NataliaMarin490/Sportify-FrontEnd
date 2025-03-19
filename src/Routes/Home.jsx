@@ -63,9 +63,9 @@ useEffect(() => {
         setError("Error al obtener canchas. Intenta nuevamente.");
       });
   } else {
-    setFilteredCourts([]); // Se usa el estado global cuando no hay filtros
+    setFilteredCourts([]); 
   }
-}, [selectedCategory, token]); // Agregar token como dependencia
+}, [selectedCategory, token]); 
 
  
   
@@ -91,7 +91,7 @@ useEffect(() => {
   const handleCategorySelect = (categoryName, sportId) => {
     if (!sportId) {
       console.error("El sportId es inválido:", sportId);
-      return; // Evita ejecutar la solicitud con un ID inválido
+      return;
     }
   
     setSelectedCategory(sportId);

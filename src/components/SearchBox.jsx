@@ -64,14 +64,14 @@ const SearchBox = ({ onSearch }) => {
     const filtered = cities.filter((c) =>
       c.name.toLowerCase().includes(city.toLowerCase())
     );
-    setFilteredCities(filtered.length > 0 ? filtered : ["Sin coincidencias"]);
+    setFilteredCities(filtered.length > 0 ? filtered : [{ name: "Sin coincidencias", id: -1 }]);
   }, [city, cities]);
 
   useEffect(() => {
     const filtered = sports.filter((s) =>
       s.name.toLowerCase().includes(sport.toLowerCase())
     );
-    setFilteredSports(filtered.length > 0 ? filtered : ["Sin coincidencias"]);
+    setFilteredSports(filtered.length > 0 ? filtered : [{ name: "Sin coincidencias", id: -1 }]);
   }, [sport, sports]);
 
   // Función para limpiar todos los filtros con flechita
@@ -175,9 +175,9 @@ return (
         )}
         {showCitiesDropdown && (
           <ul className="dropdown">
-            {filteredCities.map((c, index) => (
+            {filteredCities.map((c) => (
               <li
-                key={index}
+                key={c.id}
                 onClick={() => {
                   if (c.name !== "Sin coincidencias") {
                     setCity(c.name);
