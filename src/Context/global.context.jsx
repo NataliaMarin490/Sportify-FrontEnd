@@ -115,11 +115,11 @@ const ContextProvider = ({ children }) => {
   }, []);
 
   // Función para filtrar las canchas por categoría
-  const fetchCourtsByCategory = async (categoryName) => {
-    console.log(`Ejecutando fetchCourtsByCategory para: ${categoryName}`);
+  const fetchCourtsByCategory = async (sportId) => {
+    console.log(`Ejecutando fetchCourtsByCategory para: ${sportId}`);
     try {
       const response = await axios.get(
-        `${API_BASE_URL}/bookings/search?page=1&size=10&sportId=${categoryName}`
+        `${API_BASE_URL}/bookings/search?page=1&size=10&sportId=${sportId}`
       );
 
       const modifiedData = response.data.data.map((court) => ({
@@ -129,7 +129,7 @@ const ContextProvider = ({ children }) => {
 
       dispatch({ type: "GET_COURTS_BY_CATEGORY", payload: modifiedData });
     } catch (error) {
-      console.error(`Error al obtener las canchas de la categoría ${categoryName}:`, error);
+      console.error(`Error al obtener las canchas de la categoría ${sportId}:`, error);
     }
   };
 

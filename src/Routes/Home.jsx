@@ -47,7 +47,7 @@ const Home = () => {
 
   // useEffect para manejar la categoría seleccionada y la carga de canchas
 useEffect(() => {
-  if (selectedCategory) {
+  if (selectedCategory && !isNaN(selectedCategory)) {
     axios
       .get(`${API_BASE_URL}/bookings/search?page=1&size=10&sportId=${selectedCategory}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -73,7 +73,7 @@ useEffect(() => {
   useEffect(() => {
     const storedCategory = localStorage.getItem("selectedCategory");
     if (storedCategory) {
-      setSelectedCategory(storedCategory);
+      setSelectedCategory(Number(storedCategory));
     }
   }, []);
 
@@ -94,8 +94,8 @@ useEffect(() => {
       return; // Evita ejecutar la solicitud con un ID inválido
     }
   
-    setSelectedCategory(categoryName);
-    localStorage.setItem("selectedCategory", categoryName);
+    setSelectedCategory(sportId);
+    localStorage.setItem("selectedCategory", sportId);
     setCurrentPage(1);
   
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
@@ -225,11 +225,12 @@ useEffect(() => {
       </div>
       <main>
         <div className="main-content">
-          <h1>
-            {selectedCategory
-              ? `CANCHAS DE ${selectedCategory.toUpperCase()}`
-              : "NUESTRAS RECOMIENDACIONES"}
-          </h1>
+        <h1>
+  {selectedCategory
+    ? `CANCHAS DE ${categories.find(c => c.id === selectedCategory)?.name.toUpperCase() || "DESCONOCIDO"}`
+    : "NUESTRAS RECOMENDACIONES"}
+</h1>
+
 
           <div className="home-cards-container">
             {error ? (
