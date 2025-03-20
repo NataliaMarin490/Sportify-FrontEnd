@@ -53,7 +53,7 @@ const SearchBox = ({ onSearch }) => {
     try {
       const response = await fetch(`${API_BASE_URL}/sports/status/5`);
       const data = await response.json();
-      setSports(data);  // Asumiendo que la respuesta es un array de deportes
+      setSports(data);
     } catch (error) {
       console.error("Error fetching sports:", error);
     }
@@ -74,7 +74,7 @@ const SearchBox = ({ onSearch }) => {
     setFilteredSports(filtered.length > 0 ? filtered : [{ name: "Sin coincidencias", id: -1 }]);
   }, [sport, sports]);
 
-  // Función para limpiar todos los filtros con flechita
+  // Función para limpiar todos los filtros con flechita reset
   const resetFilters = () => {
     setCity("");
     setSport("");
@@ -253,8 +253,8 @@ return (
           alt="Clear"
           className="icon-button"
           onClick={() => {
-            setDate(""); // Resetea la fecha
-            setShowCalendar(false); // Cierra el calendario
+            setDate("");
+            setShowCalendar(false);
           }}
        />
      )}
@@ -276,8 +276,8 @@ return (
           alt="Clear"
           className="icon-button"
           onClick={() => {
-            setHour(""); // Resetea la hora
-            setShowTimePicker(false); // Cierra el selector de hora
+            setHour("");
+            setShowTimePicker(false);
           }}
         />
       )}

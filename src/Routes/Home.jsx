@@ -19,6 +19,8 @@ const Home = () => {
   const [currentCourts, setCurrentCourts] = useState([]);
   const [error, setError] = useState(null); // Estado para errores
   const [categories, setCategories] = useState([]);
+  const [isSearchActive, setIsSearchActive] = useState(false);
+
 
   /* const newDataCourt = state?.courts?.data; */
   const itemsPerPage = state?.courts?.pageSize || 10;
@@ -95,6 +97,7 @@ useEffect(() => {
     }
   
     setSelectedCategory(sportId);
+    setIsSearchActive(false);
     localStorage.setItem("selectedCategory", sportId);
     setCurrentPage(1);
   
@@ -121,20 +124,38 @@ useEffect(() => {
 
   const handleSearch = (filters) => {
     console.log("Buscando con filtros:", filters);
+
+    if (!filters || Object.keys(filters).length === 0) {
+      console.warn("No hay filtros seleccionados.");
+      return;
+    }
+
+    setIsSearchActive(true);
+    setSelectedCategory(null);
+    setCurrentPage(1);
   
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
   
     axios
-      .get(`${API_BASE_URL}/bookings/search`, {
+      .get(`${API_BASE_URL}/bookings/search?page=1&size=10`, {
         params: filters,
         headers,
       })
       .then((response) => {
-        console.log("Respuesta de la API:", response.data);
-        setFilteredCourts(response.data.data);
+        if (response.data && response.data.data) {
+          console.log("Canchas encontradas:", response.data.data);
+          setFilteredCourts(response.data.data);
+          setError(null);
+        } else {
+          console.warn("No se recibieron datos válidos.");
+          setFilteredCourts([]);
+          setError("No se encontraron canchas con esos filtros.");
+        }
       })
       .catch((error) => {
         console.error("Error al buscar canchas:", error);
+        setFilteredCourts([]);
+        setError("Error al obterner canchas. Por favor intenta de nuevo.");
       });
   };
   
@@ -143,10 +164,12 @@ useEffect(() => {
   useEffect(() => {
     if (!itemsPerPage || isNaN(itemsPerPage)) return;
     
-    const dataToPaginate = filteredCourts.length > 0 
-      ? filteredCourts 
-      : state?.courts?.data?.length > 0 
-        ? state?.courts?.data 
+    const dataToPaginate = isSearchActive
+    ? filteredCourts
+    : filteredCourts.length > 0
+      ? filteredCourts
+      : state?.courts?.data?.length > 0
+        ? state?.courts?.data
         : state?.recommendedCourts || [];
 
      if (!dataToPaginate.length) return;
@@ -155,7 +178,7 @@ useEffect(() => {
      const indexOfFirstCourt = Math.min(indexOfLastCourt - itemsPerPage, dataToPaginate.length);
 
     setCurrentCourts(dataToPaginate.slice(indexOfFirstCourt, indexOfLastCourt));
-  }, [currentPage, filteredCourts, state?.courts?.data, state?.recommendedCourts, itemsPerPage]);   
+  }, [currentPage, filteredCourts, state?.courts?.data, state?.recommendedCourts, itemsPerPage, isSearchActive]);   
 
   const handleFetchNextPage = () => {
     if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
@@ -214,13 +237,15 @@ useEffect(() => {
       <main>
         <div className="main-content">
         <h1>
-          {selectedCategory
+          {isSearchActive
+          ? "RESULTADOS DE LA BÚSQUEDA"
+          : selectedCategory
           ? `CANCHAS DE ${categories.find(c => c.id === selectedCategory)?.name.toUpperCase() || "DESCONOCIDO"}`
           : "NUESTRAS RECOMENDACIONES"}
           </h1>
 
           {/* Mostrar cantidad de resultados si hay canchas */}
-          {selectedCategory && (
+          {(isSearchActive || selectedCategory) && (
             <p>{filteredCourts.length > 0
               ? `Se encontraron ${filteredCourts.length} canchas disponibles.`
               : ""}
