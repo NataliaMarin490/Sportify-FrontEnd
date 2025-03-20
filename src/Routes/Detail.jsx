@@ -7,9 +7,9 @@ import ImageGallery from "../components/ImageGallery";
 import BackButton from "../components/BackButton";
 import { useContextGlobal } from "../Context/global.context";
 import Calendar from "../components/CalendarDetail.jsx";
-import { Heart } from "lucide-react";
 import { Share2 } from "lucide-react";
 import ShareCourtModal from "../components/ShareCourtModal.jsx";
+import FavoriteButton from "../components/FavoriteButton.jsx";
 
 const Detail = () => {
   const { state } = useContextGlobal();
@@ -18,6 +18,7 @@ const Detail = () => {
   const [selectedTime, setSelectedTime] = useState("7:00");
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
+  console.log(id);
   const currentUrl = window.location.href;
 
   const handleDateTimeChange = (date, time) => {
@@ -40,9 +41,8 @@ const Detail = () => {
         <BackButton />
         <div className="detail">
           <div className="detail-buttons">
-            <button className="court-button" onClick>
-              <Heart size={20} />
-            </button>
+            <FavoriteButton product={product} />
+
             <button
               className="court-button"
               onClick={() => setIsShareModalOpen(true)}

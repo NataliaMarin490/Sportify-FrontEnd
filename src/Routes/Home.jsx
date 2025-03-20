@@ -365,9 +365,11 @@ const Home = () => {
               currentCourts.map((court) => (
                 <Cards key={court.id} court={court} />
               ))
+              
             ) : (
               <h1>No hay canchas disponibles</h1>
             )}
+
           </div>
 
           <div className="home-cards-pagination">

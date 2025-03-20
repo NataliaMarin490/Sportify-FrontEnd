@@ -25,6 +25,7 @@ import AdminFeatures from "./Routes/AdminFeatures.jsx";
 import AdminLayout from "./Layouts/AdminLayout.jsx";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ErrorBoundary from "./components/ErrorBoundary";
+import FavoritesPage from "./Routes/FavoritesPage.jsx";
 
 function App() {
   const navigate = useNavigate();
@@ -105,6 +106,19 @@ function App() {
                 redirectTo={location.state?.from || "/"}
               >
                 <UserProfile />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Ruta protegida para favoritos */}
+          <Route
+            path="/favorites"
+            element={
+              <ProtectedRoute
+                isAuthenticated={user}
+                redirectTo={location.state?.from || "/login"} // Redirigir a login si no está logueado
+              >
+                <FavoritesPage />
               </ProtectedRoute>
             }
           />
