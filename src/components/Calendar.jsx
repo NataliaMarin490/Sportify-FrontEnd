@@ -7,27 +7,25 @@ import PropTypes from "prop-types";
 const CalendarPlain = ({ onDateChange }) => {
   const [date, setDate] = useState(new Date());
 
-  const handleDateSelection = (selectedDate) => {
-    setDate(selectedDate);
-    onDateChange(selectedDate); // Llama a la función de `SearchBox`
-  };
-  
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Asegurar comparación solo de fechas
 
   return (
-    <div className="search-calendar-container">
-      {/* <h2 className="tituloCalendar">Seleccionar Fecha</h2> */}
-      <Calendar onChange={handleDateSelection} value={date} className="search-custom-calendar" />
-
-      
-      
-
-      {/* <p className="selected-info">
-        📅 <strong>{date.toLocaleDateString()}</strong> - 🕒{" "}
-        <strong>{hour}:00 {period}</strong>
-      </p> */}
+    <div className="search-calendar-container calendar-instance">
+      <Calendar
+        onChange={(selectedDate) => {
+          setDate(selectedDate);
+          onDateChange(selectedDate);
+        }}
+        value={date}
+        className="search-custom-calendar calendar-instance"
+        minDate={today} // Evita bloquear el mes actual
+        
+      />
     </div>
   );
 };
+
 
 Calendar.propTypes = {
         onDateChange: PropTypes.func.isRequired,
