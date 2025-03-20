@@ -111,7 +111,8 @@ const SearchBox = ({ onSearch }) => {
 
   // Función para enviar los datos a Home.jsx
   const handleSearch = () => {
-    onSearch({ city, sport, date, hour });
+    const filters = { city, sport, date, hour };
+    onSearch(filters);
   };
 
   // Manejo global para que se abran y cierren inputs

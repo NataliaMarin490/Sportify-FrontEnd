@@ -20,14 +20,59 @@ const Home = () => {
   const [error, setError] = useState(null); // Estado para errores
   const [categories, setCategories] = useState([]);
   const [isSearchActive, setIsSearchActive] = useState(false);
+  const [courts, setCourts] = useState([]);
+  const [cities, setCities] = useState([]);
 
+  const [selectedCity, setSelectedCity] = useState(null);
+  const [selectedSport, setSelectedSport] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedHour, setSelectedHour] = useState(null);
+
+  const [loading, setLoading] = useState(false);
+
+  
 
   /* const newDataCourt = state?.courts?.data; */
   const itemsPerPage = state?.courts?.pageSize || 10;
-  const totalPages = state?.courts?.totalPages;
+  const [totalPages, setTotalPages] = useState(1);
+
 
   const token = localStorage.getItem("authToken");
  /*  console.log("Token:", token); */
+
+ const fetchCourts = async (filters) => {
+  setLoading(true);
+
+  try {
+    const response = await axios.get('http://localhost:8080/api/public/bookings/search', {
+      params: { ...filters, page: currentPage, size: itemsPerPage },
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    
+    const data = response.data;
+
+    console.log("Respuesta de la API:", data);
+
+    if (!data.data.length) {
+      setError("No se encontraron canchas para los filtros aplicados.");
+      setFilteredCourts([]);
+      return;
+    }
+
+    setCourts(data.data);
+    setFilteredCourts(data.data);
+    setError(null);
+    setTotalPages(Math.ceil(data.totalElements / itemsPerPage)); 
+  } catch (error) {
+    console.error("Error fetching canchas:", error);
+    setError("Error al obtener canchas. Intenta nuevamente.");
+    setFilteredCourts([]);
+  } finally {
+    setLoading(false);  // Indicar que terminó la carga
+  }
+};
+
+
 
   useEffect(() => {
     // Limpiar la categoría seleccionada al refrescar la página
@@ -47,29 +92,43 @@ const Home = () => {
       });
   }, []);
 
-  // useEffect para manejar la categoría seleccionada y la carga de canchas
-useEffect(() => {
-  if (selectedCategory && !isNaN(selectedCategory)) {
+  useEffect(() => {
     axios
-      .get(`${API_BASE_URL}/bookings/search?page=1&size=10&sportId=${selectedCategory}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .get(`${API_BASE_URL}/cities/all`)
       .then((response) => {
-        const courts = response.data.data || [];
-        setFilteredCourts(courts);
-        setCurrentPage(1);
-        setError(courts.length ? null : "No hay canchas disponibles para esta categoría.");
+        setCities(response.data);
       })
       .catch((error) => {
-        console.error("Error al obtener canchas por categoría:", error);
-        setError("Error al obtener canchas. Intenta nuevamente.");
+        console.error("Error al obtener ciudades:", error);
       });
-  } else {
-    setFilteredCourts([]); 
-  }
-}, [selectedCategory, token]); 
+  }, []);
+  
 
- 
+  // useEffect para manejar la categoría seleccionada y la carga de canchas
+  useEffect(() => {
+    if (selectedCategory) {
+      fetchCourts({ sportId: selectedCategory });
+    } else {
+      setFilteredCourts([]);
+    }
+  }, [selectedCategory, currentPage]);
+
+  // useEffect para manejar la búsqueda con filtros
+  useEffect(() => {
+    if (isSearchActive) {
+      const filters = {
+        city: selectedCity,
+        sport: selectedSport,
+        date: selectedDate,
+        hour: selectedHour,
+      };
+  
+      fetchCourts(filters);
+    }
+  }, [isSearchActive, selectedCity, selectedSport, selectedDate, selectedHour, currentPage]);
+  
+  
+  
   
 
   useEffect(() => {
@@ -91,94 +150,99 @@ useEffect(() => {
   }, [currentPage]);
 
   const handleCategorySelect = (categoryName, sportId) => {
-    if (!sportId) {
-      console.error("El sportId es inválido:", sportId);
-      return;
-    }
-  
     setSelectedCategory(sportId);
     setIsSearchActive(false);
-    localStorage.setItem("selectedCategory", sportId);
     setCurrentPage(1);
+    localStorage.setItem("selectedCategory", sportId);
+  };
+
+  const obtenerCityId = (cityName) => {
+    if (!cityName || !cities.length) return null;  // Si la ciudad no es válida, retorna null
+    const city = cities.find(c => c.name.toLowerCase().includes(cityName.toLowerCase()));
+    return city ? city.id : null;
+  };
   
-    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+  const obtenerSportId = (sportName) => {
+    if (!sportName || !categories.length) return null;  // Si el deporte no es válido, retorna null
+    const sport = categories.find(s => s.name === sportName);
+    return sport ? sport.id : null;
+  };
   
-    axios
-      .get(`${API_BASE_URL}/bookings/search?page=1&size=10&sportId=${sportId}`, {
-        headers,
-      })
-      .then((response) => {
-        if (response.data && response.data.length > 0) {
-          setCurrentCourts(response.data);
-          setFilteredCourts(response.data);
+  
+
+  const handleSearch = ({ city, sport, date, hour }) => {
+    setIsSearchActive(true);
+    const filters = { city, sport, date, hour };
+  
+    console.log("Filtros de búsqueda:", filters);
+  
+    // Comprobar si los filtros tienen los valores correctos
+    let searchParams = new URLSearchParams();
+  
+    if (filters.city) {
+      const cityId = obtenerCityId(filters.city);
+      if (cityId) {
+        searchParams.append('cityId', cityId);
+      }
+    }
+  
+    if (filters.sport) {
+      const sportId = obtenerSportId(filters.sport);
+      if (sportId) {
+        searchParams.append('sportId', sportId);
+      }
+    }
+  
+    if (filters.date) {
+      searchParams.append('date', filters.date);
+    }
+  
+    if (filters.hour) {
+      searchParams.append('hour', filters.hour);
+    }
+  
+    // Generar la URL con los parámetros de búsqueda
+    const url = `http://localhost:8080/api/public/bookings/search?page=1&size=10&${searchParams.toString()}`;
+  
+    console.log("URL generada:", url);
+  
+    // Llamar a la API con la URL generada
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        console.log("Resultados obtenidos:", data);
+        if (data.data && data.data.length > 0) {
+          setFilteredCourts(data.data);
+          setCurrentPage(1); // Resetear la paginación a la página 1
+          setTotalPages(Math.ceil(data.totalElements / itemsPerPage)); // Establecer el total de páginas
+          setError(null);
         } else {
-          setError("No hay canchas disponibles para esta categoría.");
           setFilteredCourts([]);
+          setError("No se encontraron canchas con los filtros seleccionados.");
         }
       })
-      .catch((error) => {
-        console.error("Error al obtener canchas por categoría:", error);
+      .catch(error => {
+        console.error("Error en la búsqueda:", error);
         setError("Error al obtener canchas. Intenta nuevamente.");
       });
   };
-
-  const handleSearch = (filters) => {
-    console.log("Buscando con filtros:", filters);
-
-    if (!filters || Object.keys(filters).length === 0) {
-      console.warn("No hay filtros seleccionados.");
-      return;
-    }
-
-    setIsSearchActive(true);
-    setSelectedCategory(null);
-    setCurrentPage(1);
   
-    const headers = token ? { Authorization: `Bearer ${token}` } : {};
-  
-    axios
-      .get(`${API_BASE_URL}/bookings/search?page=1&size=10`, {
-        params: filters,
-        headers,
-      })
-      .then((response) => {
-        if (response.data && response.data.data) {
-          console.log("Canchas encontradas:", response.data.data);
-          setFilteredCourts(response.data.data);
-          setError(null);
-        } else {
-          console.warn("No se recibieron datos válidos.");
-          setFilteredCourts([]);
-          setError("No se encontraron canchas con esos filtros.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error al buscar canchas:", error);
-        setFilteredCourts([]);
-        setError("Error al obterner canchas. Por favor intenta de nuevo.");
-      });
-  };
   
 
   // useEffect para paginar los datos
   useEffect(() => {
-    if (!itemsPerPage || isNaN(itemsPerPage)) return;
-    
     const dataToPaginate = isSearchActive
-    ? filteredCourts
-    : filteredCourts.length > 0
       ? filteredCourts
-      : state?.courts?.data?.length > 0
-        ? state?.courts?.data
-        : state?.recommendedCourts || [];
-
-     if (!dataToPaginate.length) return;
+      : state?.courts?.data || [];
   
-     const indexOfLastCourt = Math.min(currentPage * itemsPerPage, dataToPaginate.length);
-     const indexOfFirstCourt = Math.min(indexOfLastCourt - itemsPerPage, dataToPaginate.length);
-
+    if (!dataToPaginate.length) return;
+  
+    const indexOfLastCourt = currentPage * itemsPerPage;
+    const indexOfFirstCourt = indexOfLastCourt - itemsPerPage;
+  
     setCurrentCourts(dataToPaginate.slice(indexOfFirstCourt, indexOfLastCourt));
-  }, [currentPage, filteredCourts, state?.courts?.data, state?.recommendedCourts, itemsPerPage, isSearchActive]);   
+  }, [currentPage, filteredCourts, state?.courts?.data, itemsPerPage, isSearchActive]);
+  
 
   const handleFetchNextPage = () => {
     if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
@@ -188,6 +252,7 @@ useEffect(() => {
     if (currentPage > 1) setCurrentPage((prev) => prev - 1);
   };
 
+  
   const settings = {
     dots: true,
     infinite: true,
@@ -201,85 +266,90 @@ useEffect(() => {
   return (
     <>
       <div className="home-container">
-        <div className="searcher-container">
-          <div className="main-text-container">
-            <h1>BIENVENIDO A SPORTIFY</h1>
-            <p className="text-welcome">
-              Ofrecemos una amplia selección de canchas en todo el país, con{" "}
-              <br />
-              precios accesibles y condiciones óptimas para que disfrutes al{" "}
-              <br />
-              máximo tu actividad física.
-            </p>
-          </div>
-          <SearchBox onSearch={handleSearch} />
-          <div className="categories-container">
-            <div className="categories-slider-container">
-              <Slider {...settings}>
-                {/* { state.courts && state?.courts?.data?.features?.map((category, index) => ( */}
-                {categories.map((category, index) => (
-                  <button
-                    key={index}
-                    className="category-button"
-                    onClick={() => handleCategorySelect(category.name, category.id)}
-                  >
-                    <i className={`fa ${category.icon} category-icon`}></i>
-                    <span>{category.name}</span>
-                  </button>
-                ))}
-              </Slider>
-            </div>
-          </div>
-
-          
+  <div className="searcher-container">
+    <div className="main-text-container">
+      <h1>BIENVENIDO A SPORTIFY</h1>
+      <p className="text-welcome">
+        Ofrecemos una amplia selección de canchas en todo el país, con{" "}
+        <br />
+        precios accesibles y condiciones óptimas para que disfrutes al{" "}
+        <br />
+        máximo tu actividad física.
+      </p>
+    </div>
+    <SearchBox onSearch={handleSearch} />
+    <div className="categories-container">
+      {/* Aseguramos que categories esté cargado antes de intentar renderizar el slider */}
+      {categories.length > 0 ? (
+        <div className="categories-slider-container">
+          <Slider {...settings}>
+            {categories.map((category) => (
+              <button
+                key={category.id} 
+                className="category-button"
+                onClick={() => handleCategorySelect(category.name, category.id)}
+              >
+                <i className={`fa ${category.icon} category-icon`}></i>
+                <span>{category.name}</span>
+              </button>
+            ))}
+          </Slider>
         </div>
-      </div>
-      <main>
-        <div className="main-content">
-        <h1>
-          {isSearchActive
-          ? "RESULTADOS DE LA BÚSQUEDA"
-          : selectedCategory
-          ? `CANCHAS DE ${categories.find(c => c.id === selectedCategory)?.name.toUpperCase() || "DESCONOCIDO"}`
-          : "NUESTRAS RECOMENDACIONES"}
-          </h1>
+      ) : (
+        <p>Cargando categorías...</p>
+      )}
+    </div>
+  </div>
+</div>
 
-          {/* Mostrar cantidad de resultados si hay canchas */}
-          {(isSearchActive || selectedCategory) && (
-            <p>{filteredCourts.length > 0
-              ? `Se encontraron ${filteredCourts.length} canchas disponibles.`
-              : ""}
-              </p>
-            )}
+<main>
+  <div className="main-content">
+    <h1>
+      {isSearchActive
+        ? "RESULTADOS DE LA BÚSQUEDA"
+        : selectedCategory
+        ? `CANCHAS DE ${categories.find(c => c.id === selectedCategory)?.name.toUpperCase() || "DESCONOCIDO"}`
+        : "NUESTRAS RECOMENDACIONES"}
+    </h1>
 
+    {/* Mostrar cantidad de resultados si hay canchas */}
+    {(isSearchActive || selectedCategory) && (
+      <p>
+        {filteredCourts.length > 0
+          ? `Se encontraron ${filteredCourts.length} canchas disponibles.`
+          : ""}
+      </p>
+    )}
 
-          <div className="home-cards-container">
-            {error ? (
-              <h1>{error}</h1>
-            ) : currentCourts && currentCourts.length > 0 ? (
-              currentCourts.map((court) => (
-                <Cards key={court.id} court={court} />
-              ))
-            ) : (
-              <h1>No hay canchas disponibles</h1>
-            )}
-          </div>
+    <div className="home-cards-container">
+    {loading ? (
+    <h1>Cargando...</h1>
+  ) : error ? (
+        <h1>{error}</h1>
+      ) : currentCourts && currentCourts.length > 0 ? (
+        currentCourts.map((court) => (
+          <Cards key={court.id} court={court} />
+        ))
+      ) : (
+        <h1>No hay canchas disponibles</h1>
+      )}
+    </div>
 
-          <div className="home-cards-pagination">
-            <button onClick={handleFetchPrevPage} disabled={currentPage === 1}>
-              Anterior
-            </button>
-            <span>
-              Página {currentPage} de {totalPages}
-            </span>
-            <button
-              onClick={handleFetchNextPage}
-              disabled={currentPage === totalPages}
-            >
-              Siguiente
-            </button>
-          </div>
-        </div>
+    <div className="home-cards-pagination">
+      <button onClick={handleFetchPrevPage} disabled={currentPage === 1}>
+        Anterior
+      </button>
+      <span>
+        Página {currentPage} de {totalPages}
+      </span>
+      <button
+        onClick={handleFetchNextPage}
+        disabled={currentPage === totalPages}
+      >
+        Siguiente
+      </button>
+    </div>
+  </div>
         <div className="extra-info-container">
           <div className="box-1">
             <h4 className="box-title">ENCUENTRA</h4>
