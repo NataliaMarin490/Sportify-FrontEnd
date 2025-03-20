@@ -15,7 +15,9 @@ const Home = () => {
   const { state } = useContextGlobal();
   const [filteredCourts, setFilteredCourts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [currentPage, setCurrentPage] = useState(state?.courts?.currentPage || 1 );
+  const [currentPage, setCurrentPage] = useState(
+    state?.courts?.currentPage || 1
+  );
   const [currentCourts, setCurrentCourts] = useState([]);
   const [error, setError] = useState(null); // Estado para errores
   const [categories, setCategories] = useState([]);
@@ -30,49 +32,46 @@ const Home = () => {
 
   const [loading, setLoading] = useState(false);
 
-  
-
   /* const newDataCourt = state?.courts?.data; */
   const itemsPerPage = state?.courts?.pageSize || 10;
   const [totalPages, setTotalPages] = useState(1);
 
-
   const token = localStorage.getItem("authToken");
- /*  console.log("Token:", token); */
+  /*  console.log("Token:", token); */
 
- const fetchCourts = async (filters) => {
-  setLoading(true);
+  const fetchCourts = async (filters) => {
+    setLoading(true);
 
-  try {
-    const response = await axios.get('http://localhost:8080/api/public/bookings/search', {
-      params: { ...filters, page: currentPage, size: itemsPerPage },
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    
-    const data = response.data;
+    try {
+      const params = { ...filters, page: currentPage, size: itemsPerPage };
 
-    console.log("Respuesta de la API:", data);
+      const response = await axios.get(
+        "http://localhost:8080/api/bookings/search",
+        {
+          params,
+        }
+      );
 
-    if (!data.data.length) {
-      setError("No se encontraron canchas para los filtros aplicados.");
+      const data = response.data;
+
+      if (!data.data.length) {
+        setError("No se encontraron canchas para los filtros aplicados.");
+        setFilteredCourts([]);
+        return;
+      }
+
+      setCourts(data.data);
+      setFilteredCourts(data.data);
+      setError(null);
+      setTotalPages(data.totalPages);
+    } catch (error) {
+      console.error("Error fetching canchas:", error);
+      setError("Error al obtener canchas. Intenta nuevamente.");
       setFilteredCourts([]);
-      return;
+    } finally {
+      setLoading(false);
     }
-
-    setCourts(data.data);
-    setFilteredCourts(data.data);
-    setError(null);
-    setTotalPages(Math.ceil(data.totalElements / itemsPerPage)); 
-  } catch (error) {
-    console.error("Error fetching canchas:", error);
-    setError("Error al obtener canchas. Intenta nuevamente.");
-    setFilteredCourts([]);
-  } finally {
-    setLoading(false);  // Indicar que terminó la carga
-  }
-};
-
-
+  };
 
   useEffect(() => {
     // Limpiar la categoría seleccionada al refrescar la página
@@ -83,7 +82,7 @@ const Home = () => {
 
   useEffect(() => {
     axios
-      .get(`${API_BASE_URL}/sports/status/5`)
+      .get(`${API_BASE_URL}/public/sports/status/5`)
       .then((response) => {
         setCategories(response.data);
       })
@@ -94,7 +93,7 @@ const Home = () => {
 
   useEffect(() => {
     axios
-      .get(`${API_BASE_URL}/cities/all`)
+      .get(`${API_BASE_URL}/public/cities/all`)
       .then((response) => {
         setCities(response.data);
       })
@@ -102,7 +101,6 @@ const Home = () => {
         console.error("Error al obtener ciudades:", error);
       });
   }, []);
-  
 
   // useEffect para manejar la categoría seleccionada y la carga de canchas
   useEffect(() => {
@@ -122,14 +120,18 @@ const Home = () => {
         date: selectedDate,
         hour: selectedHour,
       };
-  
+
+      setCurrentPage(1);
       fetchCourts(filters);
     }
-  }, [isSearchActive, selectedCity, selectedSport, selectedDate, selectedHour, currentPage]);
-  
-  
-  
-  
+  }, [
+    isSearchActive,
+    selectedCity,
+    selectedSport,
+    selectedDate,
+    selectedHour,
+    currentPage,
+  ]);
 
   useEffect(() => {
     const storedCategory = localStorage.getItem("selectedCategory");
@@ -157,92 +159,120 @@ const Home = () => {
   };
 
   const obtenerCityId = (cityName) => {
-    if (!cityName || !cities.length) return null;  // Si la ciudad no es válida, retorna null
-    const city = cities.find(c => c.name.toLowerCase().includes(cityName.toLowerCase()));
+    console.log(cityName);
+    if (!cityName || !cities.length) return null;
+    const cityNameWithoutCountry = cityName.split(",")[0];
+    const city = cities.find((c) =>
+      c.name.toLowerCase().includes(cityNameWithoutCountry.toLowerCase())
+    );
+    console.log(city);
     return city ? city.id : null;
   };
-  
+
   const obtenerSportId = (sportName) => {
-    if (!sportName || !categories.length) return null;  // Si el deporte no es válido, retorna null
-    const sport = categories.find(s => s.name === sportName);
+    if (!sportName || !categories.length) return null; // Si el deporte no es válido, retorna null
+    const sport = categories.find((s) => s.name === sportName);
     return sport ? sport.id : null;
   };
-  
-  
+
+  const convertTo24HourFormat = (time) => {
+    const [hour, minutePart] = time.split(":");
+    const minute = minutePart.slice(0, 2);
+    const period = minutePart.slice(3).toUpperCase();
+
+    let hour24 = parseInt(hour);
+    if (period === "PM" && hour24 !== 12) {
+      hour24 += 12;
+    } else if (period === "AM" && hour24 === 12) {
+      hour24 = 0;
+    }
+
+    return `${String(hour24).padStart(2, "0")}:${minute}`;
+  };
 
   const handleSearch = ({ city, sport, date, hour }) => {
     setIsSearchActive(true);
+    setCurrentPage(1);
     const filters = { city, sport, date, hour };
-  
+
     console.log("Filtros de búsqueda:", filters);
-  
+
     // Comprobar si los filtros tienen los valores correctos
     let searchParams = new URLSearchParams();
-  
+
     if (filters.city) {
       const cityId = obtenerCityId(filters.city);
       if (cityId) {
-        searchParams.append('cityId', cityId);
+        searchParams.append("cityId", cityId);
       }
     }
-  
+
     if (filters.sport) {
       const sportId = obtenerSportId(filters.sport);
       if (sportId) {
-        searchParams.append('sportId', sportId);
+        searchParams.append("sportId", sportId);
       }
     }
-  
+
     if (filters.date) {
-      searchParams.append('date', filters.date);
+      const [day, month, year] = filters.date.split("/");
+      const formattedDate = `${year}-${month.padStart(2, "0")}-${day.padStart(
+        2,
+        "0"
+      )}`;
+      searchParams.append("date", formattedDate);
     }
-  
+
     if (filters.hour) {
-      searchParams.append('hour', filters.hour);
+      const militaryHour = convertTo24HourFormat(filters.hour);
+      searchParams.append("time", militaryHour);
     }
-  
+
     // Generar la URL con los parámetros de búsqueda
-    const url = `http://localhost:8080/api/public/bookings/search?page=1&size=10&${searchParams.toString()}`;
-  
+    const url = `http://localhost:8080/api/bookings/search?page=1&size=10&${searchParams.toString()}`;
+
     console.log("URL generada:", url);
-  
+
     // Llamar a la API con la URL generada
     fetch(url)
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         console.log("Resultados obtenidos:", data);
         if (data.data && data.data.length > 0) {
           setFilteredCourts(data.data);
           setCurrentPage(1); // Resetear la paginación a la página 1
-          setTotalPages(Math.ceil(data.totalElements / itemsPerPage)); // Establecer el total de páginas
+          setTotalPages(data.totalPages); // Establecer el total de páginas
           setError(null);
         } else {
           setFilteredCourts([]);
           setError("No se encontraron canchas con los filtros seleccionados.");
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error en la búsqueda:", error);
         setError("Error al obtener canchas. Intenta nuevamente.");
       });
   };
-  
-  
 
   // useEffect para paginar los datos
   useEffect(() => {
     const dataToPaginate = isSearchActive
       ? filteredCourts
       : state?.courts?.data || [];
-  
+
     if (!dataToPaginate.length) return;
-  
+
     const indexOfLastCourt = currentPage * itemsPerPage;
     const indexOfFirstCourt = indexOfLastCourt - itemsPerPage;
-  
+
     setCurrentCourts(dataToPaginate.slice(indexOfFirstCourt, indexOfLastCourt));
-  }, [currentPage, filteredCourts, state?.courts?.data, itemsPerPage, isSearchActive]);
-  
+  }, [
+    currentPage,
+    filteredCourts,
+    state?.courts?.data,
+    itemsPerPage,
+    isSearchActive,
+  ]);
 
   const handleFetchNextPage = () => {
     if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
@@ -252,7 +282,6 @@ const Home = () => {
     if (currentPage > 1) setCurrentPage((prev) => prev - 1);
   };
 
-  
   const settings = {
     dots: true,
     infinite: true,
@@ -266,90 +295,96 @@ const Home = () => {
   return (
     <>
       <div className="home-container">
-  <div className="searcher-container">
-    <div className="main-text-container">
-      <h1>BIENVENIDO A SPORTIFY</h1>
-      <p className="text-welcome">
-        Ofrecemos una amplia selección de canchas en todo el país, con{" "}
-        <br />
-        precios accesibles y condiciones óptimas para que disfrutes al{" "}
-        <br />
-        máximo tu actividad física.
-      </p>
-    </div>
-    <SearchBox onSearch={handleSearch} />
-    <div className="categories-container">
-      {/* Aseguramos que categories esté cargado antes de intentar renderizar el slider */}
-      {categories.length > 0 ? (
-        <div className="categories-slider-container">
-          <Slider {...settings}>
-            {categories.map((category) => (
-              <button
-                key={category.id} 
-                className="category-button"
-                onClick={() => handleCategorySelect(category.name, category.id)}
-              >
-                <i className={`fa ${category.icon} category-icon`}></i>
-                <span>{category.name}</span>
-              </button>
-            ))}
-          </Slider>
+        <div className="searcher-container">
+          <div className="main-text-container">
+            <h1>BIENVENIDO A SPORTIFY</h1>
+            <p className="text-welcome">
+              Ofrecemos una amplia selección de canchas en todo el país, con{" "}
+              <br />
+              precios accesibles y condiciones óptimas para que disfrutes al{" "}
+              <br />
+              máximo tu actividad física.
+            </p>
+          </div>
+          <SearchBox onSearch={handleSearch} />
+          <div className="categories-container">
+            {/* Aseguramos que categories esté cargado antes de intentar renderizar el slider */}
+            {categories.length > 0 ? (
+              <div className="categories-slider-container">
+                <Slider {...settings}>
+                  {categories.map((category) => (
+                    <button
+                      key={category.id}
+                      className="category-button"
+                      onClick={() =>
+                        handleCategorySelect(category.name, category.id)
+                      }
+                    >
+                      <i className={`fa ${category.icon} category-icon`}></i>
+                      <span>{category.name}</span>
+                    </button>
+                  ))}
+                </Slider>
+              </div>
+            ) : (
+              <p>Cargando categorías...</p>
+            )}
+          </div>
         </div>
-      ) : (
-        <p>Cargando categorías...</p>
-      )}
-    </div>
-  </div>
-</div>
+      </div>
 
-<main>
-  <div className="main-content">
-    <h1>
-      {isSearchActive
-        ? "RESULTADOS DE LA BÚSQUEDA"
-        : selectedCategory
-        ? `CANCHAS DE ${categories.find(c => c.id === selectedCategory)?.name.toUpperCase() || "DESCONOCIDO"}`
-        : "NUESTRAS RECOMENDACIONES"}
-    </h1>
+      <main>
+        <div className="main-content">
+          <h1>
+            {isSearchActive
+              ? "RESULTADOS DE LA BÚSQUEDA"
+              : selectedCategory
+              ? `CANCHAS DE ${
+                  categories
+                    .find((c) => c.id === selectedCategory)
+                    ?.name.toUpperCase() || "DESCONOCIDO"
+                }`
+              : "NUESTRAS RECOMENDACIONES"}
+          </h1>
 
-    {/* Mostrar cantidad de resultados si hay canchas */}
-    {(isSearchActive || selectedCategory) && (
-      <p>
-        {filteredCourts.length > 0
-          ? `Se encontraron ${filteredCourts.length} canchas disponibles.`
-          : ""}
-      </p>
-    )}
+          {/* Mostrar cantidad de resultados si hay canchas */}
+          {(isSearchActive || selectedCategory) && (
+            <p>
+              {filteredCourts.length > 0
+                ? `Se encontraron ${filteredCourts.length} canchas disponibles.`
+                : ""}
+            </p>
+          )}
 
-    <div className="home-cards-container">
-    {loading ? (
-    <h1>Cargando...</h1>
-  ) : error ? (
-        <h1>{error}</h1>
-      ) : currentCourts && currentCourts.length > 0 ? (
-        currentCourts.map((court) => (
-          <Cards key={court.id} court={court} />
-        ))
-      ) : (
-        <h1>No hay canchas disponibles</h1>
-      )}
-    </div>
+          <div className="home-cards-container">
+            {loading ? (
+              <h1>Cargando...</h1>
+            ) : error ? (
+              <h1>{error}</h1>
+            ) : currentCourts && currentCourts.length > 0 ? (
+              currentCourts.map((court) => (
+                <Cards key={court.id} court={court} />
+              ))
+            ) : (
+              <h1>No hay canchas disponibles</h1>
+            )}
+          </div>
 
-    <div className="home-cards-pagination">
-      <button onClick={handleFetchPrevPage} disabled={currentPage === 1}>
-        Anterior
-      </button>
-      <span>
-        Página {currentPage} de {totalPages}
-      </span>
-      <button
-        onClick={handleFetchNextPage}
-        disabled={currentPage === totalPages}
-      >
-        Siguiente
-      </button>
-    </div>
-  </div>
+          <div className="home-cards-pagination">
+            <button onClick={handleFetchPrevPage} disabled={currentPage === 1}>
+              Anterior
+            </button>
+            <span>
+              Página {currentPage} de {totalPages}
+            </span>
+            <button
+              onClick={handleFetchNextPage}
+              disabled={currentPage === totalPages}
+            >
+              Siguiente
+            </button>
+          </div>
+        </div>
         <div className="extra-info-container">
           <div className="box-1">
             <h4 className="box-title">ENCUENTRA</h4>

@@ -15,7 +15,7 @@ const AdminFeatures = () => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`${API_BASE_URL}/features`)
+      .get(`${API_BASE_URL}/public/features`)
       .then((response) => {
         setFeatures(response.data);
       })
@@ -35,7 +35,7 @@ const AdminFeatures = () => {
   const handleDelete = (id) => {
     if (window.confirm("¿Seguro que quieres desactivar esta característica?")) {
       axios
-        .put(`${API_BASE_URL}/features/${id}/deactivate`)
+        .put(`${API_BASE_URL}/public/features/${id}/deactivate`)
         .then(() => {
           setFeatures(features.filter((f) => f.idFeature !== id));
           alert("Característica desactivada exitosamente.");

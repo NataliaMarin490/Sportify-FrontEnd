@@ -35,14 +35,14 @@ const CreateFeatures = () => {
       return;
     }
     setIsLoading(true);
-    
+
     const formData = new FormData();
     formData.append("feature", JSON.stringify({ feature: feature })); // Convertir el feature a un objeto JSON
     formData.append("statusId", 24);
     formData.append("image", image);
-  
+
     try {
-      const response = await fetch(`${API_BASE_URL}/features/add`, {
+      const response = await fetch(`${API_BASE_URL}/public/features/add`, {
         method: "POST",
         body: formData,
       });
@@ -56,7 +56,7 @@ const CreateFeatures = () => {
       setIsLoading(false);
     }
   };
-  
+
   return (
     <div className="create-features-container">
       <form className="form" onSubmit={handleSubmit}>
@@ -93,7 +93,10 @@ const CreateFeatures = () => {
               alt="Preview"
               className="preview"
             />
-            <FaTimes className="remove-image-icon" onClick={handleRemoveImage} />
+            <FaTimes
+              className="remove-image-icon"
+              onClick={handleRemoveImage}
+            />
           </div>
         )}
         <button type="submit" disabled={isLoading}>
