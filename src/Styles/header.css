@@ -17,12 +17,16 @@ header {
 }
 
 .nav-container {
-  width: 20%;
+  width: 150px;
   padding: 0 30px;
   display: flex;
   /* justify-content: flex-end; */
   gap: 20px;
   align-items: center;
+}
+
+.nav-container-avatars {
+  display: flex;
 }
 
 .auth-links {
@@ -35,7 +39,6 @@ header {
   justify-content: space-between;
   gap: 20px;
 }
-
 
 .link-header {
   cursor: pointer;
