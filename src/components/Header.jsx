@@ -5,11 +5,12 @@ import headerIcon from "../../public/logoHeader.svg";
 import UserAvatar from "./UserAvatar";
 import PropTypes from "prop-types";
 import { useContextGlobal } from "../Context/global.context";
+import FavoriteAvatar from "../components/FavoriteAvatar.jsx";
 
 const Header = () => {
   const { user, logout } = useContextGlobal();
 
-/* const Header = ({ user, onLogout }) => {
+  /* const Header = ({ user, onLogout }) => {
   console.log("User en Header:", user); */
 
   return (
@@ -23,7 +24,10 @@ const Header = () => {
 
       <nav className="nav-container">
         {user ? (
-          <UserAvatar userName={user.fullName} onLogout={logout} />
+          <div className="nav-container-avatars">
+            <UserAvatar userName={user.fullName} onLogout={logout} />
+            <FavoriteAvatar />
+          </div>
         ) : (
           <div className="auth-links">
             <Link to="/login" className="link-header">

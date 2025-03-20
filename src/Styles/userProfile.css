@@ -65,7 +65,7 @@
 /* Si quieres que el UserAvatar se vea al frente */
 .user-avatar-container {
   position: absolute;
-  top: 10px;
+  /*top: 10px;*/
   right: 0px;
   z-index: 10;
 }
