@@ -1,10 +1,11 @@
+/* Estilos generales */
 .detail-container {
   background-color: var(--background-color);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   background-color: beige;
-  padding: 30px;
+  padding: 100px;
 }
 
 .feature-item {
@@ -185,6 +186,106 @@
   width: 25%;
 }
 
+/* Estilos para el calendario y botones de tiempo */
+.calendar-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.tituloCalendar {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+.custom-calendar {
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.time-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.time-button {
+  padding: 10px 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+
+/* Estilo para cuando una hora está deshabilitada (ocupada) */
+.time-button.disabled {
+  background-color: #e0e0e0 !important;
+  color: #585656 !important;
+  cursor: not-allowed !important;
+}
+
+/* Estilo para hora seleccionada */
+.time-button.selected {
+  background-color: #6699cf !important;
+  color: #fff !important;
+}
+
+/* Estilos para fechas del calendario */
+
+/* Día actual (amarillo) */
+.react-calendar .react-calendar__tile--today {
+  background-color: #ffcc00 !important; /* Color de fondo amarillo para el día actual */
+  color: #ffffff !important; /* Color de texto blanco para el día actual */
+  border-radius: 50%; /* Opcional: para hacerlo circular */
+}
+/* Fechas completamente reservadas (rojo) */
+.react-calendar .react-calendar__tile--reserved {
+  background-color: #f8d7da !important; /* Rojo claro para fechas reservadas */
+  color: #d63a49 !important;
+  cursor: not-allowed !important;
+}
+
+/* Fechas parcialmente reservadas (amarillo) */
+.react-calendar .react-calendar__tile--partially-reserved {
+  background-color: #f3df9e !important; /* Amarillo claro para fechas parcialmente reservadas */
+  color: #262927 !important;
+}
+
+/* Fechas disponibles (verde) */
+.react-calendar .react-calendar__tile--available {
+  background-color: #a1d6ae !important; /* Verde claro para fechas disponibles */
+  color: #262927 !important;
+}
+
+/* Fechas pasadas desactivadas (gris claro) */
+.react-calendar .react-calendar__tile--disabled {
+  background-color: #f0f0f0 !important; /* Gris claro para fechas pasadas */
+  color: #b5b5b5 !important;
+  cursor: not-allowed !important; /* Mostrar que no se puede seleccionar */
+  pointer-events: none !important;
+}
+
+/* Fechas seleccionadas (superpone el estilo azul sobre los demás) */
+.react-calendar .react-calendar__tile--active {
+  background-color: #007bff !important; /* Azul para fechas seleccionadas */
+  color: #fff !important;
+  border-radius: 50% !important; /* Opcional: para hacerlo circular */
+  z-index: 2 !important; /* Asegura que el estilo activo se superponga */
+}
+
+.react-calendar .react-calendar__tile:hover {
+  background-color: #3a8b45 !important;
+  color: #f8faf8 !important;
+  border-radius: 15px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Responsividad para dispositivos pequeños */
 @media (max-width: 890px) {
   .detail-container {
     background-color: beige;
