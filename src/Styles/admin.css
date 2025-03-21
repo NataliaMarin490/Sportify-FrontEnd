@@ -155,6 +155,14 @@ body{
   margin: 4px 0;
 }
 
+.category-icon-admin {
+  width: 40px;
+  height: 40px;
+  margin: 10px 0;
+  font-size: 40px;
+  color: black;
+}
+
 /* ícono de cambio de usuario */
 .admin-view .access-icon {
   font-size: 24px;

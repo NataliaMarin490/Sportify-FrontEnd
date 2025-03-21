@@ -39,15 +39,16 @@
 .search-custom-calendar .react-calendar__tile--active {
   font-family: "Poppins", serif;
   background-color: #f0592a !important;
-  color: white !important;
+  color: #252625 !important;
+  background-color: #252625 !important;
 }
 
 /* Deshabilitar fechas pasadas */
-.search-custom-calendar .react-calendar__tile--disabled {
-  cursor: not-allowed !important;
+.search-custom-calendar .react-calendar__tile[disabled] {
+  cursor: no-drop !important;
   opacity: 0.5;
   background-color: #252625 !important;
-  color: #686868;
+  color: #686868 !important;
 }
 
 /* Efecto hover en los días del calendario */
@@ -62,19 +63,20 @@
   font-family: "Poppins", serif;
   margin-top: 10px;
   font-size: 18px;
-  color: #686868;
-  background-color: white;
+  color: #686868 !important;
+  background-color: #252625 !important;
   padding: 0 10px;
 }
 
 /* Estilos de los días del mes */
 .search-custom-calendar .react-calendar__month-view__days__day {
   color: #f6f6e9 !important;
+  background-color: #252625 !important;
 }
 
 /* Estilos de la navegación del calendario */
 .search-custom-calendar .react-calendar__navigation {
-  color: #949494 !important;
+  color: #252625 !important;
 }
 
 .search-custom-calendar .react-calendar__navigation button {
@@ -87,23 +89,61 @@
 .search-custom-calendar .react-calendar__navigation__arrow,
 .search-custom-calendar .react-calendar__navigation__prev2-button {
   color: #a2a2a2 !important;
+  background-color: #252625 !important;
 }
 
 /* Etiquetas de navegación */
 .search-custom-calendar .react-calendar__navigation__label__labelText {
   font-family: "Poppins", serif;
-  color: #686868 !important;
+  color: #b52020 !important;
 }
 
 .search-custom-calendar .react-calendar__navigation__label__labelText--from {
   font-family: "Poppins", serif;
-  color: #c91b1b !important;
+  color: #f6f6e9 !important;
 }
 
-/* Título del calendario */
-.tituloCalendar {
-  margin-top: 15px;
-  margin-bottom: 5px;
-  color: gray;
-  font-size: 15px;
+/* Cambia el color de los meses deshabilitados */
+.search-custom-calendar .react-calendar__year-view .react-calendar__tile[disabled] {
+  background-color: #2c2c2c !important;
+  color: #8b8b8b !important;
+  cursor: no-drop !important;
 }
+
+/* Cambia el color de los años deshabilitados */
+.search-custom-calendar .react-calendar__decade-view .react-calendar__tile[disabled] {
+  background-color: #2c2c2c !important;
+  color: #8b8b8b !important;
+  cursor: no-drop;
+}
+
+/* Estilos de navegación: flechas prev y next deshabilitadas */
+.search-custom-calendar .react-calendar__navigation__prev2-button[disabled],
+.search-custom-calendar .react-calendar__navigation__next2-button[disabled] {
+  cursor: no-drop !important;
+  opacity: 0.5;
+}
+
+/* Estilos de navegación: flechas prev y next deshabilitadas */
+.search-custom-calendar .react-calendar__navigation__prev-button[disabled],
+.search-custom-calendar .react-calendar__navigation__next-button[disabled] {
+  cursor: no-drop !important;
+  opacity: 0.5;
+}
+
+/* Estilos para las fechas deshabilitadas en la vista de mes */
+.search-custom-calendar .react-calendar__year-view .react-calendar__tile[disabled] {
+  cursor: no-drop !important;
+  opacity: 0.5;
+  background-color: #2c2c2c !important;
+  color: #8b8b8b !important;
+}
+
+/* Estilos para las fechas deshabilitadas en la vista de año */
+.search-custom-calendar .react-calendar__decade-view .react-calendar__tile[disabled] {
+  cursor: no-drop !important;
+  opacity: 0.5;
+  background-color: #2c2c2c !important;
+  color: #8b8b8b !important;
+}
+

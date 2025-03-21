@@ -20,9 +20,9 @@ const UserProfile = () => {
 
   return (
     <div className="container-profile-ppal">
-      <div className="user-avatar-container">
+      {/* <div className="user-avatar-container">
         <UserAvatar userName={user.name} />
-      </div>
+      </div> */}
       <div className="back-button-profile">
         <BackButton />
       </div>
