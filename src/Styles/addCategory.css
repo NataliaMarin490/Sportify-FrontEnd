@@ -1,10 +1,13 @@
 .create-category-container {
   background-color: #f9f9f7;
   display: flex;
-  justify-content: center;
-  min-height: 65vh;
+  flex-direction: column;
+  min-height: 80%;
 }
 
+.create-category-container button{
+  margin-right: 20px;
+}
 .form {
   margin: auto;
   padding: 30px;
@@ -29,8 +32,7 @@
   color: var(--footer-color);
 }
 
-.form label input,
-.form label textarea {
+.form label input{
   width: 100%;
   padding: 10px;
   margin-top: 5px;
@@ -43,11 +45,12 @@
   margin-bottom: 20px;
   color: #000;
   transition: border-color 0.3s ease;
+  font-family: "Poppins";
 }
 
 .form label input:focus,
 .form label textarea:focus {
-  border-bottom: 2px solid #6a6ad7;
+  border-bottom: 2px solid var(--header-color);
 }
 
 .form label textarea {
@@ -90,21 +93,4 @@
   justify-content: center;
 }
 
-.icon-button {
-  background-color: #f0f0f0;
-  border: 2px solid transparent;
-  border-radius: 8px;
-  padding: 15px;
-  font-size: 24px;
-  cursor: pointer;
-  transition: all 0.3s;
-}
 
-.icon-button:hover {
-  background-color: #e0e0e0;
-}
-
-.icon-button.selected {
-  border-color: #6a6ad7;
-  background-color: #dbe3f5;
-}
