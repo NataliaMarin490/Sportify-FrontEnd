@@ -5,41 +5,43 @@ import { LiaHeartBrokenSolid } from "react-icons/lia";
 import BackButton from "../components/BackButton.jsx";
 
 const FavoritesPage = () => {
-  // Usar el estado para la lista de favoritos y la búsqueda
   const [favorites, setFavorites] = useState([]);
   const [search, setSearch] = useState("");
 
-  // Cargar los favoritos desde el localStorage cuando el componente se monta
   useEffect(() => {
     const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
     setFavorites(storedFavorites);
   }, []);
 
-  // Función para agregar un favorito
   const addFavorite = (item) => {
     const updatedFavorites = [...favorites, item];
     setFavorites(updatedFavorites);
-    localStorage.setItem("favorites", JSON.stringify(updatedFavorites)); // Guardar en localStorage
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
   };
 
-  // Función para eliminar un favorito
+  // Función modificada para mostrar confirmación antes de eliminar
   const removeFavorite = (item) => {
-    const updatedFavorites = favorites.filter(
-      (favorite) => favorite.id !== item.id
+    const isConfirmed = window.confirm(
+      "¿Estás seguro de que deseas eliminar este favorito?"
     );
-    setFavorites(updatedFavorites);
-    localStorage.setItem("favorites", JSON.stringify(updatedFavorites)); // Guardar en localStorage
+    if (isConfirmed) {
+      const updatedFavorites = favorites.filter(
+        (favorite) => favorite.id !== item.id
+      );
+      setFavorites(updatedFavorites);
+      localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+    }
   };
 
-  // Filtrar favoritos según la búsqueda
-  const filteredFavorites = favorites.filter((favorite) =>
-    favorite.description.toLowerCase().includes(search.toLowerCase()) || // Filtra por la descripción
-    favorite.name.toLowerCase().includes(search.toLowerCase()) // Filtra por el nombre (si tienes un campo 'name')
+  const filteredFavorites = favorites.filter(
+    (favorite) =>
+      favorite.description.toLowerCase().includes(search.toLowerCase()) ||
+      favorite.name.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
     <div className="container-fav">
-      <BackButton className="back-button-fav"/>
+      <BackButton className="back-button-fav" />
       <div className="subcontainer-fav">
         <div className="container-detail-fav">
           <span className="title-fav">Favoritos</span>

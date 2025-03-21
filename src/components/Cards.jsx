@@ -1,5 +1,5 @@
 import "../Styles/cards.css";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "../Styles/cards.css";
 import PropTypes from "prop-types";
 import FavoriteButton from "./FavoriteButton.jsx";
@@ -18,7 +18,6 @@ const Cards = ({ court }) => {
   };
 
   const { name, sport, city, id, features } = court;
-  const location = useLocation();
 
   const handleFavoriteClick = (e) => {
     e.stopPropagation(); // Evita que se active el Link
@@ -30,9 +29,9 @@ const Cards = ({ court }) => {
       <div className="card-image-container">
         <img className="card-image" src={court.imageUrl[0]} alt={name} />
         {/* El botón de favoritos se coloca sobre la imagen */}
-        <button onClick={handleFavoriteClick} className="card-favorite">
+        <div onClick={handleFavoriteClick} className="card-favorite">
           <FavoriteButton product={court} />
-        </button>
+        </div>
       </div>
 
       <div className="card-description-container">

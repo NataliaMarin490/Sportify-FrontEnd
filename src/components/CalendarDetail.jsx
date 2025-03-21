@@ -24,7 +24,7 @@ const CalendarWithTime = ({ onDateTimeChange }) => {
   const fetchReservedDates = async () => {
     try {
       setIsLoading(true);
-      setHasError(false);
+      setHasError(false); // Resetear error antes de hacer la nueva solicitud
 
       const response = await fetch(
         `http://localhost:8080/api/bookings/${id}/availability`
@@ -148,7 +148,7 @@ const CalendarWithTime = ({ onDateTimeChange }) => {
   };
 
   const handleRetry = () => {
-    fetchReservedDates();
+    fetchReservedDates(); // Llama nuevamente a la función para intentar obtener los datos
   };
 
   return (
