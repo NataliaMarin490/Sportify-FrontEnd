@@ -1,8 +1,12 @@
 .create-features-container {
   background-color: #f9f9f7;
   display: flex;
-  justify-content: center;
-  min-height: 65vh; 
+  flex-direction: column;
+  height: 100%; 
+}
+
+.create-features-container button{
+  margin-right: 20px;
 }
 
 .form {
