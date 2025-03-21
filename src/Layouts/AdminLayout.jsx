@@ -15,6 +15,13 @@ const AdminLayout = () => {
     const isAdminRoute = Object.values(adminRoutes).some((route) =>
       location.pathname.startsWith(route)
     );
+
+      // Agrega o quita la clase `admin-body` al `body`
+      if (isAdminRoute) {
+        document.body.classList.add("admin-body");
+      } else {
+        document.body.classList.remove("admin-body");
+      }
     toggleSidebar(isAdminRoute);
   }, [location.pathname, toggleSidebar]);
 
