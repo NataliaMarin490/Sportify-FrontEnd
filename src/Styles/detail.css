@@ -5,7 +5,7 @@
   flex-direction: column;
   justify-content: space-between;
   background-color: beige;
-  padding: 100px;
+  padding: 5px 100px;
 }
 
 .feature-item {
@@ -44,16 +44,23 @@
 
 .court-button {
   background-color: #457d58;
-  border-radius: 0.5rem;
-  transition: background-color 0.2s ease-in-out;
+  border-radius: 20%;
+  cursor: pointer;
+  border: 2px;
+  padding: 10px;
+  transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 100%;
-  padding-top: 5px;
   font-family: "Poppins", serif;
+  position: relative;
 }
 
 .court-button:hover {
-  background-color: #d1d5db;
+  background-color: #52705b;
   cursor: pointer;
+  border-color: #b8ddc5;
 }
 
 .product {
@@ -170,6 +177,7 @@
   flex-direction: column;
   justify-items: center;
   gap: 20px;
+  margin-bottom: 25px;
 }
 
 .gallery {

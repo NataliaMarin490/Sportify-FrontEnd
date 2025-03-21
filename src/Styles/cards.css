@@ -47,7 +47,7 @@
   align-items: flex-start;
   gap: 10px;
   margin-bottom: 30px;
-
+  margin-left: 50px;
   height: 38%;
   width: 100%;
 
@@ -91,13 +91,15 @@
 .link-button-container {
   text-decoration: none; /* Evitar el subrayado */
   width: 80%;
-  height: 100%; /* Asegura que se comporte como un bloque */
+  /* height: 100%; */
   align-content: flex-end;
+  margin-bottom: 25px;
 }
 
 .card-button {
+  font-family: "Poppins", serif;
   width: 80%;
-  height: 70%;
+  height: 140%;
   border: 0;
   border-radius: 10px;
   background-color: #457d58; /* Cambia el color de fondo según lo desees */

@@ -111,7 +111,7 @@
 }
 
 /* Cambia el color de los años deshabilitados */
-.search-custom-calendar .react-calendar__decade-view .react-calendar__tile--disabled {
+.search-custom-calendar .react-calendar__decade-view .react-calendar__tile[disabled] {
   background-color: #2c2c2c !important;
   color: #8b8b8b !important;
   cursor: no-drop;

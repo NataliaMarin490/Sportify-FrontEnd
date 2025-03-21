@@ -47,7 +47,7 @@ const Detail = () => {
               className="court-button"
               onClick={() => setIsShareModalOpen(true)}
             >
-              <Share2 size={20} />
+              <Share2 size={25} />
             </button>
           </div>
           <div className="product">
