@@ -5,8 +5,6 @@ import "../Styles/favoriteButton.css";
 const FavoriteButton = ({ product }) => {
   // Estado para saber si el producto está en favoritos
   const [isFavorite, setIsFavorite] = useState(false);
-  console.log(product);
-  console.log(product.id);
 
   // Efecto para recuperar el estado de favoritos desde localStorage cuando el componente se monta
   useEffect(() => {
@@ -52,11 +50,7 @@ const FavoriteButton = ({ product }) => {
       onClick={toggleFavorite}
       aria-label={isFavorite ? "Quitar de favoritos" : "Agregar a favoritos"}
     >
-      {isFavorite ? (
-        <FaHeart size={20} /> 
-      ) : (
-        <FaRegHeart size={20} /> 
-      )}
+      {isFavorite ? <FaHeart size={20} /> : <FaRegHeart size={20} />}
     </button>
   );
 };
