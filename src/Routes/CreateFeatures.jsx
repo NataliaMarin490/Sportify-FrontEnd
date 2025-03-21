@@ -15,38 +15,55 @@ const CreateFeatures = () => {
 
   const handleImageChange = (e) => {
     if (e.target.files.length > 0) {
-      setImage(e.target.files[0]); // Almacena la imagen seleccionada
-      e.target.value = null; // Restablece el input de archivo
+      setImage(e.target.files[0]);
     }
   };
 
   const handleIconClick = () => {
-    fileInputRef.current.click(); // Abre el explorador de archivos
+    fileInputRef.current.click();
   };
 
   const handleRemoveImage = () => {
-    setImage(null); // Elimina la imagen seleccionada
+    setImage(null);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!feature.trim() || !image) {
-      alert("Debe ingresar una característica y subir una imagen.");
+
+    if (!feature.trim()) {
+      alert("Debe ingresar una característica.");
       return;
     }
-    setIsLoading(true);
+    if (!image) {
+      alert("Debe subir una imagen.");
+      return;
+    }
+
+    const featureData = JSON.stringify({
+      feature: feature,
+      statusId: 24,
+    });
 
     const formData = new FormData();
-    formData.append("feature", JSON.stringify({ feature: feature })); // Convertir el feature a un objeto JSON
-    formData.append("statusId", 24);
-    formData.append("image", image);
+    formData.append(
+      "feature",
+      new Blob([featureData], { type: "application/json" })
+    );
+    formData.append("images", image);
+
+    setIsLoading(true);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/public/features/add`, {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        "http://localhost:8080/api/public/features/add",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
       if (!response.ok) throw new Error("Error al guardar la característica");
+
       alert("Característica creada con éxito!");
       setFeature("");
       setImage(null);
@@ -60,7 +77,7 @@ const CreateFeatures = () => {
   return (
     <div className="create-features-container">
       <form className="form" onSubmit={handleSubmit}>
-        <h1>Característica</h1>
+        <h1>Crear Característica</h1>
         <label>
           Característica:
           <input
@@ -83,7 +100,6 @@ const CreateFeatures = () => {
             onChange={handleImageChange}
             style={{ display: "none" }}
             ref={fileInputRef}
-            required
           />
         </label>
         {image && (

@@ -3,7 +3,6 @@
   width: 100%;
   height: 75vh;
   margin: auto;
-  background-color: beige;
   color: #333;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   display: flex;
@@ -154,6 +153,14 @@ body {
   width: 40px;
   height: 40px;
   margin: 4px 0;
+}
+
+.category-icon-admin {
+  width: 40px;
+  height: 40px;
+  margin: 10px 0;
+  font-size: 40px;
+  color: black;
 }
 
 /* ícono de cambio de usuario */

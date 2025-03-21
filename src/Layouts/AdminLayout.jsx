@@ -15,7 +15,17 @@ const AdminLayout = () => {
     const isAdminRoute = Object.values(adminRoutes).some((route) =>
       location.pathname.startsWith(route)
     );
+
+    if (isAdminRoute) {
+      document.body.classList.add("admin-body");
+    } else {
+      document.body.classList.remove("admin-body");
+    }
     toggleSidebar(isAdminRoute);
+
+    return () => {
+      document.body.classList.remove("admin-body");
+    };
   }, [location.pathname, toggleSidebar]);
 
   return (

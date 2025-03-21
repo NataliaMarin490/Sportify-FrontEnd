@@ -16,6 +16,7 @@ import CreateAccount from "./Routes/CreateAccount.jsx";
 import Login from "./Routes/Login.jsx";
 import CreateCourt from "./Routes/CreateCourt.jsx";
 import CreateFeatures from "./Routes/CreateFeatures";
+import CreateCategories from "./Routes/CreateCategories";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import UserProfile from "./Routes/UserProfile.jsx";
 import AdminCourts from "./Routes/AdminCourts.jsx";
@@ -96,6 +97,7 @@ function App() {
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
           <Route path="/create-court" element={<CreateCourt />} />
           <Route path="/create-feature" element={<CreateFeatures />} />
+          <Route path="/create-categories" element={<CreateCategories />} />
 
           {/* Ruta protegida para perfil de usuario */}
           <Route
