@@ -21,6 +21,7 @@ import {
   FaSnowboarding,
 } from "react-icons/fa";
 import "../Styles/addCategory.css";
+import BackButton from "../components/BackButton"
 
 const sportsIcons = [
   { name: "Fútbol", icon: <FaFutbol size={30} />, iconName: "fa-futbol" },
@@ -127,6 +128,7 @@ const CreateCategory = () => {
 
   return (
     <div className="create-category-container">
+      <BackButton/>
       <form className="form" onSubmit={handleSubmit}>
         <h1>Crear Deporte</h1>
         <label>
@@ -141,7 +143,7 @@ const CreateCategory = () => {
 
         <label>
           Descripción:
-          <textarea
+          <input
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
