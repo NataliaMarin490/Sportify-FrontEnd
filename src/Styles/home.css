@@ -170,14 +170,25 @@ main {
   margin-top: 20px;
 }
 
+.main-content h1 {
+  margin-top: 10px;
+  font-size: 36px;
+  color: --var(--text-primary);
+  font-weight: 700;
+}
+
+.main-content p {
+  margin-top: -10px;
+  font-size: 15px;
+  color: #20575A;
+  font-weight: 500;
+}
+
 .home-cards-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-
-  /* justify-self: center; */
   justify-items: center;
   align-items: center;
-
   margin-top: 50px;
   padding: 30px;
   gap: 80px 0px;

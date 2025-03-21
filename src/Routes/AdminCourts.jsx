@@ -38,7 +38,7 @@ const AdminCourts = () => {
     // Aquí simulas la carga de canchas al cambiar de página
     axios
       .get(
-        `${API_BASE_URL}/courts/search?page=${currentPage}&size=${itemsPerPage}`
+        `${API_BASE_URL}/public/courts/search?page=${currentPage}&size=${itemsPerPage}`
       )
       .then((response) => {
         setCourts(response.data.data);
@@ -51,7 +51,7 @@ const AdminCourts = () => {
   const handleDelete = (id) => {
     if (window.confirm("¿Estás seguro de que quieres eliminar esta cancha?")) {
       axios
-        .put(`${API_BASE_URL}/courts/delete/${id}`)
+        .put(`${API_BASE_URL}/public/courts/delete/${id}`)
         .then(() => {
           dispatch({ type: "DELETE_COURT", payload: id });
           alert("La cancha ha sido eliminada exitosamente.");

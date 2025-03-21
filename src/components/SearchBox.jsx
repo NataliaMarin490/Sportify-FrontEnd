@@ -35,7 +35,7 @@ const SearchBox = ({ onSearch }) => {
   // Función para obtener las ciudades desde el backend
   const fetchCities = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/cities/all`);
+      const response = await fetch(`${API_BASE_URL}/public/cities/all`);
       const data = await response.json();
       const formattedCities = data.map((city) => ({
         id: city.id,
@@ -51,9 +51,9 @@ const SearchBox = ({ onSearch }) => {
   // Función para obtener los deportes desde el backend
   const fetchSports = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/sports/status/5`);
+      const response = await fetch(`${API_BASE_URL}/public/sports/status/5`);
       const data = await response.json();
-      setSports(data);  // Asumiendo que la respuesta es un array de deportes
+      setSports(data);
     } catch (error) {
       console.error("Error fetching sports:", error);
     }
@@ -64,17 +64,21 @@ const SearchBox = ({ onSearch }) => {
     const filtered = cities.filter((c) =>
       c.name.toLowerCase().includes(city.toLowerCase())
     );
-    setFilteredCities(filtered.length > 0 ? filtered : [{ name: "Sin coincidencias", id: -1 }]);
+    setFilteredCities(
+      filtered.length > 0 ? filtered : [{ name: "Sin coincidencias", id: -1 }]
+    );
   }, [city, cities]);
 
   useEffect(() => {
     const filtered = sports.filter((s) =>
       s.name.toLowerCase().includes(sport.toLowerCase())
     );
-    setFilteredSports(filtered.length > 0 ? filtered : [{ name: "Sin coincidencias", id: -1 }]);
+    setFilteredSports(
+      filtered.length > 0 ? filtered : [{ name: "Sin coincidencias", id: -1 }]
+    );
   }, [sport, sports]);
 
-  // Función para limpiar todos los filtros con flechita
+  // Función para limpiar todos los filtros con flechita reset
   const resetFilters = () => {
     setCity("");
     setSport("");
@@ -111,11 +115,12 @@ const SearchBox = ({ onSearch }) => {
 
   // Función para enviar los datos a Home.jsx
   const handleSearch = () => {
-    onSearch({ city, sport, date, hour });
+    const filters = { city, sport, date, hour };
+    onSearch(filters);
   };
 
   // Manejo global para que se abran y cierren inputs
-  
+
   const handleInputClick = (inputType) => {
     if (inputType === "city") {
       setShowCitiesDropdown((prev) => !prev);
@@ -140,8 +145,7 @@ const SearchBox = ({ onSearch }) => {
     }
   };
 
-
-return (
+  return (
     <div className="searcher">
       <img
         className="reset-icon"
@@ -184,7 +188,9 @@ return (
                     setShowCitiesDropdown(false);
                   }
                 }}
-                className={c.name === "Sin coincidencias" ? "disabled-option" : ""}
+                className={
+                  c.name === "Sin coincidencias" ? "disabled-option" : ""
+                }
               >
                 {c.name}
               </li>
@@ -228,7 +234,9 @@ return (
                     setShowSportsDropdown(false);
                   }
                 }}
-                className={s.name === "Sin coincidencias" ? "disabled-option" : ""}
+                className={
+                  s.name === "Sin coincidencias" ? "disabled-option" : ""
+                }
               >
                 {s.name}
               </li>
@@ -236,7 +244,6 @@ return (
           </ul>
         )}
       </div>
-
 
       <div className="search-calendar-container">
         <input
@@ -249,44 +256,44 @@ return (
         />
         {date && (
           <img
-          src="../public/icons/dropdown-close-icon-2.svg"
-          alt="Clear"
-          className="icon-button"
-          onClick={() => {
-            setDate(""); // Resetea la fecha
-            setShowCalendar(false); // Cierra el calendario
-          }}
-       />
-     )}
-      {showCalendar && <CalendarPlain onDateChange={handleDateChange} />}
-    </div>
+            src="../public/icons/dropdown-close-icon-2.svg"
+            alt="Clear"
+            className="icon-button"
+            onClick={() => {
+              setDate("");
+              setShowCalendar(false);
+            }}
+          />
+        )}
+        {showCalendar && <CalendarPlain onDateChange={handleDateChange} />}
+      </div>
 
-    <div className="time-container">
-      <input
-        type="text"
-        className="searcher-input"
-        value={hour}
-        placeholder="Hora"
-        readOnly
-        onClick={() => handleInputClick("hour")}
-      />
-      {hour && (
-        <img
-          src="../public/icons/dropdown-close-icon-2.svg"
-          alt="Clear"
-          className="icon-button"
-          onClick={() => {
-            setHour(""); // Resetea la hora
-            setShowTimePicker(false); // Cierra el selector de hora
-          }}
+      <div className="time-container">
+        <input
+          type="text"
+          className="searcher-input"
+          value={hour}
+          placeholder="Hora"
+          readOnly
+          onClick={() => handleInputClick("hour")}
         />
-      )}
-      {showTimePicker && (
-        <div className="custom-timepicker">
-          <TimePicker onTimeChange={handleTimeChange} />
-        </div>
-      )}
-    </div>
+        {hour && (
+          <img
+            src="../public/icons/dropdown-close-icon-2.svg"
+            alt="Clear"
+            className="icon-button"
+            onClick={() => {
+              setHour("");
+              setShowTimePicker(false);
+            }}
+          />
+        )}
+        {showTimePicker && (
+          <div className="custom-timepicker">
+            <TimePicker onTimeChange={handleTimeChange} />
+          </div>
+        )}
+      </div>
       <button className="searcher-button" onClick={handleSearch}>
         Buscar
       </button>
