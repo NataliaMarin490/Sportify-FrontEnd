@@ -33,16 +33,16 @@ const AdminFeatures = () => {
 
   // Eliminar una característica
   const handleDelete = (id) => {
-    if (window.confirm("¿Seguro que quieres desactivar esta característica?")) {
+    if (window.confirm("¿Seguro que quieres eliminar esta característica?")) {
       axios
         .put(`${API_BASE_URL}/public/features/${id}/deactivate`)
         .then(() => {
           setFeatures(features.filter((f) => f.idFeature !== id));
-          alert("Característica desactivada exitosamente.");
+          alert("Característica eliminada exitosamente.");
         })
         .catch((error) => {
-          console.error("Error al desactivar la característica:", error);
-          alert("Hubo un error al desactivar la característica.");
+          console.error("Error al eliminar la característica:", error);
+          alert("Hubo un error al eliminar la característica.");
         });
     }
   };
