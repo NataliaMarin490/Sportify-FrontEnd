@@ -22,6 +22,10 @@ const AdminLayout = () => {
       document.body.classList.remove("admin-body");
     }
     toggleSidebar(isAdminRoute);
+
+    return () => {
+      document.body.classList.remove("admin-body");
+    };
   }, [location.pathname, toggleSidebar]);
 
   return (
