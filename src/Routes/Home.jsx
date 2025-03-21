@@ -39,6 +39,46 @@ const Home = () => {
   const token = localStorage.getItem("authToken");
   /*  console.log("Token:", token); */
 
+  useEffect(() => {
+    let dataToPaginate = [];
+  
+    if (isSearchActive && filteredCourts.length > 0) {
+      dataToPaginate = filteredCourts;
+    } else if (selectedCategory && filteredCourts.length > 0) {
+      dataToPaginate = filteredCourts;
+    } else if (state?.courts?.data?.length > 0) {
+      dataToPaginate = state.courts.data;
+    }
+  
+    if (dataToPaginate.length > 0) {
+      // Usar el totalPages del backend solo si no es una búsqueda o filtro
+      const calculatedPages =
+        isSearchActive || selectedCategory
+          ? Math.ceil(dataToPaginate.length / itemsPerPage)
+          : state?.courts?.totalPages || 1;
+  
+      setTotalPages(calculatedPages);
+    } else {
+      setTotalPages(1);
+    }
+  
+    /* console.log(
+      "📌 Total de páginas actualizado:",
+      totalPages,
+      "con",
+      dataToPaginate.length,
+      "elementos"
+    ); */
+  }, [
+    filteredCourts,
+    state?.courts?.data,
+    state?.courts?.totalPages,
+    itemsPerPage,
+    isSearchActive,
+    selectedCategory,
+  ]);
+  
+
   const fetchCourts = async (filters) => {
     setLoading(true);
 
@@ -152,11 +192,12 @@ const Home = () => {
     setCurrentPage(1);
     localStorage.setItem("selectedCategory", sportId);
 
-    fetchCourts({ sportId });
+    fetchCourts({ sportId, page: 1 });
   };
 
+  // Limpiar la categoría seleccionada al refrescar la página
   useEffect(() => {
-    // Limpiar la categoría seleccionada al refrescar la página
+    
     localStorage.removeItem("selectedCategory");
     setSelectedCategory(null);
     setFilteredCourts([]);
@@ -260,18 +301,25 @@ const Home = () => {
 
   // useEffect para paginar los datos
   useEffect(() => {
-    const dataToPaginate = isSearchActive
-    ? filteredCourts
-    : selectedCategory
-    ? filteredCourts
-    : state?.courts?.data || []; 
-
-    if (!dataToPaginate.length) return;
-
+    let dataToPaginate = [];
+  
+    if (isSearchActive && filteredCourts.length > 0) {
+      dataToPaginate = filteredCourts;
+    } else if (selectedCategory && filteredCourts.length > 0) {
+      dataToPaginate = filteredCourts;
+    } else if (state?.courts?.data?.length > 0) {
+      dataToPaginate = state.courts.data;
+    }
+  
+    if (dataToPaginate.length === 0) return;
+  
     const indexOfLastCourt = currentPage * itemsPerPage;
     const indexOfFirstCourt = indexOfLastCourt - itemsPerPage;
-
-    setCurrentCourts(dataToPaginate.slice(indexOfFirstCourt, indexOfLastCourt));
+  
+    const paginatedCourts = dataToPaginate.slice(indexOfFirstCourt, indexOfLastCourt);
+  
+    /* console.log("📌 Mostrando canchas de", indexOfFirstCourt, "a", indexOfLastCourt, "Total páginas:", totalPages); */
+    setCurrentCourts(paginatedCourts);
   }, [
     currentPage,
     filteredCourts,
@@ -279,7 +327,11 @@ const Home = () => {
     itemsPerPage,
     isSearchActive,
     selectedCategory,
+    totalPages,
   ]);
+  
+  
+  
 
   const handleFetchNextPage = () => {
     if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
