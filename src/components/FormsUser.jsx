@@ -47,7 +47,7 @@ const FormsUser = ({ user = {}, onSubmit }) => {
   }, [user]);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/countries/search`)
+    fetch(`${API_BASE_URL}/public/countries/search`)
       .then((response) => response.json())
       .then((data) => setCountries(data))
       .catch((error) => console.error("Error fetching countries:", error));

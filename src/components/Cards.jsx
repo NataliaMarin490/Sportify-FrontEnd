@@ -12,7 +12,7 @@ const Cards = ({ court }) => {
       sport: PropTypes.string.isRequired,
       city: PropTypes.string.isRequired,
       id: PropTypes.number.isRequired,
-      imageUrl: PropTypes.string.isRequired,
+      imageUrl: PropTypes.arrayOf(PropTypes.string).isRequired, // Debería ser un arreglo de URLs
       features: PropTypes.arrayOf(PropTypes.string).isRequired,
     }).isRequired,
   };
