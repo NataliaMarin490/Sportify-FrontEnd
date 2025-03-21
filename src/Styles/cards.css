@@ -63,6 +63,7 @@
   color: #6941c6;
 }
 
+
 .cards-text {
   font-size: 13px;
   font-weight: 400;
@@ -76,7 +77,7 @@
 .card-name {
   font-size: 20px;
   font-weight: 600;
-  margin: 0;
+  margin: 9px 0;
 }
 
 .card-properties-container {
@@ -117,9 +118,9 @@
   transform: scale(1.05); /* Cambio de color al pasar el mouse */
 }
 
-.card-image-container:hover {
+/* .card-image-container:hover {
   transform: scale(1.05);
-}
+} */
 
 .cards-container:hover {
   transform: scale(1.05);
