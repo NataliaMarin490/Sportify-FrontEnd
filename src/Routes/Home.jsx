@@ -46,7 +46,7 @@ const Home = () => {
       const params = { ...filters, page: currentPage, size: itemsPerPage };
 
       const response = await axios.get(
-        "http://localhost:8080/api/bookings/search",
+        `${API_BASE_URL}/public/bookings/search`,
         {
           params,
         }
@@ -229,7 +229,7 @@ const Home = () => {
     }
 
     // Generar la URL con los parámetros de búsqueda
-    const url = `http://localhost:8080/api/bookings/search?page=1&size=10&${searchParams.toString()}`;
+    const url = `${API_BASE_URL}/public/bookings/search?page=1&size=10&${searchParams.toString()}`;
 
     console.log("URL generada:", url);
 
@@ -365,11 +365,9 @@ const Home = () => {
               currentCourts.map((court) => (
                 <Cards key={court.id} court={court} />
               ))
-              
             ) : (
               <h1>No hay canchas disponibles</h1>
             )}
-
           </div>
 
           <div className="home-cards-pagination">

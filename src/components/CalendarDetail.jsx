@@ -27,7 +27,7 @@ const CalendarWithTime = ({ onDateTimeChange }) => {
       setHasError(false); // Resetear error antes de hacer la nueva solicitud
 
       const response = await fetch(
-        `http://localhost:8080/api/bookings/${id}/availability`
+        `${API_BASE_URL}/public/bookings/${id}/availability`
       );
       if (!response.ok) {
         throw new Error(`Error en la API. Código: ${response.status}`);
