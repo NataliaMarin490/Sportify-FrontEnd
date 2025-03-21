@@ -73,12 +73,7 @@ const Home = () => {
     }
   };
 
-  useEffect(() => {
-    // Limpiar la categoría seleccionada al refrescar la página
-    localStorage.removeItem("selectedCategory");
-    setSelectedCategory(null);
-    setFilteredCourts([]);
-  }, []);
+  
 
   useEffect(() => {
     axios
@@ -87,7 +82,7 @@ const Home = () => {
         setCategories(response.data);
       })
       .catch((error) => {
-        console.error("Error al obtener categorías:", error);
+        console.error("Error al obtener deportes:", error);
       });
   }, []);
 
@@ -156,7 +151,16 @@ const Home = () => {
     setIsSearchActive(false);
     setCurrentPage(1);
     localStorage.setItem("selectedCategory", sportId);
+
+    fetchCourts({ sportId });
   };
+
+  useEffect(() => {
+    // Limpiar la categoría seleccionada al refrescar la página
+    localStorage.removeItem("selectedCategory");
+    setSelectedCategory(null);
+    setFilteredCourts([]);
+  }, []);
 
   const obtenerCityId = (cityName) => {
     console.log(cityName);
@@ -257,8 +261,10 @@ const Home = () => {
   // useEffect para paginar los datos
   useEffect(() => {
     const dataToPaginate = isSearchActive
-      ? filteredCourts
-      : state?.courts?.data || [];
+    ? filteredCourts
+    : selectedCategory
+    ? filteredCourts
+    : state?.courts?.data || []; 
 
     if (!dataToPaginate.length) return;
 
@@ -272,6 +278,7 @@ const Home = () => {
     state?.courts?.data,
     itemsPerPage,
     isSearchActive,
+    selectedCategory,
   ]);
 
   const handleFetchNextPage = () => {
