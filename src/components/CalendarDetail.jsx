@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "../Styles/calendarDetail.css";
 import Calendar from "react-calendar";
+import API_BASE_URL from "../config";
 import "react-calendar/dist/Calendar.css";
 
 const CalendarWithTime = ({ onDateTimeChange }) => {
