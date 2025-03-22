@@ -134,7 +134,7 @@ const FormsUser = ({ user = {}, onSubmit }) => {
       countryId: parseInt(userData.country, 10),
     };
 
-    fetch("http://localhost:8080/api/auth/register", {
+    fetch(`${API_BASE_URL}/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userToSend),
