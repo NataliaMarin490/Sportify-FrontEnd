@@ -1,32 +1,9 @@
 import "../Styles/createAccount.css";
 import FormsUser from "../components/FormsUser.jsx";
-import API_BASE_URL from "../config";
 
 const CreateAccount = () => {
   const handleRegister = (newUser) => {
     console.log("Registrando usuario:", newUser);
-
-    // Enviar datos al backend
-    fetch(`${API_BASE_URL}/auth/register`, {
-      method: "POST", // Método POST para enviar datos
-      headers: {
-        "Content-Type": "application/json", // Asegurarse de que los datos sean enviados en formato JSON
-      },
-      body: JSON.stringify(newUser), // Convertir el objeto a JSON
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Error en la solicitud");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Usuario registrado:", data);
-        // Aquí puedes manejar la respuesta del servidor, por ejemplo, mostrar un mensaje o redirigir
-      })
-      .catch((error) => {
-        console.error("Error al registrar usuario:", error);
-      });
   };
 
   return (
