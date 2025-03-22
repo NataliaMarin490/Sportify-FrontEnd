@@ -56,7 +56,7 @@ const CreateFeatures = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/api/public/features/add",
+        `${API_BASE_URL}/public/features/add`,
         {
           method: "POST",
           body: formData,
