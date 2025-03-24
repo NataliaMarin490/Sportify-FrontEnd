@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../Styles/favoritesPage.css";
 import { FaSearch } from "react-icons/fa";
 import { LiaHeartBrokenSolid } from "react-icons/lia";
+import { useNavigate } from "react-router-dom";
 import BackButton from "../components/BackButton.jsx";
 import API_BASE_URL from "../config";
 
@@ -9,6 +10,7 @@ const FavoritesPage = () => {
   const [favorites, setFavorites] = useState([]);
   const [search, setSearch] = useState("");
   const user = JSON.parse(localStorage.getItem("user"));
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
@@ -64,6 +66,10 @@ const FavoritesPage = () => {
     }
   };
 
+  const goToDetail = (idCourt) => {
+    navigate(`/detail/${idCourt}`);
+  };
+
   const filteredFavorites = favorites.filter(
     (favorite) =>
       favorite.courtDescription.toLowerCase().includes(search.toLowerCase()) ||
@@ -105,9 +111,14 @@ const FavoritesPage = () => {
                           src={favorite.imageUrl}
                           alt={favorite.courtName}
                           width="50"
+                          style={{ cursor: "pointer" }}
+                          onClick={() => goToDetail(favorite.idCourt)}
                         />
                       </td>
-                      <td>{favorite.courtName}</td>
+                      <td
+                      style={{ cursor: "pointer", textDecoration: "underline" }}
+                      onClick={() => goToDetail(favorite.idCourt)}>
+                        {favorite.courtName}</td>
                       <td>
                         <button
                           className="button-fav"
