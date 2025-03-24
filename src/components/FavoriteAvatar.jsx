@@ -12,13 +12,13 @@ const FavoriteAvatar = () => {
       <Link to="/favorites">
         {isFavoritePage ? (
           <img
-            src="public\icons\favorito-menu-header-blanco-icono.svg"
+            src="\icons\favorito-menu-header-blanco-icono.svg"
             alt="fav-heart"
             className="fav-avatar"
           />
         ) : (
           <img
-            src="public\icons\favorito-menu-header-verde-icono.svg"
+            src="\icons\favorito-menu-header-verde-icono.svg"
             alt="fav-heart"
             className="fav-avatar"
           />
