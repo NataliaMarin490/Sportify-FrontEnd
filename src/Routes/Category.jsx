@@ -1,5 +1,5 @@
 import Image from "../components/Image";
-import "../Styles/Category.css";
+import "../Styles/category.css";
 import { useContextGlobal} from "../Context/global.context";
 import CardsCategory from "../components/CardsCategory";
 
