@@ -148,7 +148,6 @@ const FormsUser = ({ user = {}, onSubmit }) => {
         return response.text();
       })
       .then((data) => {
-        console.log("Registro exitoso:", data);
         setSuccessMessage("Usuario registrado correctamente!");
 
         console.log(userData.name);
