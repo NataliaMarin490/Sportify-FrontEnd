@@ -109,7 +109,7 @@ const Detail = () => {
                 <div className="detail-header">
                   <h4 className="title-product"> {product.name} </h4>
                   <div className="rating">
-                    <span className="fa fa-star checked"></span><span>4.5 Stars | 450 Reseñas</span>
+                    <span className="fa fa-star checked"></span><span>4.5 Estrellas | 450 Reseñas</span>
                   </div>
                 </div>
                 <div className="detail-content">
