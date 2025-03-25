@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import "../Styles/CreateCourt.css";
+import "../Styles/createCourt.css";
 import API_BASE_URL from "../config";
 
 const CourtForm = ({ onSubmit, courtId, isEditing }) => {

@@ -2,41 +2,78 @@ import React, { useState, useEffect } from "react";
 import "../Styles/favoritesPage.css";
 import { FaSearch } from "react-icons/fa";
 import { LiaHeartBrokenSolid } from "react-icons/lia";
+import { useNavigate } from "react-router-dom";
 import BackButton from "../components/BackButton.jsx";
+import API_BASE_URL from "../config";
 
 const FavoritesPage = () => {
   const [favorites, setFavorites] = useState([]);
   const [search, setSearch] = useState("");
+  const user = JSON.parse(localStorage.getItem("user"));
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
-    setFavorites(storedFavorites);
-  }, []);
+    if (user) {
+      fetchFavorites();
+    }
+  }, [user]);
 
-  const addFavorite = (item) => {
-    const updatedFavorites = [...favorites, item];
-    setFavorites(updatedFavorites);
-    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+  const fetchFavorites = async () => {
+
+    try {
+      const storedUser = localStorage.getItem("user");
+      const user = storedUser ? JSON.parse(storedUser) : null;
+      const token = user?.token; 
+
+      if (!token) {
+        console.error("No hay token disponible");
+        return;
+      }
+
+      const response = await fetch(`${API_BASE_URL}/favorites/all`, {
+        method: "GET",
+        headers: { 
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}` },
+      });
+
+      if (!response.ok) throw new Error("Error al obtener favoritos");
+
+      const data = await response.json();
+      setFavorites(data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  // Función modificada para mostrar confirmación antes de eliminar
-  const removeFavorite = (item) => {
-    const isConfirmed = window.confirm(
-      "¿Estás seguro de que deseas eliminar este favorito?"
-    );
-    if (isConfirmed) {
-      const updatedFavorites = favorites.filter(
-        (favorite) => favorite.id !== item.id
+  const toggleFavorite = async (courtId) => {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/favorites/${courtId}/toggle`,
+        {
+          method: "POST",
+          headers: { Authorization: `Bearer ${user?.token}` },
+        }
       );
-      setFavorites(updatedFavorites);
-      localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+
+      if (!response.ok) {
+        throw new Error("Error al actualizar favorito");
+      }
+
+      fetchFavorites();
+    } catch (error) {
+      console.error("Error actualizando favorito:", error);
     }
+  };
+
+  const goToDetail = (idCourt) => {
+    navigate(`/detail/${idCourt}`);
   };
 
   const filteredFavorites = favorites.filter(
     (favorite) =>
-      favorite.description.toLowerCase().includes(search.toLowerCase()) ||
-      favorite.name.toLowerCase().includes(search.toLowerCase())
+      favorite.courtDescription.toLowerCase().includes(search.toLowerCase()) ||
+      favorite.courtName.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -68,19 +105,24 @@ const FavoritesPage = () => {
                 </thead>
                 <tbody>
                   {filteredFavorites.map((favorite) => (
-                    <tr key={favorite.id}>
+                    <tr key={favorite.idCourt}>
                       <td>
                         <img
                           src={favorite.imageUrl}
-                          alt={favorite.name}
+                          alt={favorite.courtName}
                           width="50"
+                          style={{ cursor: "pointer" }}
+                          onClick={() => goToDetail(favorite.idCourt)}
                         />
                       </td>
-                      <td>{favorite.description}</td>
+                      <td
+                      style={{ cursor: "pointer", textDecoration: "underline" }}
+                      onClick={() => goToDetail(favorite.idCourt)}>
+                        {favorite.courtName}</td>
                       <td>
                         <button
                           className="button-fav"
-                          onClick={() => removeFavorite(favorite)}
+                          onClick={() => toggleFavorite(favorite.idCourt)}
                         >
                           <LiaHeartBrokenSolid size={20} />
                         </button>
