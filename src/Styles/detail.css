@@ -1,9 +1,22 @@
+/* Estilos generales */
 .detail-container {
   background-color: var(--background-color);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: beige;
+  padding: 5px 100px;
+}
+
+.not-found-container{
+  background-color: var(--background-color);
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  height: 80%;
+}
+
+.not-found-container button{
+  margin-right: 20px;
 }
 
 .feature-item {
@@ -33,35 +46,59 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: 15px;
+}
+
+.detail-buttons {
+  display: flex;
+  gap: 5px;
+}
+
+.court-button {
+  background-color: #457d58;
+  border-radius: 20%;
+  cursor: pointer;
+  border: 2px;
+  padding: 10px;
+  transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-family: "Poppins", serif;
+  position: relative;
+}
+
+.court-button:hover {
+  background-color: #52705b;
+  cursor: pointer;
+  border-color: #b8ddc5;
 }
 
 .product {
   color: rgba(32, 87, 90, 1);
   display: flex;
   flex-direction: column;
-  align-items: center;
+  margin-top: 15px;
 }
 
 .product-info {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin: 50px 5px;
+  margin-top: 30px;
 }
 
 .description-container {
   display: flex;
   flex-direction: column;
   gap: 30px;
-
-  width: 68%;
+  width: 70%;
   height: 100%;
 }
 
 .image-detail {
-  width: 500px;
-  height: 500px;
+  width: 60%;
+  height: 710px;
   border-radius: 10px;
   object-fit: cover;
   cursor: pointer;
@@ -69,7 +106,7 @@
 }
 
 .image-detail:hover {
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 
 .title-product {
@@ -124,22 +161,151 @@
   font-size: 12px;
 }
 
+.policies-content {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.policy-column {
+  padding: 15px;
+}
+
+.policy-column h5 {
+  font-size: 1rem;
+  margin: 0;
+  color: #333;
+}
+
+.policy-column p {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #666;
+}
+
 .map {
   display: flex;
   flex-direction: column;
   justify-items: center;
-  margin: 0 40px;
   gap: 20px;
+  margin-bottom: 25px;
 }
 
 .gallery {
   display: flex;
-  align-items: center;
+  height: 100%;
   justify-content: space-around;
-  width: 95%;
   gap: 30px;
+  align-items: stretch;
 }
 
+.container-booking-calendar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 25%;
+}
+
+/* Estilos para el calendario y botones de tiempo */
+.calendar-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.tituloCalendar {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+.custom-calendar {
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.time-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.time-button {
+  padding: 10px 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+
+/* Estilo para cuando una hora está deshabilitada (ocupada) */
+.time-button.disabled {
+  background-color: #e0e0e0 !important;
+  color: #585656 !important;
+  cursor: not-allowed !important;
+}
+
+/* Estilo para hora seleccionada */
+.time-button.selected {
+  background-color: #6699cf !important;
+  color: #fff !important;
+}
+
+/* Estilos para fechas del calendario */
+
+/* Día actual (amarillo) */
+.react-calendar .react-calendar__tile--today {
+  background-color: #ffcc00 !important; /* Color de fondo amarillo para el día actual */
+  color: #ffffff !important; /* Color de texto blanco para el día actual */
+  border-radius: 50%; /* Opcional: para hacerlo circular */
+}
+/* Fechas completamente reservadas (rojo) */
+.react-calendar .react-calendar__tile--reserved {
+  background-color: #f8d7da !important; /* Rojo claro para fechas reservadas */
+  color: #d63a49 !important;
+  cursor: not-allowed !important;
+}
+
+/* Fechas parcialmente reservadas (amarillo) */
+.react-calendar .react-calendar__tile--partially-reserved {
+  background-color: #f3df9e !important; /* Amarillo claro para fechas parcialmente reservadas */
+  color: #262927 !important;
+}
+
+/* Fechas disponibles (verde) */
+.react-calendar .react-calendar__tile--available {
+  background-color: #a1d6ae !important; /* Verde claro para fechas disponibles */
+  color: #262927 !important;
+}
+
+/* Fechas pasadas desactivadas (gris claro) */
+.react-calendar .react-calendar__tile--disabled {
+  background-color: #f0f0f0 !important; /* Gris claro para fechas pasadas */
+  color: #b5b5b5 !important;
+  cursor: not-allowed !important; /* Mostrar que no se puede seleccionar */
+  pointer-events: none !important;
+}
+
+/* Fechas seleccionadas (superpone el estilo azul sobre los demás) */
+.react-calendar .react-calendar__tile--active {
+  background-color: #007bff !important; /* Azul para fechas seleccionadas */
+  color: #fff !important;
+  border-radius: 50% !important; /* Opcional: para hacerlo circular */
+  z-index: 2 !important; /* Asegura que el estilo activo se superponga */
+}
+
+.react-calendar .react-calendar__tile:hover {
+  background-color: #3a8b45 !important;
+  color: #f8faf8 !important;
+  border-radius: 15px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Responsividad para dispositivos pequeños */
 @media (max-width: 890px) {
   .detail-container {
     background-color: beige;

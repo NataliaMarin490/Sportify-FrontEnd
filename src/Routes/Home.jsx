@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useContextGlobal } from "../Context/global.context";
-import { Link } from "react-router-dom";
+/* import { Link } from "react-router-dom"; */
 import Cards from "../components/Cards";
 import Recommendations from "../components/Recommendations";
 import Slider from "react-slick";
@@ -12,76 +12,166 @@ import API_BASE_URL from "../config";
 import SearchBox from "../components/SearchBox";
 
 const Home = () => {
-  const { state, fetchCourtsByCategory } = useContextGlobal();
+  const { state } = useContextGlobal();
   const [filteredCourts, setFilteredCourts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [currentPage, setCurrentPage] = useState(
     state?.courts?.currentPage || 1
   );
-  const [currentCourts, setCurrentCourts] = useState(state?.courts?.data);
+  const [currentCourts, setCurrentCourts] = useState([]);
   const [error, setError] = useState(null); // Estado para errores
   const [categories, setCategories] = useState([]);
+  const [isSearchActive, setIsSearchActive] = useState(false);
+  const [courts, setCourts] = useState([]);
+  const [cities, setCities] = useState([]);
 
-  const newDataCourt = state?.courts?.data;
-  const itemsPerPage = state?.courts?.pageSize;
-  const totalPages = state?.courts?.totalPages;
+  const [selectedCity, setSelectedCity] = useState(null);
+  const [selectedSport, setSelectedSport] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedHour, setSelectedHour] = useState(null);
+
+  const [loading, setLoading] = useState(false);
+
+  /* const newDataCourt = state?.courts?.data; */
+  const itemsPerPage = state?.courts?.pageSize || 10;
+  const [totalPages, setTotalPages] = useState(1);
 
   const token = localStorage.getItem("authToken");
-  console.log("Token:", token);
+  /*  console.log("Token:", token); */
 
   useEffect(() => {
-    // Limpiar la categoría seleccionada al refrescar la página
-    localStorage.removeItem("selectedCategory");
-    setSelectedCategory(null);
-    setFilteredCourts([]);
-  }, []);
+    let dataToPaginate = [];
+  
+    if (isSearchActive && filteredCourts.length > 0) {
+      dataToPaginate = filteredCourts;
+    } else if (selectedCategory && filteredCourts.length > 0) {
+      dataToPaginate = filteredCourts;
+    } else if (state?.courts?.data?.length > 0) {
+      dataToPaginate = state.courts.data;
+    }
+  
+    if (dataToPaginate.length > 0) {
+      // Usar el totalPages del backend solo si no es una búsqueda o filtro
+      const calculatedPages =
+        isSearchActive || selectedCategory
+          ? Math.ceil(dataToPaginate.length / itemsPerPage)
+          : state?.courts?.totalPages || 1;
+  
+      setTotalPages(calculatedPages);
+    } else {
+      setTotalPages(1);
+    }
+  
+    /* console.log(
+      "📌 Total de páginas actualizado:",
+      totalPages,
+      "con",
+      dataToPaginate.length,
+      "elementos"
+    ); */
+  }, [
+    filteredCourts,
+    state?.courts?.data,
+    state?.courts?.totalPages,
+    itemsPerPage,
+    isSearchActive,
+    selectedCategory,
+  ]);
+  
+
+  const fetchCourts = async (filters) => {
+    setLoading(true);
+
+    try {
+      const params = { ...filters, page: currentPage, size: itemsPerPage };
+
+      const response = await axios.get(
+        `${API_BASE_URL}/public/bookings/search`,
+        {
+          params,
+        }
+      );
+
+      const data = response.data;
+
+      if (!data.data.length) {
+        setError("No se encontraron canchas para los filtros aplicados.");
+        setFilteredCourts([]);
+        return;
+      }
+
+      setCourts(data.data);
+      setFilteredCourts(data.data);
+      setError(null);
+      setTotalPages(data.totalPages);
+    } catch (error) {
+      console.error("Error fetching canchas:", error);
+      setError("Error al obtener canchas. Intenta nuevamente.");
+      setFilteredCourts([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  
 
   useEffect(() => {
     axios
-      .get(`${API_BASE_URL}/sports/status/5`)
+      .get(`${API_BASE_URL}/public/sports/status/5`)
       .then((response) => {
         setCategories(response.data);
       })
       .catch((error) => {
-        console.error("Error al obtener categorías:", error);
+        console.error("Error al obtener deportes:", error);
       });
   }, []);
 
-  // Filtra las canchas de acuerdo con la categoría seleccionada
+  useEffect(() => {
+    axios
+      .get(`${API_BASE_URL}/public/cities/all`)
+      .then((response) => {
+        setCities(response.data);
+      })
+      .catch((error) => {
+        console.error("Error al obtener ciudades:", error);
+      });
+  }, []);
+
+  // useEffect para manejar la categoría seleccionada y la carga de canchas
   useEffect(() => {
     if (selectedCategory) {
-      axios
-        .get(`${API_BASE_URL}/courts/category/${selectedCategory}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((response) => {
-          if (response.data.data.length > 0) {
-            setFilteredCourts(response.data.data);
-            setCurrentCourts(response.data.data);
-          } else {
-            setError("No hay canchas disponibles para esta categoría.");
-            setFilteredCourts([]);
-          }
-        })
-        .catch((error) => {
-          console.error("Error al obtener canchas por categoría:", error);
-          setError("Error al obtener canchas. Intenta nuevamente.");
-          console.log(
-            "Detalles del error:",
-            error.response ? error.response.data : error
-          );
-        });
+      fetchCourts({ sportId: selectedCategory });
     } else {
-      setCurrentCourts(state?.courts?.data || []);
+      setFilteredCourts([]);
     }
-  }, [selectedCategory, state]);
+  }, [selectedCategory, currentPage]);
+
+  // useEffect para manejar la búsqueda con filtros
+  useEffect(() => {
+    if (isSearchActive) {
+      const filters = {
+        city: selectedCity,
+        sport: selectedSport,
+        date: selectedDate,
+        hour: selectedHour,
+      };
+
+      setCurrentPage(1);
+      fetchCourts(filters);
+    }
+  }, [
+    isSearchActive,
+    selectedCity,
+    selectedSport,
+    selectedDate,
+    selectedHour,
+    currentPage,
+  ]);
 
   useEffect(() => {
     const storedCategory = localStorage.getItem("selectedCategory");
     if (storedCategory) {
-      setSelectedCategory(storedCategory);
+      setSelectedCategory(Number(storedCategory));
     }
   }, []);
 
@@ -97,86 +187,158 @@ const Home = () => {
   }, [currentPage]);
 
   const handleCategorySelect = (categoryName, sportId) => {
-    setSelectedCategory(categoryName);
-    localStorage.setItem("selectedCategory", categoryName);
+    setSelectedCategory(sportId);
+    setIsSearchActive(false);
     setCurrentPage(1);
+    localStorage.setItem("selectedCategory", sportId);
 
-    axios
-      .get(`${API_BASE_URL}/courts/category/${sportId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        if (response.data && response.data.length > 0) {
-          setCurrentCourts(response.data);
-          setFilteredCourts(response.data);
+    fetchCourts({ sportId, page: 1 });
+  };
+
+  // Limpiar la categoría seleccionada al refrescar la página
+  useEffect(() => {
+    
+    localStorage.removeItem("selectedCategory");
+    setSelectedCategory(null);
+    setFilteredCourts([]);
+  }, []);
+
+  const obtenerCityId = (cityName) => {
+    console.log(cityName);
+    if (!cityName || !cities.length) return null;
+    const cityNameWithoutCountry = cityName.split(",")[0];
+    const city = cities.find((c) =>
+      c.name.toLowerCase().includes(cityNameWithoutCountry.toLowerCase())
+    );
+    console.log(city);
+    return city ? city.id : null;
+  };
+
+  const obtenerSportId = (sportName) => {
+    if (!sportName || !categories.length) return null; // Si el deporte no es válido, retorna null
+    const sport = categories.find((s) => s.name === sportName);
+    return sport ? sport.id : null;
+  };
+
+  const convertTo24HourFormat = (time) => {
+    const [hour, minutePart] = time.split(":");
+    const minute = minutePart.slice(0, 2);
+    const period = minutePart.slice(3).toUpperCase();
+
+    let hour24 = parseInt(hour);
+    if (period === "PM" && hour24 !== 12) {
+      hour24 += 12;
+    } else if (period === "AM" && hour24 === 12) {
+      hour24 = 0;
+    }
+
+    return `${String(hour24).padStart(2, "0")}:${minute}`;
+  };
+
+  const handleSearch = ({ city, sport, date, hour }) => {
+    setIsSearchActive(true);
+    setCurrentPage(1);
+    const filters = { city, sport, date, hour };
+
+    console.log("Filtros de búsqueda:", filters);
+
+    // Comprobar si los filtros tienen los valores correctos
+    let searchParams = new URLSearchParams();
+
+    if (filters.city) {
+      const cityId = obtenerCityId(filters.city);
+      if (cityId) {
+        searchParams.append("cityId", cityId);
+      }
+    }
+
+    if (filters.sport) {
+      const sportId = obtenerSportId(filters.sport);
+      if (sportId) {
+        searchParams.append("sportId", sportId);
+      }
+    }
+
+    if (filters.date) {
+      const [day, month, year] = filters.date.split("/");
+      const formattedDate = `${year}-${month.padStart(2, "0")}-${day.padStart(
+        2,
+        "0"
+      )}`;
+      searchParams.append("date", formattedDate);
+    }
+
+    if (filters.hour) {
+      const militaryHour = convertTo24HourFormat(filters.hour);
+      searchParams.append("time", militaryHour);
+    }
+
+    // Generar la URL con los parámetros de búsqueda
+    const url = `${API_BASE_URL}/public/bookings/search?page=1&size=10&${searchParams.toString()}`;
+
+    console.log("URL generada:", url);
+
+    // Llamar a la API con la URL generada
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Resultados obtenidos:", data);
+        if (data.data && data.data.length > 0) {
+          setFilteredCourts(data.data);
+          setCurrentPage(1); // Resetear la paginación a la página 1
+          setTotalPages(data.totalPages); // Establecer el total de páginas
+          setError(null);
         } else {
-          setError("No hay canchas disponibles para esta categoría.");
           setFilteredCourts([]);
+          setError("No se encontraron canchas con los filtros seleccionados.");
         }
       })
       .catch((error) => {
-        console.error("Error al obtener canchas por categoría:", error);
+        console.error("Error en la búsqueda:", error);
         setError("Error al obtener canchas. Intenta nuevamente.");
       });
   };
 
-  /* useEffect(() => {
-    if (filteredCourts.length > 0) {
-      setCurrentCourts(filteredCourts);
-    } else if (selectedCategory) {
-      setCurrentCourts([]);
-    } else {
-      setCurrentCourts(state?.courts?.data || []);
-    }
-  }, [filteredCourts, selectedCategory, state]);  */
-
-  // Función que recibe los valores del buscador y hace la búsqueda en la API
-  const handleSearch = (filters) => {
-    console.log("Buscando con filtros:", filters);
-
-    axios
-      .get(`${API_BASE_URL}/courts/search`, { params: filters })
-      .then((response) => {
-        console.log("Respuesta de la API:", response.data);
-        setFilteredCourts(response.data.data);
-      })
-      .catch((error) => {
-        console.error("Error al buscar canchas:", error);
-      });
-  };
-
+  // useEffect para paginar los datos
   useEffect(() => {
-    if (!Array.isArray(state?.courts?.data)) {
-      return;
+    let dataToPaginate = [];
+  
+    if (isSearchActive && filteredCourts.length > 0) {
+      dataToPaginate = filteredCourts;
+    } else if (selectedCategory && filteredCourts.length > 0) {
+      dataToPaginate = filteredCourts;
+    } else if (state?.courts?.data?.length > 0) {
+      dataToPaginate = state.courts.data;
     }
+  
+    if (dataToPaginate.length === 0) return;
+  
     const indexOfLastCourt = currentPage * itemsPerPage;
     const indexOfFirstCourt = indexOfLastCourt - itemsPerPage;
-
-    console.log(newDataCourt);
-    console.log(currentCourts?.length);
-    const dataToPaginate =
-      filteredCourts.length > 0 ? filteredCourts : state?.courts?.data;
-
-    setCurrentCourts(dataToPaginate.slice(indexOfFirstCourt, indexOfLastCourt));
+  
+    const paginatedCourts = dataToPaginate.slice(indexOfFirstCourt, indexOfLastCourt);
+  
+    /* console.log("📌 Mostrando canchas de", indexOfFirstCourt, "a", indexOfLastCourt, "Total páginas:", totalPages); */
+    setCurrentCourts(paginatedCourts);
   }, [
-    currentCourts?.length,
     currentPage,
     filteredCourts,
+    state?.courts?.data,
     itemsPerPage,
-    newDataCourt,
-    state,
+    isSearchActive,
+    selectedCategory,
+    totalPages,
   ]);
+  
+  
+  
 
   const handleFetchNextPage = () => {
-    const nextPage = Math.min(currentPage + 1, totalPages);
-    setCurrentPage(nextPage);
+    if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
   };
 
   const handleFetchPrevPage = () => {
-    const prevPage = Math.max(currentPage - 1, 1);
-    setCurrentPage(prevPage);
+    if (currentPage > 1) setCurrentPage((prev) => prev - 1);
   };
 
   const settings = {
@@ -203,39 +365,60 @@ const Home = () => {
               máximo tu actividad física.
             </p>
           </div>
-          <div className="categories-container">
-            <div className="categories-slider-container">
-              <Slider {...settings}>
-                {/* { state.courts && state?.courts?.data?.features?.map((category, index) => ( */}
-                {categories.map((category, index) => (
-                  <button
-                    key={index}
-                    className="category-button"
-                    onClick={() =>
-                      handleCategorySelect(category.name, category.id)
-                    }
-                  >
-                    <i className={`fa ${category.icon} category-icon`}></i>
-                    <span>{category.name}</span>
-                  </button>
-                ))}
-              </Slider>
-            </div>
-          </div>
-
           <SearchBox onSearch={handleSearch} />
+          <div className="categories-container">
+            {/* Aseguramos que categories esté cargado antes de intentar renderizar el slider */}
+            {categories.length > 0 ? (
+              <div className="categories-slider-container">
+                <Slider {...settings}>
+                  {categories.map((category) => (
+                    <button
+                      key={category.id}
+                      className="category-button"
+                      onClick={() =>
+                        handleCategorySelect(category.name, category.id)
+                      }
+                    >
+                      <i className={`fa ${category.icon} category-icon`}></i>
+                      <span>{category.name}</span>
+                    </button>
+                  ))}
+                </Slider>
+              </div>
+            ) : (
+              <p>Cargando categorías...</p>
+            )}
+          </div>
         </div>
       </div>
+
       <main>
         <div className="main-content">
           <h1>
-            {selectedCategory
-              ? `CANCHAS DE ${selectedCategory.toUpperCase()}`
-              : "NUESTRAS RECOMIENDACIONES"}
+            {isSearchActive
+              ? "RESULTADOS DE LA BÚSQUEDA"
+              : selectedCategory
+              ? `CANCHAS DE ${
+                  categories
+                    .find((c) => c.id === selectedCategory)
+                    ?.name.toUpperCase() || "DESCONOCIDO"
+                }`
+              : "NUESTRAS RECOMENDACIONES"}
           </h1>
 
+          {/* Mostrar cantidad de resultados si hay canchas */}
+          {(isSearchActive || selectedCategory) && (
+            <p>
+              {filteredCourts.length > 0
+                ? `Se encontraron ${filteredCourts.length} canchas disponibles.`
+                : ""}
+            </p>
+          )}
+
           <div className="home-cards-container">
-            {error ? (
+            {loading ? (
+              <h1>Cargando...</h1>
+            ) : error ? (
               <h1>{error}</h1>
             ) : currentCourts && currentCourts.length > 0 ? (
               currentCourts.map((court) => (

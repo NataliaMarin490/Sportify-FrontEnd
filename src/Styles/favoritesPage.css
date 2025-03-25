@@ -1,0 +1,129 @@
+.container-fav {
+  background-image: linear-gradient(
+      rgba(138, 135, 135, 0.5),
+      rgba(129, 129, 131, 0.5)
+    ),
+    url("/images/crearCuenta/Fondo.jpg");
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Poppins", serif;
+  justify-content: center;
+  height: 100%;
+  padding: 30px;
+}
+
+.subcontainer-fav {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 80%;
+  width: 60%;
+  margin: 50px;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.container-detail-fav {
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.container-details-fav {
+  display: flex;
+  margin: 0;
+  justify-content: center;
+}
+
+.title-fav {
+  justify-self: flex-start;
+  margin-top: 20px;
+  font-weight: bold;
+  color: black;
+  font-size: 20px;
+}
+
+.text-fav {
+  margin-top: 0;
+  margin-bottom: 30px;
+}
+
+.search-container {
+  width: 500px; /* Ancho reducido */
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 4px 10px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  color: black;
+  align-self: center;
+  margin-bottom: 20px;
+}
+
+.search-container:focus-within {
+  border-color: var(--header-dark);
+  box-shadow: 0 0 8px var(--footer-color);
+}
+
+/* Estilos para el ícono de búsqueda */
+.search-icon {
+  color: #777;
+}
+
+/* Estilos para el input de búsqueda */
+.search-container input {
+  border: none;
+  background: none;
+  font-family: "Poppins";
+  outline: none;
+  text-align: left;
+  color: rgb(31, 30, 30);
+}
+
+.button-fav {
+  background-color: rgba(255, 47, 50, 1);
+  width: 36px;
+  height: 36px;
+  border-radius: 5px;
+}
+
+.favorites-table {
+  width: 100%;
+  border-spacing: 10px;
+  table-layout: auto;
+  margin: 30px;
+  justify-self: center;
+}
+
+.favorites-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.favorites-table td,
+th {
+  text-align: left;
+}
+
+.favorites-table img {
+  height: 60px;
+  width: 100px;
+  border-radius: 15px;
+  object-fit: cover;
+}
+
+.favorites-table td:first-child,
+.favorites-table td:nth-child(2) {
+  text-align: left;
+  width: auto;
+}
+
+.back-button-fav {
+  width: 20px;
+  height: 100%;
+}

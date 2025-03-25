@@ -9,18 +9,11 @@
 main {
   height: 70%;
   background-color: var(--background-color);
-  padding: 10px;
+  padding: 30px;
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
-
-.main-content {
-  display: flex;
-  flex-direction: column;
-  justify-items: center;
-  margin-top: 20px;
 }
 
 .searcher-container {
@@ -49,15 +42,6 @@ main {
   width: 100%;
 }
 
-/* .text-welcome {
-  text-align: justify;
-  max-width: 80%;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-} */
-
 .main-text-container h1 {
   font-size: 50px;
   font-weight: 700;
@@ -71,41 +55,43 @@ main {
   max-width: 700px;
 }
 
-.home-cards-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-
-  justify-self: center;
-  justify-items: center;
+/* .text-welcome {
+  text-align: justify;
+  max-width: 80%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-
-  margin-top: 50px;
-
-  gap: 80px 0;
-}
+} */
 
 .categories-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 50%;
-
-  margin: 20px 0;
+  width: 60%;
+  margin: 10px 0;
 }
 
 .categories-slider-container {
   padding: 0;
   width: 90%;
   height: 100%;
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 700;
+  margin-left: 0;
+  text-transform: uppercase;
+  text-align: center;
+  display: block;
 
   .slick-prev {
-    left: -100px !important;
+    left: -30px !important;
   }
 
   .slick-prev,
   .slick-next {
-    top: 80px !important;
+    top: 100px !important;
   }
 
   .slick-prev:before,
@@ -115,30 +101,56 @@ main {
 
   .slick-list {
     position: relative;
-    top: 10px;
+    top: 15px;
   }
 
   span {
-    color: #f6f6e9;
-    font-size: 20px;
-    font-weight: 700;
-    margin-left: 8%;
+    color: #ffffff;
+    font-family: "Poppins", sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 5px;
     text-transform: uppercase;
   }
 }
 
+.category-button {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: transparent;
+  border: none;
+  padding: 25px;
+  cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.category-button:hover {
+  transform: scale(1.05);
+  background-color: rgba(255, 255, 255, 0);
+}
+
 .category-icon {
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 120px;
   height: 120px;
-  border-radius: 10px;
-  padding: 15px;
-  font-size: 60px;
-  color: black;
+  padding: 10px 0;
+  font-size: 70px;
+  color: rgb(255, 255, 255);
   text-align: center;
+  margin-bottom: -25px;
+}
+
+.category-button span {
+  font-family: "Poppins", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #f1f1f1;
 }
 
 .category-icon i {
@@ -151,15 +163,51 @@ main {
   width: 100%;
 }
 
-.categories-slider-container span {
-  color: #f6f6e9;
-  font-size: 20px;
+.main-content {
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  margin-top: 20px;
+}
+
+.main-content h1 {
+  margin-top: 10px;
+  font-size: 36px;
+  color: --var(--text-primary);
   font-weight: 700;
-  margin-left: 8%;
-  text-transform: uppercase;
+}
+
+.main-content p {
+  margin-top: -10px;
+  font-size: 15px;
+  color: #20575A;
+  font-weight: 500;
+}
+
+.home-cards-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-items: center;
+  align-items: center;
+  margin-top: 50px;
+  padding: 30px;
+  gap: 80px 0px;
+  min-height: 100px;
+
+  width: 100%; /* Hace que el contenedor ocupe el 100% del espacio disponible */
+  max-width: 1300px; /* Ajuste opcional para limitar el tamaño máximo */
+  margin-left: auto; /* Centra el contenedor horizontalmente */
+  margin-right: auto;
+}
+
+.home-cards-container h1 {
+  font-family: "Poppins", sans-serif;
+  font-size: 30px;
+  font-weight: 600;
+  color: #20575a;
   text-align: center;
-  display: block;
-  width: 100%;
+  grid-column: span 2;
+  justify-self: center;
 }
 
 .home-recommendations-container {
@@ -169,6 +217,16 @@ main {
   align-items: center;
 
   margin-top: 5%;
+}
+
+.error-message {
+  font-family: "Poppins", sans-serif;
+  font-size: 30px;
+  font-weight: 600;
+  color: #20575a;
+  text-align: center;
+  grid-column: span 2; /* Hace que el mensaje ocupe las 2 columnas */
+  justify-self: center;
 }
 
 .home-cards-pagination {

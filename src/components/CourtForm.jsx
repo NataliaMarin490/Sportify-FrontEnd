@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import "../Styles/CreateCourt.css";
+import "../Styles/createCourt.css";
 import API_BASE_URL from "../config";
 
 const CourtForm = ({ onSubmit, courtId, isEditing }) => {
@@ -26,14 +26,14 @@ const CourtForm = ({ onSubmit, courtId, isEditing }) => {
   const [selectedFeatures, setSelectedFeatures] = useState([]);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/sports/status/5`)
+    fetch(`${API_BASE_URL}/public/sports/status/5`)
       .then((response) => response.json())
       .then((data) => setSports(data))
       .catch((error) => console.error("Error fetching sports:", error));
   }, []);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/countries/search`)
+    fetch(`${API_BASE_URL}/public/countries/search`)
       .then((response) => response.json())
       .then((data) => setCountries(data))
       .catch((error) => console.error("Error fetching countries:", error));
@@ -41,7 +41,7 @@ const CourtForm = ({ onSubmit, courtId, isEditing }) => {
 
   useEffect(() => {
     if (formData.country) {
-      fetch(`${API_BASE_URL}/regions/by-country/${formData.country}`)
+      fetch(`${API_BASE_URL}/public/regions/by-country/${formData.country}`)
         .then((response) => response.json())
         .then((data) => setRegions(data))
         .catch((error) => console.error("Error fetching regions:", error));
@@ -53,7 +53,7 @@ const CourtForm = ({ onSubmit, courtId, isEditing }) => {
 
   useEffect(() => {
     if (formData.region) {
-      fetch(`${API_BASE_URL}/cities/by-region/${formData.region}`)
+      fetch(`${API_BASE_URL}/public/cities/by-region/${formData.region}`)
         .then((response) => response.json())
         .then((data) => setCities(data))
         .catch((error) => console.error("Error fetching cities:", error));
@@ -74,7 +74,7 @@ const CourtForm = ({ onSubmit, courtId, isEditing }) => {
   };
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/features`)
+    fetch(`${API_BASE_URL}/public/features`)
       .then((response) => response.json())
       .then((data) => setFeatures(data))
       .catch((error) => console.error("Error fetching features:", error));
@@ -82,7 +82,7 @@ const CourtForm = ({ onSubmit, courtId, isEditing }) => {
 
   useEffect(() => {
     if (isEditing && courtId) {
-      fetch(`${API_BASE_URL}/courts/search/${courtId}`)
+      fetch(`${API_BASE_URL}/public/courts/search/${courtId}`)
         .then((response) => response.json())
         .then((data) => {
           setFormData({
@@ -137,7 +137,7 @@ const CourtForm = ({ onSubmit, courtId, isEditing }) => {
     });
 
     try {
-      const response = await fetch(`${API_BASE_URL}/courts/add`, {
+      const response = await fetch(`${API_BASE_URL}/public/courts/add`, {
         method: "POST",
         body: formDataToSend,
       });

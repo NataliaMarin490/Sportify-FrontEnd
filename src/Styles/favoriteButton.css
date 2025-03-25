@@ -1,0 +1,46 @@
+/* Estilo base del botón */
+.favorite-button {
+  background-color: #457d58; 
+  border: 2px solid transparent; /* Sin borde por defecto */
+  cursor: pointer;
+  border-radius: 20%; /* Forma circular */
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s, border-color 0.3s, color 0.3s; /* Suavizar las transiciones */
+  position: relative;
+}
+
+/* Estilos cuando el producto está en favoritos */
+.favorite-button.favorited {
+  background-color: #457d58; /* Fondo blanco */
+  color: white; /* Corazón lleno verde */
+}
+
+/* Estilos cuando el producto no está en favoritos */
+.favorite-button.not-favorited {
+  background-color: #457d58; /* Fondo verde */
+  border-color: white; /* Borde blanco */
+  color: white; /* Corazón vacío blanco */
+  border-width: 2px; /* Añadir borde de 2px */
+}
+
+/* Aseguramos que los iconos de corazón no se vean deformados */
+.favorite-button svg {
+  transition: color 0.3s; /* Suaviza el cambio de color del corazón */
+  width: 20px;
+  height: 20px;
+}
+
+/* Opcional: cambio de color al pasar el mouse sobre el botón */
+.favorite-button:hover {
+  background-color: #52705b; /* Fondo verde al pasar el mouse */
+  border-color: #b8ddc5;
+}
+
+/* Estilo para cuando el botón está deshabilitado */
+.favorite-button:disabled {
+  background-color: #457d58;
+  cursor: not-allowed;
+}

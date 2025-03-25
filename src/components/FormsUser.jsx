@@ -47,7 +47,7 @@ const FormsUser = ({ user = {}, onSubmit }) => {
   }, [user]);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/countries/search`)
+    fetch(`${API_BASE_URL}/public/countries/search`)
       .then((response) => response.json())
       .then((data) => setCountries(data))
       .catch((error) => console.error("Error fetching countries:", error));
@@ -134,7 +134,7 @@ const FormsUser = ({ user = {}, onSubmit }) => {
       countryId: parseInt(userData.country, 10),
     };
 
-    fetch("http://localhost:8080/api/auth/register", {
+    fetch(`${API_BASE_URL}/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userToSend),

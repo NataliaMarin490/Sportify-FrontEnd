@@ -16,7 +16,7 @@ const AdminUsers = () => {
   const fetchUsers = () => {
     setLoading(true);
     axios
-      .get(`${API_BASE_URL}/users/all`)
+      .get(`${API_BASE_URL}/public/users/all`)
       .then((response) => {
         setUsers(response.data);
       })
@@ -50,7 +50,7 @@ const AdminUsers = () => {
       }
 
       const response = await fetch(
-        `http://localhost:8080/api/roles/update/${userId}?newRole=${newRole}`,
+        `${API_BASE_URL}/roles/update/${userId}?newRole=${newRole}`,
         {
           method: "PUT",
           headers: {
@@ -138,7 +138,7 @@ const AdminUsers = () => {
                         {user.roles.includes("ROLE_ADMIN") ? (
                           <FaUserShield />
                         ) : (
-                          <FaUserCog /> 
+                          <FaUserCog />
                         )}
                       </button>
                     )}

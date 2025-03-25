@@ -16,6 +16,7 @@ import CreateAccount from "./Routes/CreateAccount.jsx";
 import Login from "./Routes/Login.jsx";
 import CreateCourt from "./Routes/CreateCourt.jsx";
 import CreateFeatures from "./Routes/CreateFeatures";
+import CreateCategories from "./Routes/CreateCategories";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import UserProfile from "./Routes/UserProfile.jsx";
 import AdminCourts from "./Routes/AdminCourts.jsx";
@@ -25,6 +26,7 @@ import AdminFeatures from "./Routes/AdminFeatures.jsx";
 import AdminLayout from "./Layouts/AdminLayout.jsx";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ErrorBoundary from "./components/ErrorBoundary";
+import FavoritesPage from "./Routes/FavoritesPage.jsx";
 
 function App() {
   const navigate = useNavigate();
@@ -95,6 +97,7 @@ function App() {
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
           <Route path="/create-court" element={<CreateCourt />} />
           <Route path="/create-feature" element={<CreateFeatures />} />
+          <Route path="/create-categories" element={<CreateCategories />} />
 
           {/* Ruta protegida para perfil de usuario */}
           <Route
@@ -105,6 +108,19 @@ function App() {
                 redirectTo={location.state?.from || "/"}
               >
                 <UserProfile />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Ruta protegida para favoritos */}
+          <Route
+            path="/favorites"
+            element={
+              <ProtectedRoute
+                isAuthenticated={user}
+                redirectTo={location.state?.from || "/login"} // Redirigir a login si no está logueado
+              >
+                <FavoritesPage />
               </ProtectedRoute>
             }
           />

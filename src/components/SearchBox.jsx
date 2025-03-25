@@ -35,15 +35,14 @@ const SearchBox = ({ onSearch }) => {
   // Función para obtener las ciudades desde el backend
   const fetchCities = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/cities/all`);
+      const response = await fetch(`${API_BASE_URL}/public/cities/all`);
       const data = await response.json();
-
       const formattedCities = data.map((city) => ({
         id: city.id,
         name: `${city.name}, ${city.region.country.countryName}`,
       }));
 
-      setCities(formattedCities); // Asumiendo que la respuesta es un array de ciudades
+      setCities(formattedCities);
     } catch (error) {
       console.error("Error fetching cities:", error);
     }
@@ -52,9 +51,9 @@ const SearchBox = ({ onSearch }) => {
   // Función para obtener los deportes desde el backend
   const fetchSports = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/sports/status/5`);
+      const response = await fetch(`${API_BASE_URL}/public/sports/status/5`);
       const data = await response.json();
-      setSports(data); // Asumiendo que la respuesta es un array de deportes
+      setSports(data);
     } catch (error) {
       console.error("Error fetching sports:", error);
     }
@@ -66,7 +65,7 @@ const SearchBox = ({ onSearch }) => {
       c.name.toLowerCase().includes(city.toLowerCase())
     );
     setFilteredCities(
-      filtered.length > 0 ? filtered : [{ id: 0, name: "Sin coincidencias" }]
+      filtered.length > 0 ? filtered : [{ name: "Sin coincidencias", id: -1 }]
     );
   }, [city, cities]);
 
@@ -75,11 +74,11 @@ const SearchBox = ({ onSearch }) => {
       s.name.toLowerCase().includes(sport.toLowerCase())
     );
     setFilteredSports(
-      filtered.length > 0 ? filtered : [{ id: 0, name: "Sin coincidencias" }]
+      filtered.length > 0 ? filtered : [{ name: "Sin coincidencias", id: -1 }]
     );
   }, [sport, sports]);
 
-  // Función para limpiar todos los filtros con flechita
+  // Función para limpiar todos los filtros con flechita reset
   const resetFilters = () => {
     setCity("");
     setSport("");
@@ -116,7 +115,8 @@ const SearchBox = ({ onSearch }) => {
 
   // Función para enviar los datos a Home.jsx
   const handleSearch = () => {
-    onSearch({ city, sport, date, hour });
+    const filters = { city, sport, date, hour };
+    onSearch(filters);
   };
 
   // Manejo global para que se abran y cierren inputs
@@ -179,9 +179,9 @@ const SearchBox = ({ onSearch }) => {
         )}
         {showCitiesDropdown && (
           <ul className="dropdown">
-            {filteredCities.map((c, index) => (
+            {filteredCities.map((c) => (
               <li
-                key={index}
+                key={c.id}
                 onClick={() => {
                   if (c.name !== "Sin coincidencias") {
                     setCity(c.name);
@@ -260,8 +260,8 @@ const SearchBox = ({ onSearch }) => {
             alt="Clear"
             className="icon-button"
             onClick={() => {
-              setDate(""); // Resetea la fecha
-              setShowCalendar(false); // Cierra el calendario
+              setDate("");
+              setShowCalendar(false);
             }}
           />
         )}
@@ -283,8 +283,8 @@ const SearchBox = ({ onSearch }) => {
             alt="Clear"
             className="icon-button"
             onClick={() => {
-              setHour(""); // Resetea la hora
-              setShowTimePicker(false); // Cierra el selector de hora
+              setHour("");
+              setShowTimePicker(false);
             }}
           />
         )}

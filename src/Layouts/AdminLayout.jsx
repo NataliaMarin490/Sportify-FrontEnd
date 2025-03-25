@@ -21,11 +21,13 @@ const AdminLayout = () => {
   return (
     <>
       <Header />
+      <div className="admin-body">
       <div className="adminLayout">
         {state.showSidebar && <Sidebar />}
         <div className="adminContent">
           <Outlet /> 
         </div>
+      </div>
       </div>
       <Footer />
     </>

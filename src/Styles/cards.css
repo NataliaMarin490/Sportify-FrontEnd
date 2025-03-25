@@ -10,22 +10,35 @@
 
   height: 570px;
   width: 400px;
+  padding: 20px;
 }
 
 .card-image-container {
+  position: relative; /* Asegura que el botón se posicione dentro de este contenedor */
   display: flex;
   align-items: center;
   justify-content: center;
 
   width: 100%;
+}
 
-  margin-top: 20px;
+.card-favorite {
+  position: absolute; /* Lo posicionamos sobre la imagen */
+  bottom: 10px; /* 10px desde la parte inferior de la imagen */
+  right: 0px; /* 10px desde el borde derecho de la imagen */
+  background-color: transparent;
+  border: none;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10; /* Asegura que esté encima de la imagen */
+  transition: background-color 0.3s ease;
 }
 
 .card-image {
-  width: 90%;
-  height: 200px;
-  object-fit: cover;
+  width: 100%; /* Se ajusta al 100% del contenedor */
+  height: 250px;
+  object-fit: cover; /* Esto asegura que la imagen no se distorsione */
 }
 
 .card-description-container {
@@ -33,9 +46,10 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
-
+  margin-bottom: 30px;
+  margin-left: 50px;
   height: 38%;
-  width: 80%;
+  width: 100%;
 
   p {
     margin: 0;
@@ -43,14 +57,15 @@
 }
 
 .cards-title {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 400;
   margin: 3px 0;
   color: #6941c6;
 }
 
+
 .cards-text {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 400;
   margin: 2px 0;
 
@@ -62,20 +77,51 @@
 .card-name {
   font-size: 20px;
   font-weight: 600;
-  margin: 0;
+  margin: 9px 0;
 }
 
 .card-properties-container {
   display: flex;
   align-items: center;
   gap: 10px;
-
   width: 100%;
+  margin-left: 15px;
+}
+
+/* Asegúrate de que Link no altere el estilo del botón */
+.link-button-container {
+  text-decoration: none; /* Evitar el subrayado */
+  width: 80%;
+  /* height: 100%; */
+  align-content: flex-end;
+  margin-bottom: 25px;
 }
 
 .card-button {
+  font-family: "Poppins", serif;
   width: 80%;
-  height: 8%;
+  height: 140%;
   border: 0;
   border-radius: 10px;
+  background-color: #457d58; /* Cambia el color de fondo según lo desees */
+  color: white; /* Color del texto */
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* Si quieres algún cambio en el color cuando pasas el mouse sobre el botón */
+.card-button:hover {
+  background-color: #6db88e;
+  transform: scale(1.05); /* Cambio de color al pasar el mouse */
+}
+
+/* .card-image-container:hover {
+  transform: scale(1.05);
+} */
+
+.cards-container:hover {
+  transform: scale(1.05);
 }

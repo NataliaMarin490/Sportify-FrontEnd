@@ -1,6 +1,5 @@
 .calendar-container {
-  max-width: 400px;
-  margin: auto;
+  font-family: "Poppins", serif;
   text-align: center;
   border-radius: 10px;
   border-color: #f5f5eb;
@@ -9,13 +8,16 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-top: -10px;
 }
 
 .custom-calendar {
+  font-family: "Poppins", serif;
   border: none;
   background-color: white;
   padding: 10px;
   border-radius: 8px;
+  width: 100% !important;
 }
 
 .react-calendar__tile {
@@ -32,13 +34,14 @@
 }
 
 .time-picker {
+  font-family: "Poppins", serif;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  width: 100%;
   border-radius: 10px;
   border-color: white;
   background-color: white;
+  width: 100%;
 }
 
 .time-button {
@@ -60,7 +63,7 @@
 }
 
 .selected {
-  background-color: #4caf50;
+  background-color: #474947;
   color: white;
 }
 
@@ -93,14 +96,28 @@
 }
 
 .tituloCalendar {
-  color: rgba(0, 66, 37, 1);
-  font-size: 15px;
+  color: var(--header-dark);
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  background-color: white;
+  border-radius: 5px;
+  padding: 10px 0;
 }
 
 .react-calendar__tile--active {
   background-color: rgba(0, 66, 37, 1) !important;
   color: white !important;
+  cursor: pointer;
 }
+
+.react-calendar__tile--disabled {
+  cursor: no-drop !important;
+  opacity: 0.5;
+  background-color: #d3d9d3 !important;
+  color: #686868 !important;
+}
+
 
 /* Estilo para fechas totalmente reservadas */
 .fully-reserved-date {
@@ -132,3 +149,49 @@
   background-color: rgba(0, 66, 37, 1) !important;
   color: white !important;
 }
+
+
+/* Cambia el color de los meses deshabilitados */
+.react-calendar__year-view .react-calendar__tile[disabled] {
+  background-color: #2c2c2c !important;
+  color: #8b8b8b !important;
+  cursor: no-drop !important;
+}
+
+/* Cambia el color de los años deshabilitados */
+.react-calendar__decade-view .react-calendar__tile[disabled] {
+  background-color: #2c2c2c !important;
+  color: #8b8b8b !important;
+  cursor: no-drop;
+}
+
+/* Estilos de navegación: flechas prev y next deshabilitadas */
+.react-calendar__navigation__prev2-button[disabled],
+.react-calendar__navigation__next2-button[disabled] {
+  cursor: no-drop !important;
+  opacity: 0.5;
+}
+
+/* Estilos de navegación: flechas prev y next deshabilitadas */
+.react-calendar__navigation__prev-button[disabled],
+ .react-calendar__navigation__next-button[disabled] {
+  cursor: no-drop !important;
+  opacity: 0.5;
+}
+
+/* Estilos para las fechas deshabilitadas en la vista de mes */
+.react-calendar__year-view .react-calendar__tile[disabled] {
+  cursor: no-drop !important;
+  opacity: 0.5;
+  background-color: #2c2c2c !important;
+  color: #8b8b8b !important;
+}
+
+/* Estilos para las fechas deshabilitadas en la vista de año */
+.react-calendar__decade-view .react-calendar__tile[disabled] {
+  cursor: no-drop !important;
+  opacity: 0.5;
+  background-color: #2c2c2c !important;
+  color: #8b8b8b !important;
+}
+

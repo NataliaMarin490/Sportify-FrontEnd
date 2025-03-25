@@ -36,7 +36,8 @@
     border-radius: 10px;
     background-color: #252625;
     color: #f6f6e9;
-    text-align: center;
+    text-align: left;
+    padding: 10px;
 }
 
 .searcher-input,

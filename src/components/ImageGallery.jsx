@@ -3,25 +3,27 @@ import { useParams } from "react-router-dom";
 import { useContextGlobal } from "../Context/global.context";
 import "../Styles/imageGallery.css";
 
-const ImageGallery = () => {
-  const { state } = useContextGlobal();
-  const { id } = useParams();
-  const [images, setImages] = useState([]);
+const ImageGallery = ({images=[]}) => {
+  console.log(images);
+  
+  // const { state } = useContextGlobal();
+  // const { id } = useParams();
+  // const [images, setImages] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
-    const selectedCourt = state?.courts?.data?.find((court) => court.id === Number(id));
+  // useEffect(() => {
+  //   const selectedCourt = state?.courts?.data?.find((court) => court.id === Number(id));
 
-    if (selectedCourt) {
-      setImages(
-        selectedCourt.imageUrl.map((img) =>
-          typeof img === "string" ? img : img.url
-        )
-      );
-    } else {
-      setImages([]);
-    }
-  }, [id]);
+  //   if (selectedCourt) {
+  //     setImages(
+  //       selectedCourt.imageUrl.map((img) =>
+  //         typeof img === "string" ? img : img.url
+  //       )
+  //     );
+  //   } else {
+  //     setImages([]);
+  //   }
+  // }, [id]);
 
   return (
     <div className="gallery-container">

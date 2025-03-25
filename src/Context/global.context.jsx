@@ -35,7 +35,10 @@ const ContextProvider = ({ children }) => {
 
   const login = async (credentials) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/api/auth/login`, credentials);
+      const response = await axios.post(
+        `${API_BASE_URL}/auth/login`,
+        credentials
+      );
 
       if (response.status === 200) {
         const userData = response.data;
@@ -73,7 +76,7 @@ const ContextProvider = ({ children }) => {
     const fetchCourts = async () => {
       try {
         const response = await axios.get(
-          `${API_BASE_URL}/courts/search?page=1&size=10`
+          `${API_BASE_URL}/public/courts/search?page=1&size=10`
         );
 
         const modifiedData = response.data.data.map((court) => ({
@@ -97,7 +100,9 @@ const ContextProvider = ({ children }) => {
 
     const fetchRecommendedCourts = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/courts/random`);
+        const response = await axios.get(
+          `${API_BASE_URL}/public/courts/random`
+        );
 
         const modifiedData = response.data.map((court) => ({
           ...court,
@@ -115,10 +120,11 @@ const ContextProvider = ({ children }) => {
   }, []);
 
   // Función para filtrar las canchas por categoría
-  const fetchCourtsByCategory = async (categoryName) => {
+  const fetchCourtsByCategory = async (sportId) => {
+    console.log(`Ejecutando fetchCourtsByCategory para: ${sportId}`);
     try {
       const response = await axios.get(
-        `${API_BASE_URL}/courts/search?category=${categoryName}&page=1&size=10`
+        `${API_BASE_URL}/public/bookings/search?page=1&size=10&sportId=${sportId}`
       );
 
       const modifiedData = response.data.data.map((court) => ({
@@ -128,12 +134,26 @@ const ContextProvider = ({ children }) => {
 
       dispatch({ type: "GET_COURTS_BY_CATEGORY", payload: modifiedData });
     } catch (error) {
-      console.error(`Error al obtener las canchas de la categoría ${categoryName}:`, error);
+      console.error(
+        `Error al obtener las canchas de la categoría ${sportId}:`,
+        error
+      );
     }
   };
 
   return (
-    <ContextGlobal.Provider value={{ state, dispatch, toggleSidebar, user, setUser, login, logout, fetchCourtsByCategory }}>
+    <ContextGlobal.Provider
+      value={{
+        state,
+        dispatch,
+        toggleSidebar,
+        user,
+        setUser,
+        login,
+        logout,
+        fetchCourtsByCategory,
+      }}
+    >
       {children}
     </ContextGlobal.Provider>
   );

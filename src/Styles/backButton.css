@@ -5,8 +5,9 @@
   background-color: #457d58;
   border-radius: 0.5rem;
   transition: background-color 0.2s ease-in-out;
-  height: 2%;
-  margin: 10px;
+  height: 6vh;
+  margin-top: 15px;
+  align-items: center;
 }
 
 .backButton:hover {

@@ -1,37 +1,45 @@
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import "../Styles/calendarDetail.css";
 import Calendar from "react-calendar";
+import API_BASE_URL from "../config";
 import "react-calendar/dist/Calendar.css";
 
 const CalendarWithTime = ({ onDateTimeChange }) => {
   const [date, setDate] = useState(new Date());
   const [time, setTime] = useState("07:00");
 
-  // Estados para manejar la carga y los errores
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
-  const [reservedDates, setReservedDates] = useState([]);
+  const [reservedSlots, setReservedSlots] = useState({});
 
-  // Función simulada de obtención de datos desde el backend
+  const { id } = useParams();
+
+  useEffect(() => {
+    if (id) {
+      fetchReservedDates();
+    }
+  }, [id]);
+
+  // Función para obtener las fechas y horas reservadas desde la API
   const fetchReservedDates = async () => {
     try {
       setIsLoading(true);
-      setHasError(false);
+      setHasError(false); // Resetear error antes de hacer la nueva solicitud
 
-      // Simulando una llamada al backend con un pequeño retraso
-      setTimeout(() => {
-        // Aquí va la lógica real de obtener los datos (por ejemplo, usando fetch o axios)
-        // Vamos a simular un error:
-        // throw new Error('No se pudo obtener la información de las fechas.');
+      const response = await fetch(
+        `${API_BASE_URL}/public/bookings/${id}/availability`
+      );
+      if (!response.ok) {
+        throw new Error(`Error en la API. Código: ${response.status}`);
+      }
 
-        setReservedDates([
-          { date: "2025-03-16", time: "9:00" },
-          { date: "2025-03-17", time: "10:00" },
-          { date: "2025-03-17", time: "15:00" },
-          { date: "2025-03-18", time: "14:00" },
-        ]);
-        setIsLoading(false);
-      }, 2000); // Simulando un retraso en la obtención de datos
+      const data = await response.json();
+      console.log("Datos recibidos:", JSON.stringify(data, null, 2));
+
+      // Asegúrate de que reservedSlots sea un objeto
+      setReservedSlots(data.reservedSlots || {});
+      setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
       setHasError(true);
@@ -39,119 +47,94 @@ const CalendarWithTime = ({ onDateTimeChange }) => {
     }
   };
 
-  // Llamamos a la función fetchReservedDates cuando se monta el componente
-  useEffect(() => {
-    fetchReservedDates();
-  }, []);
-
+  // Generar las opciones de hora de 07:00 a 21:00
   const generateTimeOptions = () => {
-    const times = [];
-    for (let i = 7; i <= 22; i++) {
-      const hour = i < 10 ? `0${i}` : i;
-      times.push(`${hour}:00`);
-    }
-    return times;
+    return Array.from(
+      { length: 15 }, // Genera 15 horas (de 07:00 a 21:00)
+      (_, i) => `${String(i + 7).padStart(2, "0")}:00:00`
+    );
   };
 
   // Obtener la hora y minutos actuales
   const currentDate = new Date();
-  const currentHour = currentDate.getHours();
-  const currentMinutes = currentDate.getMinutes();
+  const currentFormattedTime = `${String(currentDate.getHours()).padStart(
+    2,
+    "0"
+  )}:${String(currentDate.getMinutes()).padStart(2, "0")}:00`;
 
-  /// Verificar si la fecha seleccionada es el día actual
-  const isToday = (date) => {
+  // Verificar si la fecha seleccionada es el día actual
+  const isToday = (selectedDate) => {
     const today = new Date();
     return (
-      date.toISOString().split("T")[0] === today.toISOString().split("T")[0]
+      selectedDate.getDate() === today.getDate() &&
+      selectedDate.getMonth() === today.getMonth() &&
+      selectedDate.getFullYear() === today.getFullYear()
     );
   };
 
   // Filtrar horas pasadas solo si es el día actual
   const filteredTimeOptions = generateTimeOptions().filter((t) => {
-    const [hour, minute] = t.split(":");
+    const formattedTime = t;
+    // Verifica si la fecha seleccionada es hoy
+    const isTodaySelected = isToday(date);
 
-    // Solo deshabilitar horas pasadas para el día actual
-    if (isToday(date)) {
-      if (parseInt(hour) < currentHour) {
-        return false; // Deshabilitar todas las horas anteriores
-      }
-      if (parseInt(hour) === currentHour && currentMinutes > 0) {
-        return false; // Deshabilitar la hora actual si ya pasó el minuto
-      }
+    if (isTodaySelected && formattedTime < currentFormattedTime) {
+      return false; // Deshabilitar horas pasadas
     }
 
-    return true; // Mantener las horas futuras
+    return true;
   });
-
-  // Función para verificar si una fecha está reservada
-  const isDateReserved = (date) => {
-    const formattedDate = date.toISOString().split("T")[0]; // Formato "YYYY-MM-DD"
-    return reservedDates.some((reserved) => reserved.date === formattedDate);
-  };
 
   // Función para verificar si una hora está reservada
   const isTimeReserved = (selectedTime) => {
-    const formattedDate = date.toISOString().split("T")[0]; // Formato "YYYY-MM-DD"
-    return reservedDates.some(
-      (reserved) =>
-        reserved.date === formattedDate && reserved.time === selectedTime
+    const formattedDate = date.toISOString().split("T")[0];
+    const selectedTimeFormatted = `${selectedTime}:00`; // Asegurarse de que el formato incluya los segundos
+    return (
+      reservedSlots[formattedDate]?.includes(selectedTimeFormatted) ?? false
     );
-  };
-
-  // Función para contar cuántas horas están reservadas en un día específico
-  const getReservedHoursCount = (formattedDate) => {
-    return reservedDates.filter((reserved) => reserved.date === formattedDate)
-      .length;
-  };
-
-  // Función para verificar si la fecha está completamente reservada (todas las horas)
-  const isAllDayReserved = (formattedDate) => {
-    const reservedHoursCount = getReservedHoursCount(formattedDate);
-    return reservedHoursCount === generateTimeOptions().length;
   };
 
   // Función para obtener el estilo de la fecha
   const getDateClassName = ({ date, view }) => {
     if (view === "month") {
       const formattedDate = date.toISOString().split("T")[0]; // Formato "YYYY-MM-DD"
-      const reservedHoursCount = getReservedHoursCount(formattedDate);
+      const reservedHoursCount = reservedSlots[formattedDate]?.length || 0;
       const totalHours = generateTimeOptions().length;
 
+      // Verificar si la fecha es pasada
+      const today = new Date();
+      const currentFormattedDate = today.toISOString().split("T")[0]; // Fecha actual en "YYYY-MM-DD"
+      const formattedDateToCompare = date.toISOString().split("T")[0]; // Fecha de la celda
+
+      if (formattedDateToCompare < currentFormattedDate) {
+        return "react-calendar__tile--disabled"; // Deshabilitar las fechas pasadas
+      }
+      // Si es el día actual, se marca de forma especial
+      if (isToday(date)) {
+        return "react-calendar__tile--today"; // Marca el día actual
+      }
+
       if (reservedHoursCount === totalHours) {
-        return "fully-reserved-date"; // Todas las horas reservadas
+        return "react-calendar__tile--reserved"; // Todas las horas reservadas
       } else if (reservedHoursCount > 0) {
-        return "partially-reserved-date"; // Algunas horas reservadas
+        return "react-calendar__tile--partially-reserved"; // Algunas horas reservadas
+      } else {
+        return "react-calendar__tile--available"; // Fechas disponibles
       }
     }
     return "";
   };
 
-  // Función para deshabilitar una hora si ya pasó o si está reservada
+  // Función para deshabilitar una hora si está reservada
   const isHourDisabled = (selectedTime) => {
-    const [selectedHour] = selectedTime.split(":").map(Number);
-
-    // Verificar si la hora está reservada
-    if (isTimeReserved(selectedTime)) {
-      return true;
-    }
-
-    // Verificar si la hora ya pasó (hora en el pasado)
-    if (isToday(date) && selectedHour < currentHour) {
-      return true;
-    }
-    if (isToday(date) && selectedHour === currentHour && currentMinutes > 0) {
-      return true; // Deshabilitar si la hora actual ya pasó
-    }
-
-    return false;
+    const formattedDate = date.toISOString().split("T")[0];
+    return reservedSlots[formattedDate]?.includes(selectedTime) ?? false;
   };
 
-  // Función para aplicar clase CSS para resaltar las horas reservadas
-  const getTimeButtonClass = (selectedTime) => {
-    if (isTimeReserved(selectedTime)) {
-      return "reserved-time"; // Clase para horas reservadas
-    }
-    return "";
+  // Función para verificar si una fecha es pasada
+  const isDateDisabled = (date) => {
+    const currentDate = new Date();
+    return date < currentDate; // Si la fecha es anterior a hoy, deshabilitada
   };
 
   const handleDateChange = (selectedDate) => {
@@ -160,26 +143,23 @@ const CalendarWithTime = ({ onDateTimeChange }) => {
   };
 
   const handleTimeChange = (selectedTime) => {
-    if (isHourDisabled(selectedTime)) {
-      return; // No hacer nada si la hora está deshabilitada
-    }
+    if (isHourDisabled(selectedTime)) return;
     setTime(selectedTime);
-    onDateTimeChange(date, selectedTime); // Pasar la fecha y hora seleccionada al componente principal
+    onDateTimeChange(date, selectedTime);
   };
 
-  // Función para reintentar obtener las fechas
   const handleRetry = () => {
-    fetchReservedDates();
+    fetchReservedDates(); // Llama nuevamente a la función para intentar obtener los datos
   };
 
   return (
     <div className="calendar-container">
       {isLoading ? (
-        <div>Loading...</div> // Muestra un mensaje de carga
+        <div>Loading...</div>
       ) : hasError ? (
         <div>
           <p>Error al obtener las fechas. Por favor, inténtelo nuevamente.</p>
-          <button onClick={handleRetry}>Intentar nuevamente</button>
+          <button onClick={handleRetry}>🔄 Reintentar</button>
         </div>
       ) : (
         <>
@@ -188,26 +168,25 @@ const CalendarWithTime = ({ onDateTimeChange }) => {
             onChange={handleDateChange}
             value={date}
             className="custom-calendar"
-            minDate={new Date()}
+            minDate={new Date()} // Esto se asegura de que no se seleccionen fechas pasadas
             tileClassName={getDateClassName}
+            tileDisabled={({ date }) => isDateDisabled(date)} // Asegúrate de aplicar el estilo de las fechas reservadas
           />
 
           <h2 className="tituloCalendar">Seleccionar Hora</h2>
           <div className="time-picker">
             {filteredTimeOptions.map((t) => {
-              // Verifica si la hora está reservada o ya pasó
               const disabled = isHourDisabled(t);
-
               return (
                 <button
                   key={t}
-                  className={`time-button ${
-                    t === time ? "selected" : ""
-                  } ${getTimeButtonClass(t)} ${disabled ? "disabled" : ""}`} // Aplica la clase 'disabled' si la hora está deshabilitada
-                  onClick={() => !disabled && handleTimeChange(t)} // Solo cambia la hora si no está deshabilitada
-                  disabled={disabled} // Deshabilita el botón si la hora está ocupada o ya pasó
+                  className={`time-button ${t === time ? "selected" : ""} ${
+                    disabled ? "disabled" : ""
+                  }`}
+                  onClick={() => !disabled && handleTimeChange(t)}
+                  disabled={disabled}
                 >
-                  {t}
+                  {t.slice(0, 5)} {/* Muestra la hora sin los segundos */}
                 </button>
               );
             })}

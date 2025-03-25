@@ -10,7 +10,7 @@ const BackButton = () => {
 
   return (
     <button className="backButton" onClick={() => navigate(-1)}>
-      <ArrowLeft size={15} />
+      <ArrowLeft size={30} />
     </button>
   );
 };
