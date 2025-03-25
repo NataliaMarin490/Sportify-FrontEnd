@@ -4,6 +4,7 @@
   background-image: url("../../public/images/home/background.png");
   background-size: cover;
   background-repeat: no-repeat;
+  background-color: black;
 }
 
 main {

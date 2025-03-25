@@ -140,7 +140,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-
+  /* gap: 5px; */
   margin-bottom: 15px;
   border-bottom: 1px solid ghostwhite;
 }
@@ -149,16 +149,30 @@
   font-size: 14px;
 }
 
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto;
+}
+
+.checked {
+  /* display: flex;
+  position: relative; */
+  color: orange;
+}
+
+
 .detail-content {
   display: grid;
   grid-template-rows: repeat(2, auto);
   grid-auto-flow: column;
-  gap: 15px;
-  padding: 10px;
+  gap: 20px;
+  padding: 20px;
 }
 
 .detail-content span {
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .policies-content {
