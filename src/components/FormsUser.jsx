@@ -140,11 +140,14 @@ const FormsUser = ({ user = {}, onSubmit }) => {
       body: JSON.stringify(userToSend),
     })
       .then((response) => {
-        if (!response.ok) throw new Error("Error en el registro");
+        if (!response.ok)
+        {
+          setSuccessMessage("Error al crear el nuevo usuario");  
+          throw new Error("Error en el registro");
+        }
         return response.text();
       })
       .then((data) => {
-        console.log("Registro exitoso:", data);
         setSuccessMessage("Usuario registrado correctamente!");
 
         console.log(userData.name);
