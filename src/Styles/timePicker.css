@@ -64,3 +64,13 @@
     color: white !important; /* Color de texto gris para el día seleccionado */
   }
   
+  .hour-option.selected,
+.period-option.selected {
+  background-color: #4CAF50;
+  color: white;
+}
+
+button:disabled {
+  background-color: #f0f0f0;
+  cursor: no-drop;
+}
