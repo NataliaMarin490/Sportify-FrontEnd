@@ -4,8 +4,19 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: beige;
   padding: 5px 100px;
+}
+
+.not-found-container{
+  background-color: var(--background-color);
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  height: 80%;
+}
+
+.not-found-container button{
+  margin-right: 20px;
 }
 
 .feature-item {
