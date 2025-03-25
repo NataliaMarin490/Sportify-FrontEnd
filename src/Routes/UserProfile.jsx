@@ -1,4 +1,4 @@
-/* import { useContextGlobal } from "../Context/global.context"; */
+import { useContextGlobal } from "../Context/global.context";
 import { useEffect } from "react";
 /* import { useContext } from "react"; */
 import BackButton from "../components/BackButton";
@@ -6,8 +6,8 @@ import "../Styles/userProfile.css";
 import FormsUser from "../components/FormsUser";
 import UserAvatar from "../components/UserAvatar";
 
-/* const UserProfile = () => {
-  const { user, setUser } = useContextGlobal(); */
+const UserProfile = () => {
+  const { user, setUser } = useContextGlobal();
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));

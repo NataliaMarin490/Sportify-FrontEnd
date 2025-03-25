@@ -3,7 +3,6 @@ import {
   X,
   Facebook,
   Twitter,
-  Instagram,
   Link2,
   MessageCircle,
 } from "lucide-react";
@@ -42,7 +41,6 @@ const ShareCourtModal = ({ isOpen, onClose, product, currentUrl }) => {
       facebook: `https://www.facebook.com/dialog/share?app_id=${appId}&href=${url}&quote=${message}`,
       twitter: `https://twitter.com/intent/tweet?text=${message}&url=${url}`,
       whatsapp: `https://api.whatsapp.com/send?text=${message}%20${url}`,
-      instagram: `https://instagram.com/`,
     };
 
     window.open(shareUrls[platform], "_blank", "width=1000,height=700");
@@ -87,9 +85,6 @@ const ShareCourtModal = ({ isOpen, onClose, product, currentUrl }) => {
           </button>
           <button onClick={() => handleShare("facebook")}>
             <Facebook /> Facebook
-          </button>
-          <button onClick={() => handleShare("instagram")}>
-            <Instagram /> Instagram
           </button>
           <button onClick={handleCopyLink}>
             <Link2 /> Copiar enlace
