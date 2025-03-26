@@ -177,6 +177,7 @@ const Detail = () => {
               <BookingForm
                 selectedDate={selectedDate}
                 selectedTime={selectedTime}
+                pricePerHour={product.pricePerHour}
               />
             </div>
           </div>
