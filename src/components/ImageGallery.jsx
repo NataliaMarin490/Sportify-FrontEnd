@@ -4,7 +4,7 @@ import { useContextGlobal } from "../Context/global.context";
 import "../Styles/imageGallery.css";
 
 const ImageGallery = ({images=[]}) => {
-  console.log(images);
+  //console.log(images);
   
   // const { state } = useContextGlobal();
   // const { id } = useParams();
