@@ -86,7 +86,7 @@ const Home = () => {
       const params = { ...filters, page: currentPage, size: itemsPerPage };
 
       const response = await axios.get(
-        `${API_BASE_URL}/public/bookings/search`,
+        `${API_BASE_URL}/bookings/search`,
         {
           params,
         }
@@ -274,7 +274,7 @@ const Home = () => {
     }
 
     // Generar la URL con los parámetros de búsqueda
-    const url = `${API_BASE_URL}/public/bookings/search?page=1&size=10&${searchParams.toString()}`;
+    const url = `${API_BASE_URL}/bookings/search?page=1&size=10&${searchParams.toString()}`;
 
     console.log("URL generada:", url);
 
