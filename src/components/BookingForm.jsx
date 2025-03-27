@@ -3,18 +3,34 @@ import { useNavigate } from "react-router-dom";
 import { useContextGlobal } from "../Context/global.context";
 import "../Styles/bookingForm.css";
 
-const BookingForm = ({ selectedDate, selectedTime }) => {
+const BookingForm = ({ selectedDate, selectedTime, pricePerHour }) => {
   const { user } = useContextGlobal();
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState("");
   const [reserva, setReserva] = useState({
-    name: "",
-    phoneNumber: "",
+    name: user?.fullName || localStorage.getItem("userName") || "",
+    email: user?.email || localStorage.getItem("userEmail") || "",
+    phoneNumber: user?.phoneNumber || localStorage.getItem("userPhone") || "",
     date: selectedDate ? selectedDate.toLocaleDateString() : "",
     time: selectedTime || "",
     number: "",
   });
+
+  // Guarda el nombre y teléfono en localStorage cuando el usuario está disponible
+  useEffect(() => {
+    console.log(user);
+    if (user) {
+      localStorage.setItem("userName", user.fullName || "");
+      localStorage.setItem("userEmail", user.email || "");
+      localStorage.setItem("userPhone", user.phoneNumber || "");
+      setReserva((prevReserva) => ({
+        ...prevReserva,
+        name:user.fullName,
+        email: user.email,
+      }));
+    }
+  }, [user]); 
 
   // Se asegura de que los valores de reserva se actualicen si selectedDate o selectedTime cambian
   useEffect(() => {
@@ -31,6 +47,17 @@ const BookingForm = ({ selectedDate, selectedTime }) => {
       ...prevReserva,
       [name]: value,
     }));
+
+    // Actualiza el localStorage cuando el usuario cambia el nombre o teléfono
+    if (name === "name") {
+      localStorage.setItem("userName", value);
+    }
+    if (name === "email") {
+      localStorage.setItem("userEmail", value);
+    }
+    if (name === "phoneNumber") {
+      localStorage.setItem("userPhone", value);
+    }
   };
 
   const handleSubmit = (event) => {
@@ -69,6 +96,12 @@ const BookingForm = ({ selectedDate, selectedTime }) => {
     }, 9000);
   };
 
+  // Calcular la cantidad de horas seleccionadas
+  const selectedHours = Array.isArray(selectedTime) ? selectedTime.length : 1;
+
+  // Calcular el precio total
+  const totalPrice = selectedHours * pricePerHour;
+
   return (
     <div className="booking-form-container">
       <h4 className="titleForm">Datos de Reserva</h4>
@@ -83,7 +116,7 @@ const BookingForm = ({ selectedDate, selectedTime }) => {
           value={reserva.number}
           onChange={handleChange}
         />
-        <label>Nombre Contacto: </label>
+        <label>Nombre: </label>
         <input
           placeholder="Nombre del representante"
           className="input"
@@ -92,22 +125,33 @@ const BookingForm = ({ selectedDate, selectedTime }) => {
           value={reserva.name}
           onChange={handleChange}
         />
-        <label>Número Contacto: </label>
+        <label>Email: </label>
+        <input
+          placeholder="Correo electrónico"
+          className="input"
+          type="email"
+          name="email"
+          value={reserva.email || ""}
+          onChange={handleChange}
+        />
+        <label>Número (Opcional): </label>
         <input
           placeholder="Número de teléfono"
           className="input"
           type="text"
           name="phoneNumber"
-          value={reserva.phoneNumber}
+          value={reserva.phoneNumber || ""}
           onChange={handleChange}
         />
-
+        {selectedTime && selectedTime.length > 0 && (
         <div>
-          <p>Fecha seleccionada: {selectedDate ? selectedDate.toLocaleDateString() : "No disponible"}</p>
-          <p>Hora seleccionada: {selectedTime || "No disponible"}</p>
+          <p>Fecha seleccionada: <strong>{selectedDate ? selectedDate.toLocaleDateString() : "No disponible"}</strong></p>
+          <p>Cantidad de horas: <strong>{Array.isArray(selectedTime) ? selectedTime.length : 1}</strong></p>
+          <p>Precio total: <strong>${totalPrice}</strong></p>
         </div>
+        )}
 
-        <button className="button-reserve" type="submit">Reservar</button>
+        <button className="button-reserve" type="submit">Realizar reserva</button>
 
         {error && <h4 className="error-message">{error}</h4>}
       </form>

@@ -30,6 +30,7 @@ const useLogin = (onLogin) => {
       if (response.data && response.data.token) {
         const userData = {
           fullName: response.data.fullName,
+          email: response.data.email,
           role: response.data.role,
           token: response.data.token,
         };

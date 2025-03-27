@@ -38,7 +38,7 @@ const ImageGallery = ({images=[]}) => {
         ))}
       </div>
       <button className="view-more-btn" onClick={() => setIsModalOpen(true)}>
-        Ver Más
+        Ver más
       </button>
 
       {/* MODAL */}

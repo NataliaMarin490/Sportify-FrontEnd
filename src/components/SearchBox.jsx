@@ -106,12 +106,23 @@ const SearchBox = ({ onSearch }) => {
   };
 
   // Función para manejar el cambio de hora
-  const handleTimeChange = (selectedHour, selectedPeriod) => {
-    const formattedTime = `${selectedHour}:00 ${selectedPeriod}`;
-    setHour(formattedTime);
-    setShowTimePicker(false);
-    setActiveDropdown(null);
+  const [selectedHour, setSelectedHour] = useState("");
+  const [selectedPeriod, setSelectedPeriod] = useState("");
+
+  const handleTimeChange = (newHour, newPeriod) => {
+    if (newHour && newPeriod) {
+      // Solo actualiza y cierra el dropdown cuando ambos (hora y periodo) están disponibles
+      const formattedTime = `${newHour}:00 ${newPeriod}`;
+      setHour(formattedTime);  // Actualiza el estado de la hora
+      setShowTimePicker(false);  // Cierra el dropdown
+      setActiveDropdown(null);  // Opcional: Cierra el dropdown activo
+    } else {
+      // Si no ambos, solo actualiza los valores por separado
+      if (newHour) setSelectedHour(newHour);
+      if (newPeriod) setSelectedPeriod(newPeriod);
+    }
   };
+  
 
   // Función para enviar los datos a Home.jsx
   const handleSearch = () => {
@@ -272,7 +283,7 @@ const SearchBox = ({ onSearch }) => {
         <input
           type="text"
           className="searcher-input"
-          value={hour}
+          value={hour || (selectedHour && selectedPeriod ? `${selectedHour}:00 ${selectedPeriod}` : "")}
           placeholder="Hora"
           readOnly
           onClick={() => handleInputClick("hour")}
@@ -299,6 +310,7 @@ const SearchBox = ({ onSearch }) => {
       </button>
     </div>
   );
+  
 };
 
 SearchBox.propTypes = {
