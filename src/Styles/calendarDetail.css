@@ -34,7 +34,7 @@
 }
 
 .time-picker {
-  font-family: "Poppins", serif;
+  font-family: "Poppins", serif !important;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -45,14 +45,15 @@
 }
 
 .time-button {
+  font-family: "Poppins", serif;
   background-color: white;
   border: 1px solid #e46115;
   padding: 5px 15px;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 10px;
+  font-size: 11px;
   color: #e46115;
-  width: 19%;
+  width: 17%;
   display: flex;
   text-align: center;
   margin: 5px;

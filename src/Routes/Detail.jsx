@@ -108,13 +108,15 @@ const Detail = () => {
               <div className="detail-product-container">
                 <div className="detail-header">
                   <h4 className="title-product"> {product.name} </h4>
-                  <span>4.5 Stars | 450 Reseñas</span>
+                  <div className="rating">
+                    <span className="fa fa-star checked"></span><span>4.5 Estrellas | 450 Reseñas</span>
+                  </div>
                 </div>
                 <div className="detail-content">
-                  <span>{product.pricePerHour}</span>
-                  <span>{product.city}</span>
-                  <span>{product.sport}</span>
-                  <span>{product.status}</span>
+                  <span><strong>Precio: </strong>{product.pricePerHour}</span>
+                  <span><strong>Ciudad: </strong>{product.city}</span>
+                  <span><strong>Deporte: </strong>{product.sport}</span>
+                  <span><strong>Estado: </strong>{product.status}</span>
                 </div>
               </div>
               <div className="detail-product-container">
@@ -175,6 +177,7 @@ const Detail = () => {
               <BookingForm
                 selectedDate={selectedDate}
                 selectedTime={selectedTime}
+                pricePerHour={product.pricePerHour}
               />
             </div>
           </div>
