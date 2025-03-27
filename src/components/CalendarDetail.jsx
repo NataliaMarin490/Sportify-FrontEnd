@@ -28,14 +28,14 @@ const CalendarWithTime = ({ onDateTimeChange }) => {
       setHasError(false); // Resetear error antes de hacer la nueva solicitud
 
       const response = await fetch(
-        `${API_BASE_URL}/public/bookings/${id}/availability`
+        `${API_BASE_URL}/bookings/${id}/availability`
       );
       if (!response.ok) {
         throw new Error(`Error en la API. Código: ${response.status}`);
       }
 
       const data = await response.json();
-      /* console.log("Datos recibidos:", JSON.stringify(data, null, 2)); */
+      //console.log("Datos recibidos:", JSON.stringify(data, null, 2));
 
       // Asegúrate de que reservedSlots sea un objeto
       setReservedSlots(data.reservedSlots || {});
