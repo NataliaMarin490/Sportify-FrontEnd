@@ -2,12 +2,13 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "../Styles/calendarDetail.css";
 import Calendar from "react-calendar";
+import API_BASE_URL from "../config";
 import "react-calendar/dist/Calendar.css";
 
 const CalendarWithTime = ({ onDateTimeChange }) => {
   const [date, setDate] = useState(new Date());
   const [time, setTime] = useState("07:00");
-
+  const [selectedTimes, setSelectedTimes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [reservedSlots, setReservedSlots] = useState({});
@@ -34,7 +35,7 @@ const CalendarWithTime = ({ onDateTimeChange }) => {
       }
 
       const data = await response.json();
-      console.log("Datos recibidos:", JSON.stringify(data, null, 2));
+      /* console.log("Datos recibidos:", JSON.stringify(data, null, 2)); */
 
       // Asegúrate de que reservedSlots sea un objeto
       setReservedSlots(data.reservedSlots || {});
@@ -73,24 +74,16 @@ const CalendarWithTime = ({ onDateTimeChange }) => {
 
   // Filtrar horas pasadas solo si es el día actual
   const filteredTimeOptions = generateTimeOptions().filter((t) => {
-    const formattedTime = t;
+    /* const formattedTime = t; */
     // Verifica si la fecha seleccionada es hoy
     const isTodaySelected = isToday(date);
-
-    if (isTodaySelected && formattedTime < currentFormattedTime) {
-      return false; // Deshabilitar horas pasadas
-    }
-
-    return true;
+    return !(isTodaySelected && t < currentFormattedTime);
   });
 
   // Función para verificar si una hora está reservada
   const isTimeReserved = (selectedTime) => {
     const formattedDate = date.toISOString().split("T")[0];
-    const selectedTimeFormatted = `${selectedTime}:00`; // Asegurarse de que el formato incluya los segundos
-    return (
-      reservedSlots[formattedDate]?.includes(selectedTimeFormatted) ?? false
-    );
+    return reservedSlots[formattedDate]?.includes(`${selectedTime}:00`) ?? false;
   };
 
   // Función para obtener el estilo de la fecha
@@ -138,13 +131,37 @@ const CalendarWithTime = ({ onDateTimeChange }) => {
 
   const handleDateChange = (selectedDate) => {
     setDate(selectedDate);
-    onDateTimeChange(selectedDate, time); // Pasar la fecha y hora seleccionada al componente principal
+    setSelectedTimes([]); // Limpiar selección al cambiar de fecha
+    onDateTimeChange(selectedDate, []);
   };
 
   const handleTimeChange = (selectedTime) => {
-    if (isHourDisabled(selectedTime)) return;
-    setTime(selectedTime);
-    onDateTimeChange(date, selectedTime);
+    setSelectedTimes((prevSelectedTimes) => {
+      let updatedTimes;
+      
+      // Si la hora ya está seleccionada, la eliminamos
+      if (prevSelectedTimes.includes(selectedTime)) {
+        updatedTimes = prevSelectedTimes.filter((time) => time !== selectedTime);
+      } else {
+        // Si no está seleccionada, la añadimos y ordenamos
+        updatedTimes = [...prevSelectedTimes, selectedTime].sort();
+      }
+  
+      // Pasar la lista actualizada al componente padre
+      onDateTimeChange(date, updatedTimes);
+  
+      return updatedTimes;
+    });
+  };
+  
+  
+  // Mostrar un rango de horas si se seleccionan varias
+  const formatSelectedTime = () => {
+    if (selectedTimes.length === 0) return "No disponible";
+    if (selectedTimes.length === 1) return selectedTimes[0];
+    
+    // Mostrar el primer y último tiempo como un rango
+    return `${selectedTimes[0]} - ${selectedTimes[selectedTimes.length - 1]}`;
   };
 
   const handleRetry = () => {
@@ -176,12 +193,11 @@ const CalendarWithTime = ({ onDateTimeChange }) => {
           <div className="time-picker">
             {filteredTimeOptions.map((t) => {
               const disabled = isHourDisabled(t);
+              const selected = selectedTimes.includes(t);
               return (
                 <button
                   key={t}
-                  className={`time-button ${t === time ? "selected" : ""} ${
-                    disabled ? "disabled" : ""
-                  }`}
+                  className={`time-button ${selected ? "selected" : ""} ${disabled ? "disabled" : ""}`}
                   onClick={() => !disabled && handleTimeChange(t)}
                   disabled={disabled}
                 >
@@ -192,8 +208,7 @@ const CalendarWithTime = ({ onDateTimeChange }) => {
           </div>
 
           <p className="selected-info">
-            📅 <strong>{date.toLocaleDateString()}</strong> - 🕒{" "}
-            <strong>{time}</strong>
+            📅 <strong>{date.toLocaleDateString()}</strong> - 🕒<strong>{formatSelectedTime()}</strong>
           </p>
         </>
       )}

@@ -134,17 +134,20 @@ const FormsUser = ({ user = {}, onSubmit }) => {
       countryId: parseInt(userData.country, 10),
     };
 
-    fetch("http://localhost:8080/api/auth/register", {
+    fetch(`${API_BASE_URL}/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userToSend),
     })
       .then((response) => {
-        if (!response.ok) throw new Error("Error en el registro");
+        if (!response.ok)
+        {
+          setSuccessMessage("Error al crear el nuevo usuario");  
+          throw new Error("Error en el registro");
+        }
         return response.text();
       })
       .then((data) => {
-        console.log("Registro exitoso:", data);
         setSuccessMessage("Usuario registrado correctamente!");
 
         console.log(userData.name);
@@ -265,7 +268,6 @@ const FormsUser = ({ user = {}, onSubmit }) => {
           )}
         </div>
 
-       
         {/* Campo Correo Electrónico */}
         <div
           className={`input-container ${
@@ -379,7 +381,6 @@ const FormsUser = ({ user = {}, onSubmit }) => {
             </select>
           </label>
         </div>
-
         
         {/* Campo Contraseña */}
         <div

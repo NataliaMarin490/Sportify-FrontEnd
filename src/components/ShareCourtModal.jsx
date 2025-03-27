@@ -85,7 +85,7 @@ const ShareCourtModal = ({ isOpen, onClose, product, currentUrl }) => {
           </button>
           <button onClick={() => handleShare("facebook")}>
             <Facebook /> Facebook
-          </button>
+          </button>          
           <button onClick={handleCopyLink}>
             <Link2 /> Copiar enlace
           </button>

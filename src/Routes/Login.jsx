@@ -46,7 +46,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
           <img className="icons4" src="\icons\deportes\basketball-icono-version-2.svg" alt=""></img>
         </div>
 
-        {/* <h2>Iniciar Sesión</h2> */}
+        <p>Debes iniciar sesión para poder efectuar reservas</p>
 
         <form className="form-login" onSubmit={handleSubmit}>
           <div className="input-container">

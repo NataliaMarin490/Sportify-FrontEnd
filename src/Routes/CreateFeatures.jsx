@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import API_BASE_URL from "../config";
 import "../Styles/addFeatureCategory.css";
 import { FaImage, FaTimes } from "react-icons/fa";
+import BackButton from "../components/BackButton";
 
 const CreateFeatures = () => {
   const [feature, setFeature] = useState("");
@@ -55,7 +56,7 @@ const CreateFeatures = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/api/public/features/add",
+        `${API_BASE_URL}/public/features/add`,
         {
           method: "POST",
           body: formData,
@@ -76,6 +77,7 @@ const CreateFeatures = () => {
 
   return (
     <div className="create-features-container">
+      <BackButton/>
       <form className="form" onSubmit={handleSubmit}>
         <h1>Crear Característica</h1>
         <label>

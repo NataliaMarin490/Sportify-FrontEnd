@@ -334,46 +334,45 @@ const Home = () => {
   
 
   const handleFetchNextPage = () => {
-    console.log("Prueba");
-    const nextPage = Math.min(currentPage + 1, totalPages);
-    axios
-      .get(`${API_BASE_URL}/courts/search?page=${nextPage}&size=10`)
-      .then((response) => {
-        const court = {
-          data: response.data.data,
-          totalPages: response.data.totalPages,
-          pageSize: response.data.pageSize,
-          currentPage: response.data.currentPage,
-        };
-
-        setCurrentCourts(court.data);
-      })
-      .catch((error) => {
-        console.error("Error al traer la siguiente página ", error);
-      });
-
-    setCurrentPage(nextPage);
+     const nextPage = Math.min(currentPage + 1, totalPages);
+     axios
+       .get(`${API_BASE_URL}/courts/search?page=${nextPage}&size=10`)
+       .then((response) => {
+         const court = {
+           data: response.data.data,
+           totalPages: response.data.totalPages,
+           pageSize: response.data.pageSize,
+           currentPage: response.data.currentPage,
+         };
+ 
+         setCurrentCourts(court.data);
+       })
+       .catch((error) => {
+         console.error("Error al traer la siguiente página ", error);
+       });
+ 
+     setCurrentPage(nextPage);
   };
 
   const handleFetchPrevPage = () => {
     const prevPage = Math.min(currentPage - 1, totalPages);
-    axios
-      .get(`${API_BASE_URL}/courts/search?page=${prevPage}&size=10`)
-      .then((response) => {
-        const court = {
-          data: response.data.data,
-          totalPages: response.data.totalPages,
-          pageSize: response.data.pageSize,
-          currentPage: response.data.currentPage,
-        };
-
-        setCurrentCourts(court.data);
-      })
-      .catch((error) => {
-        console.error("Error al traer la anterior página ", error);
-      });
-
-    setCurrentPage(prevPage);
+     axios
+       .get(`${API_BASE_URL}/courts/search?page=${prevPage}&size=10`)
+       .then((response) => {
+         const court = {
+           data: response.data.data,
+           totalPages: response.data.totalPages,
+           pageSize: response.data.pageSize,
+           currentPage: response.data.currentPage,
+         };
+ 
+         setCurrentCourts(court.data);
+       })
+       .catch((error) => {
+         console.error("Error al traer la anterior página ", error);
+       });
+ 
+     setCurrentPage(prevPage);
   };
 
   const settings = {

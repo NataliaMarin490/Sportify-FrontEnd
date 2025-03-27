@@ -36,7 +36,7 @@ const ContextProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       const response = await axios.post(
-        `${API_BASE_URL}/public/api/auth/login`,
+        `${API_BASE_URL}/auth/login`,
         credentials
       );
 

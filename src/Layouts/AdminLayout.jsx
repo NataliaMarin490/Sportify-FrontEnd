@@ -15,27 +15,19 @@ const AdminLayout = () => {
     const isAdminRoute = Object.values(adminRoutes).some((route) =>
       location.pathname.startsWith(route)
     );
-
-    if (isAdminRoute) {
-      document.body.classList.add("admin-body");
-    } else {
-      document.body.classList.remove("admin-body");
-    }
     toggleSidebar(isAdminRoute);
-
-    return () => {
-      document.body.classList.remove("admin-body");
-    };
   }, [location.pathname, toggleSidebar]);
 
   return (
     <>
       <Header />
+      <div className="admin-body">
       <div className="adminLayout">
         {state.showSidebar && <Sidebar />}
         <div className="adminContent">
           <Outlet /> 
         </div>
+      </div>
       </div>
       <Footer />
     </>

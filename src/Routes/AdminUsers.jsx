@@ -50,7 +50,7 @@ const AdminUsers = () => {
       }
 
       const response = await fetch(
-        `http://localhost:8080/api/roles/update/${userId}?newRole=${newRole}`,
+        `${API_BASE_URL}/roles/update/${userId}?newRole=${newRole}`,
         {
           method: "PUT",
           headers: {

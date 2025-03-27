@@ -21,6 +21,8 @@ import {
   FaSnowboarding,
 } from "react-icons/fa";
 import "../Styles/addCategory.css";
+import BackButton from "../components/BackButton";
+import API_BASE_URL from "../config";
 
 const sportsIcons = [
   { name: "Fútbol", icon: <FaFutbol size={30} />, iconName: "fa-futbol" },
@@ -103,14 +105,11 @@ const CreateCategory = () => {
     };
 
     try {
-      const response = await fetch(
-        "http://localhost:8080/api/public/sports/add",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch(`${API_BASE_URL}/public/sports/add`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
       if (!response.ok) throw new Error("Error al guardar el deporte");
 
@@ -127,6 +126,7 @@ const CreateCategory = () => {
 
   return (
     <div className="create-category-container">
+      <BackButton />
       <form className="form" onSubmit={handleSubmit}>
         <h1>Crear Deporte</h1>
         <label>
@@ -141,7 +141,7 @@ const CreateCategory = () => {
 
         <label>
           Descripción:
-          <textarea
+          <input
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
