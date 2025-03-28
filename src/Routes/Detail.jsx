@@ -31,12 +31,10 @@ const Detail = () => {
     featuresImageUrl: [],
   });
   const [error, setError] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedTime, setSelectedTime] = useState("7:00");
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedTime, setSelectedTime] = useState("");
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const { id } = useParams();
-
-  // console.log(id);
   const currentUrl = window.location.href;
 
   const handleDateTimeChange = (date, time) => {
@@ -47,7 +45,6 @@ const Detail = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
 
   useEffect(() => {
     const fetchUrl = `${API_BASE_URL}/public/courts/search/${id}`;
@@ -60,9 +57,8 @@ const Detail = () => {
         console.log(err);
         setError(err.message);
       });
-  }, [id]); // Solo depende de `id`
-  
-  
+  }, [id]);
+
   // Recuperar fecha y hora seleccionadas desde el localStorage (si están guardadas)
   useEffect(() => {
     const storedDate = localStorage.getItem("selectedDate");
@@ -82,7 +78,6 @@ const Detail = () => {
       localStorage.removeItem("selectedTime");
     }
   }, []);
-  
 
   if (error || !product) {
     return (
@@ -197,21 +192,17 @@ const Detail = () => {
             </div>
             <div className="container-booking-calendar">
               <Calendar
-                court={handleDateTimeChange}
-                onDateTimeChange={handleDateTimeChange}
-                /* selectedDate={selectedDate}
-                selectedTime={selectedTime} */
+              /* court={handleDateTimeChange} */ 
+              onDateTimeChange={handleDateTimeChange} 
               />
-              {product.id !== 0 && (
-                <BookingForm
-                  user={user}
-                  selectedCourt={product}
-                  selectedDate={selectedDate}
-                  selectedTime={selectedTime}
-                  pricePerHour={product.pricePerHour}
-                />
-              )}
-
+              <BookingForm
+                user={user}
+                /* selectedCourt={product} */
+                selectedDate={selectedDate}
+                selectedTime={selectedTime}
+                pricePerHour={product.pricePerHour}
+                productInfo={product}
+              />
             </div>
           </div>
         </div>
