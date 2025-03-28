@@ -30,12 +30,10 @@ const Detail = () => {
     featuresImageUrl: [],
   });
   const [error, setError] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedTime, setSelectedTime] = useState("7:00");
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedTime, setSelectedTime] = useState("");
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const { id } = useParams();
-
-  console.log(id);
   const currentUrl = window.location.href;
 
   const handleDateTimeChange = (date, time) => {
@@ -47,7 +45,6 @@ const Detail = () => {
     window.scrollTo(0, 0);
   }, []);
 
-
   const url = `${API_BASE_URL}/public/courts/search/${id}`;
 
   useEffect(() => {
@@ -56,7 +53,7 @@ const Detail = () => {
         setProduct(res.data);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setError(err.message);
       });
   }, []);
@@ -178,6 +175,7 @@ const Detail = () => {
                 selectedDate={selectedDate}
                 selectedTime={selectedTime}
                 pricePerHour={product.pricePerHour}
+                productInfo={product}
               />
             </div>
           </div>
