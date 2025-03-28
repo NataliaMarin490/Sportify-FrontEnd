@@ -1,9 +1,16 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useContextGlobal } from "../Context/global.context";
+import axios from "axios";
+import API_BASE_URL from "../config.js";
 import "../Styles/bookingForm.css";
 
-const BookingForm = ({ selectedDate, selectedTime, pricePerHour }) => {
+const BookingForm = ({
+  selectedDate,
+  selectedTime,
+  pricePerHour,
+  productInfo,
+}) => {
   const { user } = useContextGlobal();
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
@@ -16,21 +23,23 @@ const BookingForm = ({ selectedDate, selectedTime, pricePerHour }) => {
     time: selectedTime || "",
     number: "",
   });
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isUserDetailsExpanded, setIsUserDetailsExpanded] = useState(false);
 
   // Guarda el nombre y teléfono en localStorage cuando el usuario está disponible
   useEffect(() => {
-    console.log(user);
     if (user) {
       localStorage.setItem("userName", user.fullName || "");
       localStorage.setItem("userEmail", user.email || "");
       localStorage.setItem("userPhone", user.phoneNumber || "");
       setReserva((prevReserva) => ({
         ...prevReserva,
-        name:user.fullName,
+        name: user.fullName,
         email: user.email,
       }));
     }
-  }, [user]); 
+  }, [user]);
 
   // Se asegura de que los valores de reserva se actualicen si selectedDate o selectedTime cambian
   useEffect(() => {
@@ -57,6 +66,42 @@ const BookingForm = ({ selectedDate, selectedTime, pricePerHour }) => {
     }
     if (name === "phoneNumber") {
       localStorage.setItem("userPhone", value);
+    }
+  };
+
+  const handleConfirmBooking = async () => {
+    try {
+      setIsLoading(true);
+
+      const startTime = Array.isArray(selectedTime)
+        ? selectedTime[0]
+        : selectedTime;
+      const endTime = Array.isArray(selectedTime)
+        ? selectedTime[selectedTime.length - 1]
+        : selectedTime;
+
+      const bookingData = {
+        courtId: productInfo.id,
+        bookingDate: selectedDate.toISOString().split("T")[0],
+        startTime: startTime,
+        endTime: endTime,
+      };
+
+      const url = `${API_BASE_URL}/api/bookings/create`;
+      const response = await axios(url, {
+        method: 'POST',
+        body: JSON.stringify(bookingData),
+      });
+
+      if (!response.ok) throw new Error('Error al hacer la reserva');
+
+      const data = await response.json();
+      setShowConfirmModal(false);
+      setShowModal(true);
+    } catch (error) {
+      setError("Error al crear la reserva. Por favor, intente nuevamente.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -87,7 +132,7 @@ const BookingForm = ({ selectedDate, selectedTime, pricePerHour }) => {
     setError(""); // Limpiar error en caso de que todo esté bien
 
     // Mostrar modal de éxito
-    setShowModal(true);
+    setShowConfirmModal(true);
 
     // Redirigir después de 9 segundos
     setTimeout(() => {
@@ -144,24 +189,174 @@ const BookingForm = ({ selectedDate, selectedTime, pricePerHour }) => {
           onChange={handleChange}
         />
         {selectedTime && selectedTime.length > 0 && (
-        <div>
-          <p>Fecha seleccionada: <strong>{selectedDate ? selectedDate.toLocaleDateString() : "No disponible"}</strong></p>
-          <p>Cantidad de horas: <strong>{Array.isArray(selectedTime) ? selectedTime.length : 1}</strong></p>
-          <p>Precio total: <strong>${totalPrice}</strong></p>
-        </div>
+          <div>
+            <p>
+              Fecha seleccionada:{" "}
+              <strong>
+                {selectedDate
+                  ? selectedDate.toLocaleDateString()
+                  : "No disponible"}
+              </strong>
+            </p>
+            <p>
+              Cantidad de horas:{" "}
+              <strong>
+                {Array.isArray(selectedTime) ? selectedTime.length : 1}
+              </strong>
+            </p>
+            <p>
+              Precio total: <strong>${totalPrice}</strong>
+            </p>
+          </div>
         )}
 
-        <button className="button-reserve" type="submit">Realizar reserva</button>
+        <button className="button-reserve" type="submit">
+          Realizar reserva
+        </button>
 
         {error && <h4 className="error-message">{error}</h4>}
       </form>
+
+      {showConfirmModal && (
+        <div className="modal confirmation-modal">
+          <div className="modal-content">
+            <h2>Confirmar Reserva</h2>
+
+            <div className="confirmation-details">
+              <div className="court-details">
+                <h3>Detalles de la Cancha</h3>
+                <div className="court-images">
+                  <img
+                    src={productInfo.imageUrl[0]}
+                    alt={productInfo.name}
+                    className="featured-image"
+                  />
+                  <div className="image-grid">
+                    {productInfo.imageUrl.slice(1, 4).map((img, index) => (
+                      <img
+                        key={index}
+                        src={img}
+                        alt={`${productInfo.name} ${index + 1}`}
+                        className="thumbnail-image"
+                      />
+                    ))}
+                  </div>
+                </div>
+                <p>
+                  <strong>Nombre:</strong> {productInfo.name}
+                </p>
+                <p>
+                  <strong>Ubicación:</strong> {productInfo.city}
+                </p>
+                <p>
+                  <strong>Deporte:</strong> {productInfo.sport}
+                </p>
+              </div>
+
+              <div className="booking-details">
+                <h3>Detalles de la Reserva</h3>
+                <p>
+                  <strong>Fecha:</strong> {selectedDate.toLocaleDateString()}
+                </p>
+                <p>
+                  <strong>Hora:</strong>{" "}
+                  {Array.isArray(selectedTime)
+                    ? `${selectedTime[0]} - ${
+                        selectedTime[selectedTime.length - 1]
+                      }`
+                    : selectedTime}
+                </p>
+                <p>
+                  <strong>Precio Total:</strong> ${totalPrice}
+                </p>
+              </div>
+
+              <div className="user-details">
+                <div className="section-header">
+                  <h3>Datos del Usuario</h3>
+                  <button
+                    className="expand-button"
+                    onClick={() =>
+                      setIsUserDetailsExpanded(!isUserDetailsExpanded)
+                    }
+                  >
+                    {isUserDetailsExpanded ? "−" : "+"}
+                  </button>
+                </div>
+                <div
+                  className={`details-content ${
+                    isUserDetailsExpanded ? "expanded" : ""
+                  }`}
+                >
+                  <p>
+                    <strong>Nombre:</strong> {reserva.name}
+                  </p>
+                  <p>
+                    <strong>Email:</strong> {reserva.email}
+                  </p>
+                  <p>
+                    <strong>Teléfono:</strong>{" "}
+                    {reserva.phoneNumber || "No especificado"}
+                  </p>
+                  <p>
+                    <strong>Participantes:</strong> {reserva.number}
+                  </p>
+                  {isUserDetailsExpanded && (
+                    <>
+                      <p>
+                        <strong>Tipo de Documento:</strong> DNI
+                      </p>
+                      <p>
+                        <strong>Número de Documento:</strong>{" "}
+                        {user?.documentNumber || "No especificado"}
+                      </p>
+                      <p>
+                        <strong>Dirección:</strong>{" "}
+                        {user?.address || "No especificada"}
+                      </p>
+                      <p>
+                        <strong>Ciudad:</strong>{" "}
+                        {user?.city || "No especificada"}
+                      </p>
+                      <p>
+                        <strong>País:</strong>{" "}
+                        {user?.country || "No especificado"}
+                      </p>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="modal-actions">
+              <button
+                className="button-confirm"
+                onClick={handleConfirmBooking}
+                disabled={isLoading}
+              >
+                {isLoading ? "Procesando..." : "Confirmar Reserva"}
+              </button>
+              <button
+                className="button-cancel"
+                onClick={() => setShowConfirmModal(false)}
+                disabled={isLoading}
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showModal && (
         <div className="modal">
           <div className="modal-content">
             <h2>¡Reserva Exitosa!</h2>
             <p>Tu reserva ha sido confirmada.</p>
-            <button className="button-modal" onClick={() => setShowModal(false)}>
+            <button
+              className="button-modal"
+              onClick={() => setShowModal(false)}
+            >
               Cerrar
             </button>
           </div>
