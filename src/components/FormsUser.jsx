@@ -134,17 +134,20 @@ const FormsUser = ({ user = {}, onSubmit }) => {
       countryId: parseInt(userData.country, 10),
     };
 
-    fetch("http://localhost:8080/api/auth/register", {
+    fetch(`${API_BASE_URL}/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userToSend),
     })
       .then((response) => {
-        if (!response.ok) throw new Error("Error en el registro");
+        if (!response.ok)
+        {
+          setSuccessMessage("Error al crear el nuevo usuario");  
+          throw new Error("Error en el registro");
+        }
         return response.text();
       })
       .then((data) => {
-        console.log("Registro exitoso:", data);
         setSuccessMessage("Usuario registrado correctamente!");
 
         console.log(userData.name);
@@ -265,69 +268,6 @@ const FormsUser = ({ user = {}, onSubmit }) => {
           )}
         </div>
 
-        {/*Campo tipo doc
-    <div
-      className={`input-container ${
-        isRegisterPage ? "input-color-create" : "input-color-profile"
-      }`}
-    >
-      <label className="label">Tipo de Documento</label>
-      <select
-        className={`entrada-registrer ${
-          isRegisterPage ? "border-green-500" : "border-red-500"
-        }`}
-        name="idDocumentType"
-        value={userData.idDocumentType}
-        onChange={handleChange}
-        disabled={!isEditing}
-        required
-      >
-        <option
-          className={`entrada-registrer ${
-            isRegisterPage ? "border-green-500" : "border-red-500"
-          }`}
-          value=""
-        >
-          Seleccione un tipo
-        </option>
-        {documentTypes.map((type) => (
-          <option
-            className={`entrada-registrer ${
-              isRegisterPage ? "border-green-500" : "border-red-500"
-            }`}
-            key={type.id}
-            value={type.id}
-          >
-            {type.document_type}
-          </option>
-        ))}
-      </select>
-      {errors.idDocumentType && (
-        <p className="error-message">{errors.idDocumentType}</p>
-      )}
-    </div>
-  {/*Documento}
-    <div
-      className={`input-container ${
-        isRegisterPage ? "input-color-create" : "input-color-profile"
-      }`}
-    >
-      <label className="label">Documento</label>
-      <input
-        className={`entrada-registrer ${
-          isRegisterPage ? "border-green-500" : "border-red-500"
-        }`}
-        type="text"
-        name="document"
-        value={userData.document}
-        placeholder="ej. 123456789"
-        onChange={handleChange}
-        disabled={!isEditing}
-        required
-      />
-      {errors.document && <p className="error-message">{errors.document}</p>}
-    </div>*/}
-
         {/* Campo Correo Electrónico */}
         <div
           className={`input-container ${
@@ -441,93 +381,7 @@ const FormsUser = ({ user = {}, onSubmit }) => {
             </select>
           </label>
         </div>
-
-        {/* Campo Region
-    <div
-      className={`input-container ${
-        isRegisterPage ? "input-color-create" : "input-color-profile"
-      }`}
-    >
-      <label className="label">
-        Región/Estado:
-        <select
-          className={`entrada-registrer ${
-            isRegisterPage ? "border-green-500" : "border-red-500"
-          }`}
-          name="region"
-          value={userData.region}
-          onChange={handleChange}
-          required
-          disabled={!isEditing}
-        >
-          {isEditing || isRegisterPage ? (
-            <>
-              <option value="">Selecciona una región</option>
-              {regions.map((region) => (
-                <option key={region.id} value={region.id}>
-                  {region.name}
-                </option>
-              ))}
-            </>
-          ) : (
-            <>
-              {regions.map((region) =>
-                region.id === userData.region ? (
-                  <option key={region.id} value={region.id}>
-                    {region.name}
-                  </option>
-                ) : null
-              )}
-            </>
-          )}
-        </select>
-      </label>
-    </div>
-
-    {/* Campo Ciudad
-    <div
-      className={`input-container ${
-        isRegisterPage ? "input-color-create" : "input-color-profile"
-      }`}
-    >
-      <label className="label">
-        Ciudad:
-        <select
-          className={`entrada-registrer ${
-            isRegisterPage ? "border-green-500" : "border-red-500"
-          }`}
-          name="cityId"
-          value={userData.cityId}
-          onChange={handleChange}
-          required
-          disabled={!isEditing}
-        >
-          {isEditing || isRegisterPage ? (
-            <>
-              <option value="">Selecciona una ciudad</option>
-              {cities.map((city) => (
-                <option key={city.id} value={city.id}>
-                  {city.name}
-                </option>
-              ))}
-            </>
-          ) : (
-            <>
-              {cities.map((city) =>
-                city.id === userData.cityId ? (
-                  <option key={city.id} value={city.id}>
-                    {city.name}
-                  </option>
-                ) : null
-              )}
-            </>
-          )}
-        </select>
-      </label>
-
-      {errors.cityId && <p className="error-message">{errors.cityId}</p>}
-    </div>*/}
-
+        
         {/* Campo Contraseña */}
         <div
           className={`input-container ${

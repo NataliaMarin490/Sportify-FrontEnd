@@ -4,7 +4,7 @@
   background-image: linear-gradient(
     rgba(138, 135, 135, 0.5),
     rgba(129, 129, 131, 0.5)
-  ), url("public/images/crearCuenta/Fondo.jpg");
+  ), url("/images/crearCuenta/Fondo.jpg");
   background-size: cover;
   background-position: center;
   min-height: 100vh;
@@ -34,7 +34,7 @@
   align-items: flex-start;
   padding: 40px;
   width: 100%;
-  background: url("\imagen-iniciar-sesion.png") no-repeat center center/cover;
+  background: url("/imagen-iniciar-sesion.png") no-repeat center center/cover;
   text-align: center;
   font-weight: bold;
   justify-content: flex-start;
@@ -75,10 +75,12 @@
   height: 100%;
 }
 
-.login-right h2 {
+.login-right p {
   text-align: center;
   color: #1c1c1c;
   margin-bottom: 20px;
+  font-size: 11px;
+  font-weight: 500;
 }
 
 /* íconos decorativos */

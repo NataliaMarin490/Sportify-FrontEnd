@@ -39,6 +39,46 @@ const Home = () => {
   const token = localStorage.getItem("authToken");
   /*  console.log("Token:", token); */
 
+  useEffect(() => {
+    let dataToPaginate = [];
+  
+    if (isSearchActive && filteredCourts.length > 0) {
+      dataToPaginate = filteredCourts;
+    } else if (selectedCategory && filteredCourts.length > 0) {
+      dataToPaginate = filteredCourts;
+    } else if (state?.courts?.data?.length > 0) {
+      dataToPaginate = state.courts.data;
+    }
+  
+    if (dataToPaginate.length > 0) {
+      // Usar el totalPages del backend solo si no es una búsqueda o filtro
+      const calculatedPages =
+        isSearchActive || selectedCategory
+          ? Math.ceil(dataToPaginate.length / itemsPerPage)
+          : state?.courts?.totalPages || 1;
+  
+      setTotalPages(calculatedPages);
+    } else {
+      setTotalPages(1);
+    }
+  
+    /* console.log(
+      "📌 Total de páginas actualizado:",
+      totalPages,
+      "con",
+      dataToPaginate.length,
+      "elementos"
+    ); */
+  }, [
+    filteredCourts,
+    state?.courts?.data,
+    state?.courts?.totalPages,
+    itemsPerPage,
+    isSearchActive,
+    selectedCategory,
+  ]);
+  
+
   const fetchCourts = async (filters) => {
     setLoading(true);
 
@@ -46,7 +86,7 @@ const Home = () => {
       const params = { ...filters, page: currentPage, size: itemsPerPage };
 
       const response = await axios.get(
-        "http://localhost:8080/api/bookings/search",
+        `${API_BASE_URL}/bookings/search`,
         {
           params,
         }
@@ -73,12 +113,7 @@ const Home = () => {
     }
   };
 
-  useEffect(() => {
-    // Limpiar la categoría seleccionada al refrescar la página
-    localStorage.removeItem("selectedCategory");
-    setSelectedCategory(null);
-    setFilteredCourts([]);
-  }, []);
+  
 
   useEffect(() => {
     axios
@@ -87,7 +122,7 @@ const Home = () => {
         setCategories(response.data);
       })
       .catch((error) => {
-        console.error("Error al obtener categorías:", error);
+        console.error("Error al obtener deportes:", error);
       });
   }, []);
 
@@ -156,7 +191,17 @@ const Home = () => {
     setIsSearchActive(false);
     setCurrentPage(1);
     localStorage.setItem("selectedCategory", sportId);
+
+    fetchCourts({ sportId, page: 1 });
   };
+
+  // Limpiar la categoría seleccionada al refrescar la página
+  useEffect(() => {
+    
+    localStorage.removeItem("selectedCategory");
+    setSelectedCategory(null);
+    setFilteredCourts([]);
+  }, []);
 
   const obtenerCityId = (cityName) => {
     console.log(cityName);
@@ -229,7 +274,7 @@ const Home = () => {
     }
 
     // Generar la URL con los parámetros de búsqueda
-    const url = `http://localhost:8080/api/bookings/search?page=1&size=10&${searchParams.toString()}`;
+    const url = `${API_BASE_URL}/bookings/search?page=1&size=10&${searchParams.toString()}`;
 
     console.log("URL generada:", url);
 
@@ -256,30 +301,78 @@ const Home = () => {
 
   // useEffect para paginar los datos
   useEffect(() => {
-    const dataToPaginate = isSearchActive
-      ? filteredCourts
-      : state?.courts?.data || [];
-
-    if (!dataToPaginate.length) return;
-
+    let dataToPaginate = [];
+  
+    if (isSearchActive && filteredCourts.length > 0) {
+      dataToPaginate = filteredCourts;
+    } else if (selectedCategory && filteredCourts.length > 0) {
+      dataToPaginate = filteredCourts;
+    } else if (state?.courts?.data?.length > 0) {
+      dataToPaginate = state.courts.data;
+    }
+  
+    if (dataToPaginate.length === 0) return;
+  
     const indexOfLastCourt = currentPage * itemsPerPage;
     const indexOfFirstCourt = indexOfLastCourt - itemsPerPage;
-
-    setCurrentCourts(dataToPaginate.slice(indexOfFirstCourt, indexOfLastCourt));
+  
+    const paginatedCourts = dataToPaginate.slice(indexOfFirstCourt, indexOfLastCourt);
+  
+    /* console.log("📌 Mostrando canchas de", indexOfFirstCourt, "a", indexOfLastCourt, "Total páginas:", totalPages); */
+    setCurrentCourts(paginatedCourts);
   }, [
     currentPage,
     filteredCourts,
     state?.courts?.data,
     itemsPerPage,
     isSearchActive,
+    selectedCategory,
+    totalPages,
   ]);
+  
+  
+  
 
   const handleFetchNextPage = () => {
-    if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
+     const nextPage = Math.min(currentPage + 1, totalPages);
+     axios
+       .get(`${API_BASE_URL}/courts/search?page=${nextPage}&size=10`)
+       .then((response) => {
+         const court = {
+           data: response.data.data,
+           totalPages: response.data.totalPages,
+           pageSize: response.data.pageSize,
+           currentPage: response.data.currentPage,
+         };
+ 
+         setCurrentCourts(court.data);
+       })
+       .catch((error) => {
+         console.error("Error al traer la siguiente página ", error);
+       });
+ 
+     setCurrentPage(nextPage);
   };
 
   const handleFetchPrevPage = () => {
-    if (currentPage > 1) setCurrentPage((prev) => prev - 1);
+    const prevPage = Math.min(currentPage - 1, totalPages);
+     axios
+       .get(`${API_BASE_URL}/courts/search?page=${prevPage}&size=10`)
+       .then((response) => {
+         const court = {
+           data: response.data.data,
+           totalPages: response.data.totalPages,
+           pageSize: response.data.pageSize,
+           currentPage: response.data.currentPage,
+         };
+ 
+         setCurrentCourts(court.data);
+       })
+       .catch((error) => {
+         console.error("Error al traer la anterior página ", error);
+       });
+ 
+     setCurrentPage(prevPage);
   };
 
   const settings = {
@@ -365,11 +458,9 @@ const Home = () => {
               currentCourts.map((court) => (
                 <Cards key={court.id} court={court} />
               ))
-              
             ) : (
               <h1>No hay canchas disponibles</h1>
             )}
-
           </div>
 
           <div className="home-cards-pagination">

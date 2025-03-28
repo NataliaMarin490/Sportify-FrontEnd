@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams} from "react-router-dom";
 import BookingForm from "../components/BookingForm";
 import Map from "../components/Map";
 import "../Styles/detail.css";
@@ -10,15 +10,30 @@ import Calendar from "../components/CalendarDetail.jsx";
 import { Share2 } from "lucide-react";
 import ShareCourtModal from "../components/ShareCourtModal.jsx";
 import FavoriteButton from "../components/FavoriteButton.jsx";
+import axios from "axios";
+import API_BASE_URL from "../config.js"
 
 const Detail = () => {
-  const { state } = useContextGlobal();
-  const { id } = useParams();
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedTime, setSelectedTime] = useState("7:00");
+  const [product, setProduct] = useState({
+    id: 0,
+    name: "",
+    sport: "",
+    city: "",
+    status: "",
+    description: "",
+    capacity: 0,
+    pricePerHour: 0,
+    address: "",
+    neighborhood: "",
+    imageUrl: [], // Inicializado como un array vacío
+    features: [],
+    featuresImageUrl: [],
+  });
+  const [error, setError] = useState(null);
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedTime, setSelectedTime] = useState("");
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-
-  console.log(id);
+  const { id } = useParams();
   const currentUrl = window.location.href;
 
   const handleDateTimeChange = (date, time) => {
@@ -30,10 +45,35 @@ const Detail = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const product =
-    state?.courts?.data && Array.isArray(state?.courts?.data)
-      ? state?.courts?.data?.find((item) => item.id === parseInt(id))
-      : null;
+  const url = `${API_BASE_URL}/public/courts/search/${id}`;
+
+  useEffect(() => {
+    axios(url)
+      .then((res) => {
+        setProduct(res.data);
+      })
+      .catch((err) => {
+        // console.log(err);
+        setError(err.message);
+      });
+  }, []);
+
+  if (error || !product) {
+    return (
+      <div className="not-found-container">
+        <BackButton />
+        <div className="not-found-message">
+          <h2>Producto no encontrado</h2>
+          <p>Lo sentimos, el producto que está buscando no existe o ha sido eliminado.</p>
+        </div>
+      </div>
+    );
+  }
+
+  // product =
+  //   state?.courts?.data && Array.isArray(state?.courts?.data)
+  //     ? state?.courts?.data?.find((item) => item.id === parseInt(id))
+  //     : null;
 
   return (
     <>
@@ -54,10 +94,10 @@ const Detail = () => {
             <div className="gallery">
               <img
                 className="image-detail"
-                src={product.imageUrl[id - 1]}
-                alt={product.name}
+                src={product.imageUrl?.[product.imageUrl.length-4] || "default-image-url"}
+                alt={product.name || "Court image"}
               />
-              <ImageGallery />
+              <ImageGallery images={product.imageUrl || []} />
             </div>
           </div>
           <div className="product-info">
@@ -65,13 +105,15 @@ const Detail = () => {
               <div className="detail-product-container">
                 <div className="detail-header">
                   <h4 className="title-product"> {product.name} </h4>
-                  <span>4.5 Stars | 450 Reseñas</span>
+                  <div className="rating">
+                    <span className="fa fa-star checked"></span><span>4.5 Estrellas | 450 Reseñas</span>
+                  </div>
                 </div>
                 <div className="detail-content">
-                  <span>{product.pricePerHour}</span>
-                  <span>{product.city}</span>
-                  <span>{product.sport}</span>
-                  <span>{product.status}</span>
+                  <span><strong>Precio: </strong>{product.pricePerHour}</span>
+                  <span><strong>Ciudad: </strong>{product.city}</span>
+                  <span><strong>Deporte: </strong>{product.sport}</span>
+                  <span><strong>Estado: </strong>{product.status}</span>
                 </div>
               </div>
               <div className="detail-product-container">
@@ -132,6 +174,8 @@ const Detail = () => {
               <BookingForm
                 selectedDate={selectedDate}
                 selectedTime={selectedTime}
+                pricePerHour={product.pricePerHour}
+                productInfo={product}
               />
             </div>
           </div>

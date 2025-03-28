@@ -15,8 +15,21 @@ const AdminUsers = () => {
 
   const fetchUsers = () => {
     setLoading(true);
+    const storedUser = localStorage.getItem("user");
+    const token = storedUser ? JSON.parse(storedUser).token : null;
+  
+    if (!token) {
+      alert("No se encontró un token de autenticación. Inicia sesión nuevamente.");
+      setLoading(false);
+      return;
+    }
+
     axios
-      .get(`${API_BASE_URL}/public/users/all`)
+      .get(`${API_BASE_URL}/users/all`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => {
         setUsers(response.data);
       })
@@ -50,7 +63,7 @@ const AdminUsers = () => {
       }
 
       const response = await fetch(
-        `http://localhost:8080/api/roles/update/${userId}?newRole=${newRole}`,
+        `${API_BASE_URL}/roles/update/${userId}?newRole=${newRole}`,
         {
           method: "PUT",
           headers: {
