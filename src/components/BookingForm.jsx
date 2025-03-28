@@ -278,11 +278,13 @@ const BookingForm = ({
                 </p>
                 <p>
                   <strong>Hora:</strong>{" "}
-                  {Array.isArray(selectedTime)
-                    ? `${selectedTime[0]} - ${
-                        selectedTime[selectedTime.length - 1]
-                      }`
-                    : selectedTime}
+                  {Array.isArray(selectedTime) && selectedTime.length > 0
+                    ? selectedTime.length > 1
+                      ? `${selectedTime[0]} - ${
+                          selectedTime[selectedTime.length - 1]
+                        }`
+                      : selectedTime[0]
+                    : "No seleccionada"}
                 </p>
                 <p>
                   <strong>Precio Total:</strong> ${totalPrice}

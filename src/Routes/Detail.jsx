@@ -30,8 +30,8 @@ const Detail = () => {
     featuresImageUrl: [],
   });
   const [error, setError] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedTime, setSelectedTime] = useState("7:00");
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedTime, setSelectedTime] = useState("");
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const { id } = useParams();
   const currentUrl = window.location.href;
