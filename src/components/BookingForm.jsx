@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useContextGlobal } from "../Context/global.context";
 import "../Styles/bookingForm.css";
 
-const BookingForm = ({ selectedDate, selectedTime, pricePerHour }) => {
+const BookingForm = ({ selectedCourt, selectedDate, selectedTime, pricePerHour }) => {
   const { user } = useContextGlobal();
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
@@ -12,10 +12,11 @@ const BookingForm = ({ selectedDate, selectedTime, pricePerHour }) => {
     name: user?.fullName || localStorage.getItem("userName") || "",
     email: user?.email || localStorage.getItem("userEmail") || "",
     phoneNumber: user?.phoneNumber || localStorage.getItem("userPhone") || "",
-    date: selectedDate ? selectedDate.toLocaleDateString() : "",
-    time: selectedTime || "",
+    date: selectedDate?.toLocaleDateString() || localStorage.getItem("selectedDate") || "",
+    time: Array.isArray(selectedTime) ? selectedTime.join(", ") : localStorage.getItem("selectedTime") || "",
     number: "",
   });
+
 
   // Guarda el nombre y teléfono en localStorage cuando el usuario está disponible
   useEffect(() => {
@@ -37,8 +38,9 @@ const BookingForm = ({ selectedDate, selectedTime, pricePerHour }) => {
     setReserva((prevReserva) => ({
       ...prevReserva,
       date: selectedDate ? selectedDate.toLocaleDateString() : prevReserva.date,
-      time: selectedTime || prevReserva.time,
+      time: Array.isArray(selectedTime) ? selectedTime.join(", ") : prevReserva.time, // Verifica si es un array antes de usar join()
     }));
+    
   }, [selectedDate, selectedTime]);
 
   const handleChange = (e) => {
@@ -60,13 +62,24 @@ const BookingForm = ({ selectedDate, selectedTime, pricePerHour }) => {
     }
   };
 
+  const handleLoginRedirect = () => {
+    if (!user) {
+      navigate("/login", {
+        state: { from: window.location.pathname }, // Guarda la URL actual
+      });
+    }
+  };
+  
+  
+  
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
     const regexNum = /^[0-9]+$/;
 
     if (!user) {
-      navigate("/login"); // Redirige a login si no está logueado
+      handleLoginRedirect(); // Redirige a login si no está logueado
       return;
     }
 
@@ -79,8 +92,8 @@ const BookingForm = ({ selectedDate, selectedTime, pricePerHour }) => {
       setError("El número de contacto debe contener solo números.");
       return;
     }
-    if (!regexNum.test(reserva.number) || reserva.number <= 0) {
-      setError("Debe ingresar un número válido de participantes.");
+    if (!regexNum.test(reserva.number) || parseInt(reserva.number, 10) <= 0) {
+      setError("El número de participantes debe ser mayor a 0.");
       return;
     }
 
@@ -97,7 +110,7 @@ const BookingForm = ({ selectedDate, selectedTime, pricePerHour }) => {
   };
 
   // Calcular la cantidad de horas seleccionadas
-  const selectedHours = Array.isArray(selectedTime) ? selectedTime.length : 1;
+  const selectedHours = Array.isArray(selectedTime) ? selectedTime.length : 0;
 
   // Calcular el precio total
   const totalPrice = selectedHours * pricePerHour;
@@ -118,7 +131,7 @@ const BookingForm = ({ selectedDate, selectedTime, pricePerHour }) => {
         />
         <label>Nombre: </label>
         <input
-          placeholder="Nombre del representante"
+          placeholder="Nombre quien reserva"
           className="input"
           type="text"
           name="name"
