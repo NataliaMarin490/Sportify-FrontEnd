@@ -116,10 +116,10 @@ const BookingForm = ({
     const regexNum = /^[0-9]+$/;
     const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    // if (!user) {
-    //   navigate("/login"); // Redirige a login si no está logueado
-    //   return;
-    // }
+    if (!user) {
+      navigate("/login"); // Redirige a login si no está logueado
+      return;
+    }
 
     // Validaciones
     if (
