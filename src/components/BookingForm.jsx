@@ -26,6 +26,7 @@ const BookingForm = ({
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isUserDetailsExpanded, setIsUserDetailsExpanded] = useState(false);
+  const [modalError, setModalError] = useState("");
 
   // Guarda el nombre y teléfono en localStorage cuando el usuario está disponible
   useEffect(() => {
@@ -72,6 +73,7 @@ const BookingForm = ({
   const handleConfirmBooking = async () => {
     try {
       setIsLoading(true);
+      setModalError("");
 
       const startTime = Array.isArray(selectedTime)
         ? selectedTime[0]
@@ -103,7 +105,9 @@ const BookingForm = ({
         navigate("/");
       }, 5000);
     } catch (error) {
-      setError("Error al crear la reserva. Por favor, intente nuevamente.");
+      setModalError(
+        "Error al crear la reserva. Por favor, intente nuevamente."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -236,7 +240,6 @@ const BookingForm = ({
         <div className="modal confirmation-modal">
           <div className="modal-content">
             <h2>Confirmar Reserva</h2>
-
             <div className="confirmation-details">
               <div className="court-details">
                 <h3>Detalles de la Cancha</h3>
@@ -342,6 +345,7 @@ const BookingForm = ({
                 </div>
               </div>
             </div>
+            {modalError && <p className="modal-error">{modalError}</p>}
 
             <div className="modal-actions">
               <button
