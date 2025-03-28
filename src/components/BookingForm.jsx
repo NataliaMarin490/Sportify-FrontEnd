@@ -98,6 +98,10 @@ const BookingForm = ({
       const data = await response.json();
       setShowConfirmModal(false);
       setShowModal(true);
+      setTimeout(() => {
+        setShowModal(false);
+        navigate("/");
+      }, 5000);
     } catch (error) {
       setError("Error al crear la reserva. Por favor, intente nuevamente.");
     } finally {
@@ -109,6 +113,7 @@ const BookingForm = ({
     event.preventDefault();
 
     const regexNum = /^[0-9]+$/;
+    const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!user) {
       navigate("/login"); // Redirige a login si no está logueado
@@ -116,8 +121,16 @@ const BookingForm = ({
     }
 
     // Validaciones
+    if (!selectedTime || (Array.isArray(selectedTime) && selectedTime.length === 0)) {
+      setError("Debe seleccionar un horario para la reserva.");
+      return;
+    }
     if (reserva.name.trim().length < 3) {
       setError("El nombre debe tener al menos 3 caracteres.");
+      return;
+    }
+    if (!regexEmail.test(reserva.email)) {
+      setError("Debe ingresar un email válido.");
       return;
     }
     if (!regexNum.test(reserva.phoneNumber)) {
@@ -135,10 +148,6 @@ const BookingForm = ({
     setShowConfirmModal(true);
 
     // Redirigir después de 9 segundos
-    setTimeout(() => {
-      setShowModal(false);
-      navigate("/"); // Redirige a la página principal o donde desees
-    }, 9000);
   };
 
   // Calcular la cantidad de horas seleccionadas
