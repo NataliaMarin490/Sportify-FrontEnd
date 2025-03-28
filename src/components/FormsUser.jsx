@@ -438,7 +438,7 @@ const FormsUser = ({ user = {}, onSubmit }) => {
               isRegisterPage ? "button-create" : "button-edit"
             }`}
           >
-            {Object.keys(user).length === 0 ? "Registrar" : "Guardar"}
+            {Object.keys(user).length === 0 ? "Registrarse" : "Guardar"}
           </button>
         ) : (
           <button
