@@ -54,7 +54,7 @@ const Detail = () => {
         setProduct(res.data);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setError(err.message);
       });
   }, [id]);
