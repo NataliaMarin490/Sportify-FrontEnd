@@ -103,11 +103,18 @@
   text-align: center;
 }
 
+.error-messages {
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: rgba(255, 0, 0, 0.1);
+}
+
 .error-message {
   color: red;
   font-size: 14px;
-  margin-top: 10px;
-  text-align: center;
+  margin: 5px 0;
+  text-align: left;
 }
 
 .button-modal {

@@ -14,7 +14,7 @@ const BookingForm = ({
   const { user } = useContextGlobal();
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState([]);
   const [reserva, setReserva] = useState({
     name: user?.fullName || localStorage.getItem("userName") || "",
     email: user?.email || localStorage.getItem("userEmail") || "",
@@ -89,11 +89,11 @@ const BookingForm = ({
 
       const url = `${API_BASE_URL}/api/bookings/create`;
       const response = await axios(url, {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify(bookingData),
       });
 
-      if (!response.ok) throw new Error('Error al hacer la reserva');
+      if (!response.ok) throw new Error("Error al hacer la reserva");
 
       const data = await response.json();
       setShowConfirmModal(false);
@@ -112,42 +112,40 @@ const BookingForm = ({
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    const newErrors = [];
     const regexNum = /^[0-9]+$/;
     const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!user) {
-      navigate("/login"); // Redirige a login si no está logueado
-      return;
-    }
+    // if (!user) {
+    //   navigate("/login"); // Redirige a login si no está logueado
+    //   return;
+    // }
 
     // Validaciones
-    if (!selectedTime || (Array.isArray(selectedTime) && selectedTime.length === 0)) {
-      setError("Debe seleccionar un horario para la reserva.");
-      return;
+    if (
+      !selectedTime ||
+      (Array.isArray(selectedTime) && selectedTime.length === 0)
+    ) {
+      newErrors.push("Debe seleccionar un horario para la reserva.");
     }
     if (reserva.name.trim().length < 3) {
-      setError("El nombre debe tener al menos 3 caracteres.");
-      return;
+      newErrors.push("El nombre debe tener al menos 3 caracteres.");
     }
     if (!regexEmail.test(reserva.email)) {
-      setError("Debe ingresar un email válido.");
-      return;
+      newErrors.push("Debe ingresar un email válido.");
     }
     if (!regexNum.test(reserva.phoneNumber)) {
-      setError("El número de contacto debe contener solo números.");
-      return;
+      newErrors.push("El número de contacto debe contener solo números.");
     }
     if (!regexNum.test(reserva.number) || reserva.number <= 0) {
-      setError("Debe ingresar un número válido de participantes.");
-      return;
+      newErrors.push("Debe ingresar un número válido de participantes.");
     }
 
-    setError(""); // Limpiar error en caso de que todo esté bien
+    setErrors(newErrors);
 
-    // Mostrar modal de éxito
-    setShowConfirmModal(true);
-
-    // Redirigir después de 9 segundos
+    if (newErrors.length === 0) {
+      setShowConfirmModal(true);
+    }
   };
 
   // Calcular la cantidad de horas seleccionadas
@@ -223,7 +221,15 @@ const BookingForm = ({
           Realizar reserva
         </button>
 
-        {error && <h4 className="error-message">{error}</h4>}
+        {errors.length > 0 && (
+          <div className="error-messages">
+            {errors.map((error, index) => (
+              <p key={index} className="error-message">
+                {error}
+              </p>
+            ))}
+          </div>
+        )}
       </form>
 
       {showConfirmModal && (
