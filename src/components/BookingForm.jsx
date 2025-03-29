@@ -14,6 +14,7 @@ const BookingForm = ({
   const { user } = useContextGlobal();
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
+  /* const [error, setError] = useState(""); */
   const [errors, setErrors] = useState([]);
   const [reserva, setReserva] = useState({
     name: user?.fullName || localStorage.getItem("userName") || "",
@@ -70,6 +71,14 @@ const BookingForm = ({
     }
   };
 
+  const handleLoginRedirect = () => {
+    if (!user) {
+      navigate("/login", {
+        state: { from: window.location.pathname }, // Guarda la URL actual
+      });
+    }
+  };
+
   const handleConfirmBooking = async () => {
     try {
       setIsLoading(true);
@@ -82,28 +91,41 @@ const BookingForm = ({
         ? selectedTime[selectedTime.length - 1]
         : selectedTime;
 
+      const [hours, minutes, seconds] = endTime.split(":").map(Number);
+
+      const newHours = (hours + 1) % 24;
+
+      const newTime = `${String(newHours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+
       const bookingData = {
         courtId: productInfo.id,
         bookingDate: selectedDate.toISOString().split("T")[0],
         startTime: startTime,
-        endTime: endTime,
+        endTime: newTime,
       };
 
-      const url = `${API_BASE_URL}/api/bookings/create`;
+      const url = `${API_BASE_URL}/bookings/create`;
+      console.log(user.token);
+      const headers = `Bearer ${user.token}`
       const response = await axios(url, {
         method: "POST",
-        body: JSON.stringify(bookingData),
+        data: JSON.stringify(bookingData),    headers: {
+          Authorization: headers,     
+          'Content-Type': 'application/json' 
+        }
       });
+            
+      // Si la reserva se confirma, limpiar localStorage
+      localStorage.removeItem("selectedDate");
+      localStorage.removeItem("selectedTimes");
 
-      if (!response.ok) throw new Error("Error al hacer la reserva");
-
-      const data = await response.json();
       setShowConfirmModal(false);
       setShowModal(true);
+
       setTimeout(() => {
         setShowModal(false);
         navigate("/");
-      }, 5000);
+      }, 7000);
     } catch (error) {
       setModalError(
         "Error al crear la reserva. Por favor, intente nuevamente."
@@ -121,7 +143,7 @@ const BookingForm = ({
     const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!user) {
-      navigate("/login"); // Redirige a login si no está logueado
+      handleLoginRedirect(); // Redirige a login si no está logueado
       return;
     }
 
@@ -174,7 +196,7 @@ const BookingForm = ({
         />
         <label>Nombre: </label>
         <input
-          placeholder="Nombre del representante"
+          placeholder="Nombre quien reserva"
           className="input"
           type="text"
           name="name"

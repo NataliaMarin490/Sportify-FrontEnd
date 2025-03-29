@@ -132,6 +132,10 @@ const CalendarWithTime = ({ onDateTimeChange }) => {
   const handleDateChange = (selectedDate) => {
     setDate(selectedDate);
     setSelectedTimes([]); // Limpiar selección al cambiar de fecha
+
+    // Guardar en localStorage
+    localStorage.setItem("selectedDate", selectedDate.toISOString());
+
     onDateTimeChange(selectedDate, []);
   };
 
@@ -146,6 +150,9 @@ const CalendarWithTime = ({ onDateTimeChange }) => {
         // Si no está seleccionada, la añadimos y ordenamos
         updatedTimes = [...prevSelectedTimes, selectedTime].sort();
       }
+
+      // Guardar en localStorage
+      localStorage.setItem("selectedTimes", JSON.stringify(updatedTimes));
   
       // Pasar la lista actualizada al componente padre
       onDateTimeChange(date, updatedTimes);
@@ -153,6 +160,20 @@ const CalendarWithTime = ({ onDateTimeChange }) => {
       return updatedTimes;
     });
   };
+
+  useEffect(() => {
+    // Recuperar la fecha y horarios guardados
+    const savedDate = localStorage.getItem("selectedDate");
+    const savedTimes = localStorage.getItem("selectedTimes");
+  
+    if (savedDate) {
+      setDate(new Date(savedDate));
+    }
+    if (savedTimes) {
+      setSelectedTimes(JSON.parse(savedTimes));
+    }
+  }, []);
+  
   
   
   // Mostrar un rango de horas si se seleccionan varias
