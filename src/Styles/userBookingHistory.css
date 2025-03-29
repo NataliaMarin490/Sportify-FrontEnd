@@ -1,0 +1,172 @@
+.background-container {
+    display: flex;
+    background-image: linear-gradient(
+        rgba(138, 135, 135, 0.5),
+        rgba(129, 129, 131, 0.5)
+      ), url("/images/crearCuenta/Fondo.jpg");
+    background-size: cover;
+    background-position: center;
+    min-height: 90vh;
+    justify-content: center;
+    align-items: center;
+    font-family: "Poppins", serif;
+    flex-direction: column;
+  }
+  
+  .booking-history-container{
+    width: 85%;
+    height: 90%;
+    background-color: #f6f6f6;
+    margin: 0 auto; /* Centra el contenido horizontalmente */
+    margin-bottom: 20px;
+    overflow-y: auto;
+  }
+  
+  .div-tittle{
+    margin-left: 40px;
+    margin-bottom: 60px;
+    line-height: 0.5;
+  }
+
+  .div-tittle h3{
+    color: #333;
+    font-size: 1.8rem;
+  }
+
+  .search-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-left: 40px;
+  }
+  
+  .search-icon {
+    margin-right: 10px;
+    color: #555;
+  }
+  
+  .search-container input[type="text"] {
+    border: none;
+    flex: 1; /* Permite que el input ocupe el espacio restante */
+    padding: 8px;
+    font-size: 16px;
+    outline: none;
+  }
+  
+  table {
+    width: 95%;
+    border-collapse: collapse;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: auto;
+    background-color: #f9f9f7;
+    font-size: 12px;
+    padding-left: 8px;
+    margin-bottom: 15px;
+  }
+  
+  /* Estilos para el encabezado de la tabla */
+  .booking-history-container th {
+    padding: 5px;
+    font-size: 15px;
+    background-color: #f8f9fa;
+    color: #333;
+    font-weight: bold;
+    border-bottom: 4px solid #ddd;
+    padding-left: 15px;
+  }
+
+  /* Estilos para las celdas de la tabla */
+.booking-history-container th,
+.booking-history-container td {
+  text-align: left;
+  border-bottom: 1px solid #ddd; /* Agregar borde inferior a cada fila */
+}
+  
+  .booking-history-container table td {
+    padding-left: 15px;
+    font-size: 15px;
+  }
+
+  .booking-history-container td button {
+    margin: 5px;
+    gap: 30px;
+    width: 40px;
+    background-color: var(--header-dark);
+  }
+
+  .booking-history-container .icon-btn {
+    padding: 5px 5px;
+  }
+  
+/* Estilos para el modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.review-modal {
+  background-color: white;
+  padding: 20px;
+  padding: 20px;
+  border-radius: 8px;
+  width: 420px;
+  max-width: 90%;
+  position: relative;
+}
+
+.close-modal {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.star-rating {
+  margin: 15px 0;
+  font-size: 1.5rem;
+}
+
+.star-rating span {
+  margin: 0 2px;
+}
+
+.review-modal textarea {
+  width: 95%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f6f6f6;
+  color: #333;
+  font-family: "Poppins";
+
+}
+
+.submit-review {
+  background-color: var(--header-dark);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: "Poppins";
+}
+
+.submit-review:hover {
+  background-color: #45a049;
+}
+  
+
