@@ -53,6 +53,41 @@ const FormsUser = ({ user = {}, onSubmit }) => {
       .catch((error) => console.error("Error fetching countries:", error));
   }, []);
 
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    const token = storedUser ? JSON.parse(storedUser).token : null;
+
+    fetch(`${API_BASE_URL}/users/currentUser`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error al obtener los datos del usuario");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setUserData({
+          name: data.name || "",
+          lastName: data.lastName || "",
+          email: data.email || "",
+          phoneNumber: data.phoneNumber || "",
+          birthdate: data.birthdate || "",
+          password: "",
+          confirmpassword: "",
+          country: data.country,
+        });
+        setIsEditing(false);
+      })
+      .catch((error) => console.error("Error:", error));
+  }, []);
+
+  
   const [successMessage, setSuccessMessage] = useState("");
 
   const handleChange = (e) => {
