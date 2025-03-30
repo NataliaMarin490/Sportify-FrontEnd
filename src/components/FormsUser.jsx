@@ -418,52 +418,56 @@ const FormsUser = ({ user = {}, onSubmit }) => {
         </div>
         
         {/* Campo Contraseña */}
-        <div
-          className={`input-container ${
-            isRegisterPage ? "input-color-create" : "input-color-profile"
-          }`}
-        >
-          <label className="label">Contraseña</label>
-          <input
-            className={`entrada-registrer ${
-              isRegisterPage ? "border-green-500" : "border-red-500"
+        {isRegisterPage && (
+          <div
+            className={`input-container ${
+              isRegisterPage ? "input-color-create" : "input-color-profile"
             }`}
-            type="password"
-            name="password"
-            placeholder="***********"
-            value={userData.password}
-            onChange={handleChange}
-            disabled={!isEditing}
-            required
-          />
-          {errors.password && (
-            <p className="error-message">{errors.password}</p>
-          )}
-        </div>
+          >
+            <label className="label">Contraseña</label>
+            <input
+              className={`entrada-registrer ${
+                isRegisterPage ? "border-green-500" : "border-red-500"
+              }`}
+              type="password"
+              name="password"
+              placeholder="***********"
+              value={userData.password}
+              onChange={handleChange}
+              disabled={!isEditing}
+              required
+            />
+            {errors.password && (
+              <p className="error-message">{errors.password}</p>
+            )}
+          </div>
+        )}
 
         {/* Campo Confirmar Contraseña */}
-        <div
-          className={`input-container ${
-            isRegisterPage ? "input-color-create" : "input-color-profile"
-          }`}
-        >
-          <label className="label">Confirma Contraseña</label>
-          <input
-            className={`entrada-registrer ${
-              isRegisterPage ? "border-green-500" : "border-red-500"
+        {isRegisterPage && (
+          <div
+            className={`input-container ${
+              isRegisterPage ? "input-color-create" : "input-color-profile"
             }`}
-            type="password"
-            name="confirmpassword"
-            placeholder="***********"
-            value={userData.confirmpassword}
-            onChange={handleChange}
-            disabled={!isEditing}
-            required
-          />
-          {errors.confirmpassword && (
-            <p className="error-message">{errors.confirmpassword}</p>
-          )}
-        </div>
+          >
+            <label className="label">Confirma Contraseña</label>
+            <input
+              className={`entrada-registrer ${
+                isRegisterPage ? "border-green-500" : "border-red-500"
+              }`}
+              type="password"
+              name="confirmpassword"
+              placeholder="***********"
+              value={userData.confirmpassword}
+              onChange={handleChange}
+              disabled={!isEditing}
+              required
+            />
+            {errors.confirmpassword && (
+              <p className="error-message">{errors.confirmpassword}</p>
+            )}
+          </div>
+        )}
 
         {/* Botón de Submit */}
         {isEditing ? (
