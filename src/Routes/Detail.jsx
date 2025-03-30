@@ -139,17 +139,19 @@ const Detail = () => {
                 <div className="detail-header">
                   <h4 className="title-product"> {product.name} </h4>
                   <div className="rating1">
-                    <div className='rating-prom'>
+                    <div className="rating-prom">
+                      <span className="fa fa-star checked"></span>
                       <span>
                         {reviews.length > 0 ? (
-                          reviews.map((review) => <p>{review.rating}</p>)
+                          reviews.map((review) => (
+                            <p>{review.rating} Estrellas</p>
+                          ))
                         ) : (
                           <p>No hay reseñas para esta cancha.</p>
                         )}
                       </span>
-                      <span className="fa fa-star checked"></span>
                     </div>
-                    <span> # Reseñas: {reviews.length} </span>
+                    <span>| # Reseñas: {reviews.length} </span>
                   </div>
                 </div>
                 <div className="detail-content">
