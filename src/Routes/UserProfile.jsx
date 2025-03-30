@@ -5,6 +5,7 @@ import BackButton from "../components/BackButton";
 import "../Styles/userProfile.css";
 import FormsUser from "../components/FormsUser";
 import UserAvatar from "../components/UserAvatar";
+import API_BASE_URL from "../config";
 
 const UserProfile = () => {
   const { user, setUser } = useContextGlobal();
@@ -22,7 +23,7 @@ const UserProfile = () => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     const token = storedUser ? storedUser.token : null;
   
-    fetch("http://localhost:8080/api/users/update-user-data", {
+    fetch( `${API_BASE_URL}/users/update-user-data`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

@@ -57,8 +57,15 @@ const FormsUser = ({ user = {}, onSubmit }) => {
   }, []);
 
   useEffect(() => {
+    if (isRegisterPage) {
+      return;
+    }
     const storedUser = localStorage.getItem("user");
     const token = storedUser ? JSON.parse(storedUser).token : null;
+    if (!token) {
+      console.error("No hay token disponible");
+      return;
+    }
 
     fetch(`${API_BASE_URL}/users/currentUser`, {
       method: "GET",
