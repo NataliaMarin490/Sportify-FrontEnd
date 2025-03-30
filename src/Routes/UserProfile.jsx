@@ -18,6 +18,42 @@ const UserProfile = () => {
 
   if (!user) return <p>Cargando perfil...</p>;
 
+  const handleUpdateUser = (updatedData) => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    const token = storedUser ? storedUser.token : null;
+  
+    fetch("http://localhost:8080/api/users/update-user-data", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(updatedData),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error al actualizar los datos del usuario");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Datos actualizados:", data);
+
+        const fullName = `${data.name} ${data.lastName}`;
+
+        const updatedUser = {
+          ...data,
+          fullName,
+          token: storedUser.token, // Mantener el token actual si no cambia
+        };
+
+        setUser(updatedUser); // Actualizar el contexto global con los nuevos datos
+        const lo = localStorage.setItem("user", JSON.stringify(updatedUser)); // Actualizar localStorage
+        console.log("Usuario actualizado:", lo);
+      })
+      .catch((error) => console.error("Error al actualizar los datos:", error));
+  };
+
   return (
     <div className="container-profile-ppal">
       {/* <div className="user-avatar-container">
@@ -36,7 +72,7 @@ const UserProfile = () => {
           <span className="title-account">
             {user.name} {user.lastName}
           </span>
-          <FormsUser user={user} />
+          <FormsUser user={user} onSubmit={handleUpdateUser} />
         </div>
       </div>
     </div>
