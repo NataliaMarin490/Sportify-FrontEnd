@@ -4,6 +4,7 @@ import { useContextGlobal } from "../Context/global.context";
 import axios from "axios";
 import API_BASE_URL from "../config.js";
 import "../Styles/bookingForm.css";
+import { sendEmailReserved } from "../components/SendEmailReserved.jsx";
 
 const BookingForm = ({
   selectedDate,
@@ -14,6 +15,7 @@ const BookingForm = ({
   const { user } = useContextGlobal();
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
   /* const [error, setError] = useState(""); */
   const [errors, setErrors] = useState([]);
   const [reserva, setReserva] = useState({
@@ -95,7 +97,9 @@ const BookingForm = ({
 
       const newHours = (hours + 1) % 24;
 
-      const newTime = `${String(newHours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+      const newTime = `${String(newHours).padStart(2, "0")}:${String(
+        minutes
+      ).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 
       const bookingData = {
         courtId: productInfo.id,
@@ -106,15 +110,39 @@ const BookingForm = ({
 
       const url = `${API_BASE_URL}/bookings/create`;
       console.log(user.token);
-      const headers = `Bearer ${user.token}`
+      const headers = `Bearer ${user.token}`;
       const response = await axios(url, {
         method: "POST",
-        data: JSON.stringify(bookingData),    headers: {
-          Authorization: headers,     
-          'Content-Type': 'application/json' 
-        }
+        data: JSON.stringify(bookingData),
+        headers: {
+          Authorization: headers,
+          "Content-Type": "application/json",
+        },
       });
-            
+
+      // Llamar a la función para enviar el correo sin await
+      sendEmailReserved(
+        reserva.email,
+        reserva.name,
+        bookingData.courtId,
+        bookingData.bookingDate,
+        bookingData.startTime,
+        bookingData.endTime,
+        productInfo.name,
+        totalPrice,
+        reserva.number
+      )
+        .then((emailSent) => {
+          if (emailSent) {
+            console.log(
+              "Correo de confirmación reserva enviado correctamente."
+            );
+          } else {
+            console.log("Hubo un problema al enviar el correo.");
+          }
+        })
+        .catch((error) => console.error("Error enviando el correo:", error));
+
       // Si la reserva se confirma, limpiar localStorage
       localStorage.removeItem("selectedDate");
       localStorage.removeItem("selectedTimes");
