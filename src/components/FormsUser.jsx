@@ -8,7 +8,7 @@ import { sendEmail } from "../components/SendEmail.jsx";
 const FormsUser = ({ user = {}, onSubmit }) => {
   const location = useLocation();
   const isRegisterPage = location.pathname === "/createAccount";
-  const [isEditing, setIsEditing] = useState(Object.keys(user).length === 0);
+  const [isEditing, setIsEditing] = useState(true);
   const [countries, setCountries] = useState([]);
   const [errors, setErrors] = useState({});
   const [emailSent, setEmailSent] = useState(false);
@@ -28,6 +28,8 @@ const FormsUser = ({ user = {}, onSubmit }) => {
     country: user.country || "",
   });
 
+  const [hasChanges, setHasChanges] = useState(false); 
+
   useEffect(() => {
     setUserData({
       name: user.name || "",
@@ -40,6 +42,7 @@ const FormsUser = ({ user = {}, onSubmit }) => {
       country: user.country ? String(user.country) : "",
     });
     setErrors({});
+    setHasChanges(false); 
   }, [user]);
 
   useEffect(() => {
@@ -53,10 +56,61 @@ const FormsUser = ({ user = {}, onSubmit }) => {
       .catch((error) => console.error("Error fetching countries:", error));
   }, []);
 
+  useEffect(() => {
+    if (isRegisterPage) {
+      return;
+    }
+    const storedUser = localStorage.getItem("user");
+    const token = storedUser ? JSON.parse(storedUser).token : null;
+    if (!token) {
+      console.error("No hay token disponible");
+      return;
+    }
+
+    fetch(`${API_BASE_URL}/users/currentUser`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error al obtener los datos del usuario");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setUserData({
+          name: data.name || "",
+          lastName: data.lastName || "",
+          email: data.email || "",
+          phoneNumber: data.phoneNumber || "",
+          birthdate: data.birthdate || "",
+          password: "",
+          confirmpassword: "",
+          country: data.country,
+        });
+        setIsEditing(false);
+      })
+      .catch((error) => console.error("Error:", error));
+  }, []);
+
+  
   const [successMessage, setSuccessMessage] = useState("");
 
   const handleChange = (e) => {
-    setUserData({ ...userData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setUserData((prevData) => {
+      const updatedData = { ...prevData, [name]: value };
+      // Detectar si hay cambios comparando con los datos originales
+      const hasChanges = Object.keys(updatedData).some(
+        (key) => updatedData[key] !== user[key]
+      );
+      setHasChanges(hasChanges);
+      return updatedData;
+    });
   };
 
   const handleSubmit = (e) => {
@@ -100,14 +154,17 @@ const FormsUser = ({ user = {}, onSubmit }) => {
     }
 
     // Validación de la contraseña (mínimo 6 caracteres)
-    if (!userData.password) {
-      newErrors.password = "La contraseña es obligatoria";
-    } else if (userData.password.length < 6) {
-      newErrors.password = "La contraseña debe tener al menos 6 caracteres";
-    }
-
-    if (userData.password !== userData.confirmpassword) {
-      newErrors.confirmpassword = "Las contraseñas no coinciden";
+    if (isRegisterPage) {
+      // Validaciones adicionales para registro
+      if (!userData.password) {
+        newErrors.password = "La contraseña es obligatoria";
+      } else if (userData.password.length < 6) {
+        newErrors.password = "La contraseña debe tener al menos 6 caracteres";
+      }
+  
+      if (userData.password !== userData.confirmpassword) {
+        newErrors.confirmpassword = "Las contraseñas no coinciden";
+      }
     }
 
     // Si hay errores, no enviamos el formulario
@@ -117,70 +174,94 @@ const FormsUser = ({ user = {}, onSubmit }) => {
       setErrors(newErrors);
       return;
     }
-    onSubmit(userData);
+
+    if (isRegisterPage) {
+      // Si es la página de registro, enviar todos los datos
+      onSubmit(userData);
+    } else {
+      // Si es la página de edición, enviar solo los campos modificados
+      const updatedData = {};
+      Object.keys(userData).forEach((key) => {
+        if (userData[key] !== user[key]) {
+          updatedData[key] = userData[key];
+        }
+      });
+      onSubmit(updatedData);
+    }
+
+    /*if (Object.keys(updatedData).length > 0) {
+      onSubmit(updatedData);
+      setSuccessMessage("Datos actualizados correctamente!");
+      setTimeout(() => setSuccessMessage(""), 3000);
+      setHasChanges(false); // Reiniciar el estado de cambios
+    }*/
 
     // Mostrar mensaje de éxito
     isRegisterPage
       ? setSuccessMessage("Usuario Registrado Correctamente!")
       : setSuccessMessage("Datos Actualizados Correctamente!");
 
-    const userToSend = {
-      name: userData.name,
-      lastName: userData.lastName,
-      email: userData.email,
-      password: userData.password,
-      phoneNumber: userData.phoneNumber,
-      birthdate: userData.birthdate,
-      countryId: parseInt(userData.country, 10),
-    };
 
-    fetch(`${API_BASE_URL}/auth/register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(userToSend),
-    })
-      .then((response) => {
-        if (!response.ok)
-        {
-          setSuccessMessage("Error al crear el nuevo usuario");  
-          throw new Error("Error en el registro");
-        }
-        return response.text();
+    if (isRegisterPage) { 
+      const userToSend = {
+        name: userData.name,
+        lastName: userData.lastName,
+        email: userData.email,
+        password: userData.password,
+        phoneNumber: userData.phoneNumber,
+        birthdate: userData.birthdate,
+        countryId: parseInt(userData.country, 10),
+      };
+
+      fetch(`${API_BASE_URL}/auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userToSend),
       })
-      .then((data) => {
-        setSuccessMessage("Usuario registrado correctamente!");
+        .then((response) => {
+          if (!response.ok)
+          {
+            setSuccessMessage("Error al crear el nuevo usuario");  
+            throw new Error("Error en el registro");
+          }
+          return response.text();
+        })
+        .then((data) => {
+          setSuccessMessage("Usuario registrado correctamente!");
 
-        console.log(userData.name);
+          console.log(userData.name);
 
-        // Llamar a la función para enviar el correo sin await
-        sendEmail(userData.email, userData.name)
-          .then((emailSent) => {
-            if (emailSent) {
-              console.log("Correo de bienvenida enviado correctamente.");
-            } else {
-              console.log("Hubo un problema al enviar el correo.");
-            }
-          })
-          .catch((error) => console.error("Error enviando el correo:", error));
+          // Llamar a la función para enviar el correo sin await
+          sendEmail(userData.email, userData.name)
+            .then((emailSent) => {
+              if (emailSent) {
+                console.log("Correo de bienvenida enviado correctamente.");
+              } else {
+                console.log("Hubo un problema al enviar el correo.");
+              }
+            })
+            .catch((error) => console.error("Error enviando el correo:", error));
 
-        setUserData({
-          name: "",
-          lastName: "",
-          email: "",
-          phoneNumber: "",
-          birthdate: "",
-          password: "",
-          confirmpassword: "",
-          country: "",
+          setUserData({
+            name: "",
+            lastName: "",
+            email: "",
+            phoneNumber: "",
+            birthdate: "",
+            password: "",
+            confirmpassword: "",
+            country: "",
+          });
+          setErrors({});
+          setTimeout(() => {
+            setSuccessMessage("");
+          }, 3000);
+        })
+        .catch((error) => {
+          console.error("Error en el registro:", error);
         });
-        setErrors({});
-        setTimeout(() => {
-          setSuccessMessage("");
-        }, 3000);
-      })
-      .catch((error) => {
-        console.error("Error en el registro:", error);
-      });
+    }
+
   };
 
   const handleResendEmail = () => {
@@ -238,7 +319,7 @@ const FormsUser = ({ user = {}, onSubmit }) => {
             placeholder="ej. Juan Miguel"
             value={userData.name}
             onChange={handleChange}
-            disabled={!isEditing}
+            //disabled={!isEditing}
             required
           />
           {errors.name && <p className="error-message">{errors.name}</p>}
@@ -260,7 +341,7 @@ const FormsUser = ({ user = {}, onSubmit }) => {
             placeholder="ej. Pérez Rodríguez"
             value={userData.lastName}
             onChange={handleChange}
-            disabled={!isEditing}
+            //disabled={!isEditing}
             required
           />
           {errors.lastName && (
@@ -306,7 +387,7 @@ const FormsUser = ({ user = {}, onSubmit }) => {
             placeholder="ej. +XXX XXXX XXXX"
             value={userData.phoneNumber}
             onChange={handleChange}
-            disabled={!isEditing}
+            //disabled={!isEditing}
             required
           />
           {errors.phoneNumber && (
@@ -330,7 +411,7 @@ const FormsUser = ({ user = {}, onSubmit }) => {
             placeholder="ej. 01/01/2000"
             value={userData.birthdate}
             onChange={handleChange}
-            disabled={!isEditing}
+            //disabled={!isEditing}
             required
           />
 
@@ -355,80 +436,68 @@ const FormsUser = ({ user = {}, onSubmit }) => {
               value={userData.country}
               onChange={handleChange}
               required
-              disabled={!isEditing}
             >
-              {isEditing || isRegisterPage ? (
-                <>
-                  <option value="">Selecciona un país</option>
-                  {countries.map((country) => (
-                    <option key={country.idCountry} value={country.idCountry}>
-                      {country.countryName}
-                    </option>
-                  ))}
-                </>
-              ) : (
-                <>
-                  {countries.map((country) =>
-                    parseInt(country.idCountry) ===
-                    parseInt(userData.country) ? (
-                      <option key={country.idCountry} value={country.idCountry}>
-                        {country.countryName}
-                      </option>
-                    ) : null
-                  )}
-                </>
-              )}
+              <option value="">Selecciona un país</option>
+              {countries.map((country) => (
+                <option key={country.idCountry} value={country.idCountry}>
+                  {country.countryName}
+                </option>
+              ))}
             </select>
           </label>
         </div>
         
         {/* Campo Contraseña */}
-        <div
-          className={`input-container ${
-            isRegisterPage ? "input-color-create" : "input-color-profile"
-          }`}
-        >
-          <label className="label">Contraseña</label>
-          <input
-            className={`entrada-registrer ${
-              isRegisterPage ? "border-green-500" : "border-red-500"
+        {isRegisterPage && (
+          <div
+            className={`input-container ${
+              isRegisterPage ? "input-color-create" : "input-color-profile"
             }`}
-            type="password"
-            name="password"
-            placeholder="***********"
-            value={userData.password}
-            onChange={handleChange}
-            disabled={!isEditing}
-            required
-          />
-          {errors.password && (
-            <p className="error-message">{errors.password}</p>
-          )}
-        </div>
+          >
+            <label className="label">Contraseña</label>
+            <input
+              className={`entrada-registrer ${
+                isRegisterPage ? "border-green-500" : "border-red-500"
+              }`}
+              type="password"
+              name="password"
+              placeholder="***********"
+              value={userData.password}
+              onChange={handleChange}
+              disabled={!isEditing}
+              required
+            />
+            {errors.password && (
+              <p className="error-message">{errors.password}</p>
+            )}
+          </div>
+        )}
 
         {/* Campo Confirmar Contraseña */}
-        <div
-          className={`input-container ${
-            isRegisterPage ? "input-color-create" : "input-color-profile"
-          }`}
-        >
-          <label className="label">Confirma Contraseña</label>
-          <input
-            className={`entrada-registrer ${
-              isRegisterPage ? "border-green-500" : "border-red-500"
+        {isRegisterPage && (
+          <div
+            className={`input-container ${
+              isRegisterPage ? "input-color-create" : "input-color-profile"
             }`}
-            type="password"
-            name="confirmpassword"
-            placeholder="***********"
-            value={userData.confirmpassword}
-            onChange={handleChange}
-            disabled={!isEditing}
-            required
-          />
-          {errors.confirmpassword && (
-            <p className="error-message">{errors.confirmpassword}</p>
-          )}
-        </div>
+          >
+            <label className="label">Confirma Contraseña</label>
+            <input
+              className={`entrada-registrer ${
+                isRegisterPage ? "border-green-500" : "border-red-500"
+              }`}
+              type="password"
+              name="confirmpassword"
+              placeholder="***********"
+              value={userData.confirmpassword}
+              onChange={handleChange}
+              disabled={!isEditing}
+              required
+            />
+            {errors.confirmpassword && (
+              <p className="error-message">{errors.confirmpassword}</p>
+            )}
+          </div>
+        )}
 
         {/* Botón de Submit */}
         {isEditing ? (
@@ -449,10 +518,14 @@ const FormsUser = ({ user = {}, onSubmit }) => {
                 ? "border-green-500"
                 : "border-red-500"
             }`}
+            disabled={!hasChanges}
           >
-            Editar
+            Guardar
           </button>
         )}
+
+
+       
 
         {/* Mensaje de éxito */}
         {successMessage && <p className="success-message">{successMessage}</p>}
