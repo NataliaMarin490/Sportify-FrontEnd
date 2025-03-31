@@ -33,7 +33,7 @@
     font-size: 1.8rem;
   }
 
-  .search-container {
+  .booking-history-container .search-container {
     display: flex;
     align-items: center;
     border: 1px solid #ccc;
@@ -55,7 +55,7 @@
     outline: none;
   }
   
-  table {
+  .booking-history-container table {
     width: 95%;
     border-collapse: collapse;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);

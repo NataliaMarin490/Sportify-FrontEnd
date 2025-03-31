@@ -101,12 +101,12 @@ const AdminFeatures = () => {
                   <button
                     onClick={() => handleEdit(feature.idFeature)}
                     className="icon-btn"
-                  >
-                    <FaEdit />
+                    >
+                      <FaEdit />
                   </button>
                   <button
                     onClick={() => handleDelete(feature.idFeature)}
-                    className="icon-btn delete"
+                    className="icon-btn"
                   >
                     <FaTrash />
                   </button>
