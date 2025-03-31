@@ -155,9 +155,10 @@ const BookingForm = ({
         navigate("/");
       }, 7000);
     } catch (error) {
-      setModalError(
-        "Error al crear la reserva. Por favor, intente nuevamente."
-      );
+      const errorMessage =
+        error.response?.data ||
+        "Error al crear la reserva. Por favor, intente nuevamente.";
+      setModalError(errorMessage);
     } finally {
       setIsLoading(false);
     }
