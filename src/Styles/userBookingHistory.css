@@ -1,37 +1,45 @@
 .background-container {
-    display: flex;
-    background-image: linear-gradient(
-        rgba(138, 135, 135, 0.5),
-        rgba(129, 129, 131, 0.5)
-      ), url("/images/crearCuenta/Fondo.jpg");
-    background-size: cover;
-    background-position: center;
-    min-height: 90vh;
-    justify-content: center;
-    align-items: center;
-    font-family: "Poppins", serif;
-    flex-direction: column;
-  }
-  
-  .booking-history-container{
-    width: 85%;
-    height: 90%;
-    background-color: #f6f6f6;
-    margin: 0 auto; /* Centra el contenido horizontalmente */
-    margin-bottom: 20px;
-    overflow-y: auto;
-  }
-  
-  .div-tittle{
-    margin-left: 40px;
-    margin-bottom: 60px;
-    line-height: 0.5;
-  }
+  display: flex;
+  background-image: linear-gradient(
+      rgba(138, 135, 135, 0.5),
+      rgba(129, 129, 131, 0.5)
+    ),
+    url("/images/crearCuenta/Fondo.jpg");
+  background-size: cover;
+  background-position: center;
+  min-height: 90vh;
+  justify-content: center;
+  align-items: center;
+  font-family: "Poppins", serif;
+  flex-direction: column;
+  padding: 50px;
+}
 
-  .div-tittle h3{
-    color: #333;
-    font-size: 1.8rem;
-  }
+.background-container .backButton {
+  margin-right: 120px;
+  margin-bottom: 50px;
+  margin-top: 50px;
+}
+
+.booking-history-container {
+  width: 70%;
+  height: 90%;
+  background-color: #f6f6f6;
+  margin: 0 auto; /* Centra el contenido horizontalmente */
+  margin-bottom: 20px;
+  overflow-y: auto;
+}
+
+.div-tittle {
+  margin-left: 40px;
+  margin-bottom: 60px;
+  line-height: 0.5;
+}
+
+.div-tittle h3 {
+  color: #242424;
+  font-size: 1.8rem;
+}
 
   .booking-history-container .search-container {
     display: flex;
@@ -77,29 +85,31 @@
     padding-left: 15px;
   }
 
-  /* Estilos para las celdas de la tabla */
+/* Estilos para las celdas de la tabla */
 .booking-history-container th,
 .booking-history-container td {
   text-align: left;
   border-bottom: 1px solid #ddd; /* Agregar borde inferior a cada fila */
 }
-  
-  .booking-history-container table td {
-    padding-left: 15px;
-    font-size: 15px;
-  }
 
-  .booking-history-container td button {
-    margin: 5px;
-    gap: 30px;
-    width: 40px;
-    background-color: var(--header-dark);
-  }
+.booking-history-container table td {
+  padding-left: 15px;
+  font-size: 15px;
+}
 
-  .booking-history-container .icon-btn {
-    padding: 5px 5px;
-  }
-  
+.booking-history-container td button {
+  margin: 5px;
+  gap: 30px;
+  width: 40px;
+  background-color: var(--header-dark);
+}
+
+.booking-history-container .icon-btn {
+  padding: 5px 5px;
+  background-color: #f44336;
+  border-radius: 6px;
+}
+
 /* Estilos para el modal */
 .modal-overlay {
   position: fixed;
@@ -119,9 +129,15 @@
   padding: 20px;
   padding: 20px;
   border-radius: 8px;
-  width: 420px;
+  width: 700px;
   max-width: 90%;
   position: relative;
+}
+
+.review-modal-actions {
+  display: flex;
+  justify-content: end;
+  gap: 10px;
 }
 
 .close-modal {
@@ -141,32 +157,56 @@
 
 .star-rating span {
   margin: 0 2px;
+  color: #555;
 }
 
 .review-modal textarea {
-  width: 95%;
-  padding: 10px;
+  width: 100%;
   margin-bottom: 15px;
   border: 1px solid #ddd;
   border-radius: 4px;
   background-color: #f6f6f6;
   color: #333;
   font-family: "Poppins";
-
 }
 
 .submit-review {
+  width: 20%;
   background-color: var(--header-dark);
   color: white;
   border: none;
-  padding: 10px 15px;
-  border-radius: 4px;
+  padding: 10px 20px;
+  border-radius: 5px;
   cursor: pointer;
+  font-size: 16px;
   font-family: "Poppins";
+  transition: background-color 0.3s ease;
+  text-align: center;
 }
 
 .submit-review:hover {
   background-color: #45a049;
 }
-  
 
+/* Estilo para el botón de cancelar */
+.cancel-review {
+  width: 20%;
+  background-color: #f44336; /* Rojo */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  font-family: "Poppins";
+  text-align: center;
+}
+
+.cancel-review:hover {
+  background-color: #e53935;
+}
+
+.cancel-review:focus {
+  outline: none;
+}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
 import BookingForm from "../components/BookingForm";
 import Map from "../components/Map";
 import "../Styles/detail.css";
@@ -11,7 +11,8 @@ import { Share2 } from "lucide-react";
 import ShareCourtModal from "../components/ShareCourtModal.jsx";
 import FavoriteButton from "../components/FavoriteButton.jsx";
 import axios from "axios";
-import API_BASE_URL from "../config.js"
+import API_BASE_URL from "../config.js";
+import Reviews from "../components/Reviews.jsx";
 
 const Detail = () => {
   const [product, setProduct] = useState({
@@ -35,6 +36,10 @@ const Detail = () => {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const { id } = useParams();
   const currentUrl = window.location.href;
+  const [reviews, setReviews] = useState([]); // Estado para almacenar las reseñas
+  const [ratings, setRatings] = useState({}); // Estado para almacenar las calificaciones
+  const [comments, setComments] = useState({}); // Estado para almacenar los comentarios
+  const [dates, setDates] = useState({}); // Estado para almacenar las fechas de las reseñas
 
   const handleDateTimeChange = (date, time) => {
     setSelectedDate(date);
@@ -53,10 +58,37 @@ const Detail = () => {
         setProduct(res.data);
       })
       .catch((err) => {
-        // console.log(err);
         setError(err.message);
       });
-  }, []);
+  }, [url]);
+
+  useEffect(() => {
+    // Recuperar las calificaciones, comentarios y fechas desde localStorage
+    const storedRatings = JSON.parse(localStorage.getItem("ratings")) || {};
+    const storedComments = JSON.parse(localStorage.getItem("comments")) || {};
+    const storedDates = JSON.parse(localStorage.getItem("dates")) || {}; // Recuperamos las fechas
+
+    // Recuperar el nombre del usuario desde localStorage (en formato JSON), con valor predeterminado "Usuario desconocido"
+    const storedUserName =
+      JSON.parse(localStorage.getItem("users")) || "Usuario desconocido";
+
+    // Establecer las calificaciones, comentarios y fechas en el estado
+    setRatings(storedRatings);
+    setComments(storedComments);
+    setDates(storedDates); // Aseguramos de establecer las fechas
+
+    // Filtrar las reseñas basadas en el `id` y prepararlas para mostrarlas
+    const currentCourtReviews = Object.keys(storedRatings).map((courtId) => ({
+      courtId,
+      rating: storedRatings[courtId],
+      comment: storedComments[courtId] || "",
+      userName: storedUserName[courtId] || "Usuario desconocido", // Asegurando que el nombre del usuario también sea por cancha
+      date: storedDates[courtId] || "No disponible", // Asegurando que la fecha sea también por cancha
+    }));
+
+    // Filtrar las reseñas por el `id` de la cancha actual
+    setReviews(currentCourtReviews.filter((review) => review.courtId === id));
+  }, [id]);
 
   if (error || !product) {
     return (
@@ -64,16 +96,14 @@ const Detail = () => {
         <BackButton />
         <div className="not-found-message">
           <h2>Producto no encontrado</h2>
-          <p>Lo sentimos, el producto que está buscando no existe o ha sido eliminado.</p>
+          <p>
+            Lo sentimos, el producto que está buscando no existe o ha sido
+            eliminado.
+          </p>
         </div>
       </div>
     );
   }
-
-  // product =
-  //   state?.courts?.data && Array.isArray(state?.courts?.data)
-  //     ? state?.courts?.data?.find((item) => item.id === parseInt(id))
-  //     : null;
 
   return (
     <>
@@ -94,7 +124,10 @@ const Detail = () => {
             <div className="gallery">
               <img
                 className="image-detail"
-                src={product.imageUrl?.[product.imageUrl.length-4] || "default-image-url"}
+                src={
+                  product.imageUrl?.[product.imageUrl.length - 4] ||
+                  "default-image-url"
+                }
                 alt={product.name || "Court image"}
               />
               <ImageGallery images={product.imageUrl || []} />
@@ -105,15 +138,39 @@ const Detail = () => {
               <div className="detail-product-container">
                 <div className="detail-header">
                   <h4 className="title-product"> {product.name} </h4>
-                  <div className="rating">
-                    <span className="fa fa-star checked"></span><span>4.5 Estrellas | 450 Reseñas</span>
+                  <div className="rating1">
+                    <div className="rating-prom">
+                      <span className="fa fa-star checked"></span>
+                      <span>
+                        {reviews.length > 0 ? (
+                          reviews.map((review) => (
+                            <p>{review.rating} Estrellas</p>
+                          ))
+                        ) : (
+                          <p>No hay reseñas para esta cancha.</p>
+                        )}
+                      </span>
+                    </div>
+                    <span>| # Reseñas: {reviews.length} </span>
                   </div>
                 </div>
                 <div className="detail-content">
-                  <span><strong>Precio: </strong>{product.pricePerHour}</span>
-                  <span><strong>Ciudad: </strong>{product.city}</span>
-                  <span><strong>Deporte: </strong>{product.sport}</span>
-                  <span><strong>Estado: </strong>{product.status}</span>
+                  <span>
+                    <strong>Precio: </strong>
+                    {product.pricePerHour}
+                  </span>
+                  <span>
+                    <strong>Ciudad: </strong>
+                    {product.city}
+                  </span>
+                  <span>
+                    <strong>Deporte: </strong>
+                    {product.sport}
+                  </span>
+                  <span>
+                    <strong>Estado: </strong>
+                    {product.status}
+                  </span>
                 </div>
               </div>
               <div className="detail-product-container">
@@ -167,7 +224,10 @@ const Detail = () => {
                   </div>
                 </div>
               </div>
-              <div>Reseñas y puntuación</div>
+              <div>
+                {/* Mostramos las reseñas aquí */}
+                <Reviews reviews={reviews} />
+              </div>
             </div>
             <div className="container-booking-calendar">
               <Calendar onDateTimeChange={handleDateTimeChange} />
