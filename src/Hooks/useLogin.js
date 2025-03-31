@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import API_BASE_URL from "../config";
 
 const useLogin = (onLogin) => {
@@ -8,6 +9,8 @@ const useLogin = (onLogin) => {
     password: "",
   });
   const [error, setError] = useState("");
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,7 +38,13 @@ const useLogin = (onLogin) => {
           token: response.data.token,
         };
 
+        // Almacenar los datos de usuario y token en localStorage
+        localStorage.setItem("user", JSON.stringify(userData));
+        setUser(userData);
+
         console.log("Usuario autenticado:", userData);
+
+      
 
         if (onLogin) {
           console.log("Ejecutando onLogin...");
@@ -62,6 +71,24 @@ const useLogin = (onLogin) => {
       );
     }
   };
+
+  // Redirigir al usuario después de iniciar sesión
+  useEffect(() => {
+    if (user) {
+      const redirectUrl = localStorage.getItem("redirectToDetailView");
+
+      if (redirectUrl) {
+        const { courtId } = JSON.parse(redirectUrl);
+        // Después de iniciar sesión, redirige al usuario a la página de detalle        
+        navigate(`/detail/${courtId}`); // Redirigir a la página de detalle de la cancha
+        localStorage.removeItem("redirectToDetailView");  // Limpiar la URL de redirección
+      } else {
+        // Si no hay página de detalle, redirigir al inicio
+        navigate("/");
+      }
+    }
+  }, [user, navigate]); // Ejecuta el efecto cuando `user` cambie
+
 
   return {
     formData,

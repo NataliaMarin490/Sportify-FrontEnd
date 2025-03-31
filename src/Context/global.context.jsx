@@ -51,9 +51,18 @@ const ContextProvider = ({ children }) => {
   };
 
   const logout = () => {
+    console.log("Cerrando sesión...");
+
+    // Eliminar datos de usuario y selección de reserva del localStorage
     localStorage.removeItem("user");
+    localStorage.removeItem("token"); // Si usas autenticación con tokens
+    localStorage.removeItem("selectedDate");
+    localStorage.removeItem("selectedTimes");
+
+    // Limpiar estado de usuario
     setUser(null);
-  };
+};
+
 
   const toggleSidebar = useCallback(
     (show) => {

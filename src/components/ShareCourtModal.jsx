@@ -78,7 +78,7 @@ const ShareCourtModal = ({ isOpen, onClose, product, currentUrl }) => {
 
         <div className="share-buttons">
           <button onClick={() => handleShare("twitter")}>
-            <Twitter /> Twitter
+            <Twitter /> X-Twitter
           </button>
           <button onClick={() => handleShare("whatsapp")}>
             <MessageCircle /> WhatsApp

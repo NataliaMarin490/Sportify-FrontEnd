@@ -14,6 +14,7 @@ import axios from "axios";
 import API_BASE_URL from "../config.js"
 
 const Detail = () => {
+  const { user } = useContextGlobal();
   const [product, setProduct] = useState({
     id: 0,
     name: "",
@@ -30,12 +31,10 @@ const Detail = () => {
     featuresImageUrl: [],
   });
   const [error, setError] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedTime, setSelectedTime] = useState("7:00");
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedTime, setSelectedTime] = useState("");
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const { id } = useParams();
-
-  console.log(id);
   const currentUrl = window.location.href;
 
   const handleDateTimeChange = (date, time) => {
@@ -47,18 +46,37 @@ const Detail = () => {
     window.scrollTo(0, 0);
   }, []);
 
-
-  const url = `${API_BASE_URL}/public/courts/search/${id}`;
-
   useEffect(() => {
-    axios(url)
+    const fetchUrl = `${API_BASE_URL}/public/courts/search/${id}`;
+    
+    axios(fetchUrl)
       .then((res) => {
         setProduct(res.data);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setError(err.message);
       });
+  }, [id]);
+
+  // Recuperar fecha y hora seleccionadas desde el localStorage (si están guardadas)
+  useEffect(() => {
+    const storedDate = localStorage.getItem("selectedDate");
+    const storedTime = localStorage.getItem("selectedTime");
+  
+    // Verificar si hay un valor guardado para la fecha y la hora
+    if (storedDate && storedTime) {
+      const parsedDate = new Date(storedDate);
+      const parsedTimes = storedTime.split(", ").filter(Boolean); // Convierte la cadena en un arreglo de horas
+  
+      // Verifica si el valor recuperado es válido antes de actualizar el estado
+      if (!isNaN(parsedDate)) {
+        setSelectedDate(parsedDate);
+      }
+      setSelectedTime(parsedTimes); // Guarda el arreglo de horas
+      localStorage.removeItem("selectedDate");
+      localStorage.removeItem("selectedTime");
+    }
   }, []);
 
   if (error || !product) {
@@ -173,11 +191,17 @@ const Detail = () => {
               <div>Reseñas y puntuación</div>
             </div>
             <div className="container-booking-calendar">
-              <Calendar onDateTimeChange={handleDateTimeChange} />
+              <Calendar
+              /* court={handleDateTimeChange} */ 
+              onDateTimeChange={handleDateTimeChange} 
+              />
               <BookingForm
+                user={user}
+                /* selectedCourt={product} */
                 selectedDate={selectedDate}
                 selectedTime={selectedTime}
                 pricePerHour={product.pricePerHour}
+                productInfo={product}
               />
             </div>
           </div>

@@ -146,6 +146,14 @@ h3 {
   border-bottom: 2px solid #14403e;
 }
 
+.court-form textarea {
+  resize: none;
+  height: 25px; 
+  line-height: 1.5;
+  overflow: hidden;
+}
+
+
 /* Estilos del botón */
 .court-form button {
   padding: 10px;

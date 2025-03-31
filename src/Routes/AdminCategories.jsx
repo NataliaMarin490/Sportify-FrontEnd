@@ -96,12 +96,13 @@ const AdminCategories = () => {
                 </td>
                 <td>{sport.description}</td>
                 <td>
-                  <button onClick={() => handleEdit(sport.id)}>
+                  <button onClick={() => handleEdit(sport.id)}
+                    className="icon-btn">
                     <FaEdit />
                   </button>
                   <button
                     onClick={() => handleDelete(sport.id)}
-                    className="delete"
+                   className="icon-btn"
                   >
                     <FaTrash />
                   </button>
