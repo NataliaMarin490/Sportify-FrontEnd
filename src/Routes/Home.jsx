@@ -235,12 +235,42 @@ const Home = () => {
     return `${String(hour24).padStart(2, "0")}:${minute}`;
   };
 
+  
+
   const handleSearch = ({ city, sport, date, hour }) => {
     setIsSearchActive(true);
     setCurrentPage(1);
+
+    const normalizedHour = hour ? normalizeHour(hour) : null;
     const filters = { city, sport, date, hour };
 
     console.log("Filtros de búsqueda:", filters);
+
+    // Verificar si la hora seleccionada está dentro de un rango válido
+    const isValidHour = (hour) => {
+    const availableHours = ["07:00:00", "08:00:00", "09:00:00", "10:00:00", "11:00:00", "12:00:00", "13:00:00", "14:00:00", "15:00:00", "16:00:00", "17:00:00", "18:00:00", "19:00:00", "20:00:00", "21:00:00"];
+
+    if (!hour) return false; // Verifica que hour no sea null o undefined
+
+    // Normaliza la hora a formato HH:MM
+    const [h, m] = hour.split(":"); 
+    const formattedHour = `${h.padStart(2, "0")}:${m.padStart(2, "0")}:00`;
+    //const formattedHour = convertTo24HourFormat(hour);
+    
+
+    console.log("Hora normalizada:", formattedHour); 
+    return availableHours.includes(formattedHour);
+    };
+
+  // Si la hora no es válida, mostramos el error
+  if (normalizedHour && !isValidHour(normalizedHour)) {
+    setError("La hora seleccionada no está disponible. Por favor elige una hora dentro del rango disponible.");
+    setFilteredCourts([]);
+    return;
+  }
+
+  // Si la hora es válida, continuar con la búsqueda
+  setError(null); // Limpiar el error si la hora es válida
 
     // Comprobar si los filtros tienen los valores correctos
     let searchParams = new URLSearchParams();
@@ -269,8 +299,9 @@ const Home = () => {
     }
 
     if (filters.hour) {
-      const militaryHour = convertTo24HourFormat(filters.hour);
-      searchParams.append("time", militaryHour);
+      //const militaryHour = convertTo24HourFormat(filters.hour);
+      //searchParams.append("time", militaryHour);
+      searchParams.append("time", normalizedHour);
     }
 
     // Generar la URL con los parámetros de búsqueda
@@ -299,6 +330,36 @@ const Home = () => {
       });
   };
 
+  // Función para normalizar la hora a formato HH:mm:ss
+  const normalizeHour = (hour) => {
+    if (!hour) return null;
+  
+    // Verificar si la hora tiene formato AM/PM
+    const amPmMatch = hour.match(/(\d+):(\d+) (AM|PM)/);
+  
+    if (amPmMatch) {
+      let [_, h, m, period] = amPmMatch;
+      h = parseInt(h, 10);
+  
+      if (period === "PM" && h !== 12) {
+        h += 12;
+      } else if (period === "AM" && h === 12) {
+        h = 0;
+      }
+  
+      return `${String(h).padStart(2, "0")}:${m.padStart(2, "0")}:00`;
+    }
+  
+    // Si ya está en formato 24 horas, simplemente agregar ":00" si falta
+    const hourMatch = hour.match(/(\d+):(\d+)/);
+    if (hourMatch) {
+      let [_, h, m] = hourMatch;
+      return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:00`;
+    }
+  
+    return hour; // Si no coincide con ningún formato, devolver como está
+  };
+  
   // useEffect para paginar los datos
   useEffect(() => {
     let dataToPaginate = [];
