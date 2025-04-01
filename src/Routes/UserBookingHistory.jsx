@@ -78,9 +78,10 @@ const UserBookingHistory = () => {
     
     setFilteredBookings(
       bookings.filter(booking =>
-        booking.countName.toLowerCase().includes(search.toLowerCase())
-      )
-    );
+        booking.courtName.toLowerCase().includes(search.toLowerCase()) ||
+        booking.bookingDate.toLowerCase().includes(search.toLowerCase()) ||
+        booking.bookingTimeRange.toLowerCase().includes(search.toLowerCase())
+      ))
   }, [search, bookings]);
 
   const handleSearchChange = (e) => {
