@@ -1,109 +1,126 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { FaSearch, FaStar, FaRegStar, FaTimes } from "react-icons/fa";
+import { FaSearch, FaStar, FaRegStar} from "react-icons/fa";
 import "../Styles/userBookingHistory.css";
 import BackButton from "../components/BackButton";
+import ReviewModal from "../components/ReviewModal";
 import API_BASE_URL from "../config";
 import { useContextGlobal } from "../Context/global.context";
 
 const UserBookingHistory = () => {
-  const [courts, setCourts] = useState([]); // Lista de canchas
-  const [filteredCourts, setFilteredCourts] = useState([]); // Lista de canchas filtradas
+  const [bookings, setBookings] = useState([]);
+  const [filteredBookings, setFilteredBookings] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentCourt, setCurrentCourt] = useState(null);
-  const [rating, setRating] = useState(0); // Calificación seleccionada
-  const [comment, setComment] = useState(""); // Comentario de la reseña
-  const [search, setSearch] = useState(""); // Estado del término de búsqueda
-  const [ratings, setRatings] = useState({}); // Estado para simular las calificaciones de las canchas
-  const [comments, setComments] = useState({}); // Estado para almacenar los comentarios
-  const [users, setNameUsers] = useState({}); // Estado para almacenar los nombres de los usuarios
-  const { user } = useContextGlobal(); // Accedemos al nombre del usuario del contexto global
-  const [dates, setDates] = useState({}); // Estado para almacenar las fechas de las reseñas
-
-  const url = `${API_BASE_URL}/public/courts/search?page=1&size=10`;
+  const [currentBooking, setCurrentBooking] = useState(null);
+  const [search, setSearch] = useState("");
+  const [reviews, setReviews] = useState({});
+  const { user } = useContextGlobal();
 
   useEffect(() => {
-    axios(url)
-      .then((res) => {
-        const courtsData = res.data.data;
+    const fetchBookingHistory = async () => {
+      // Verificar token existe y no está expirado
+      if (!user?.token) {
+        setError("Usuario no autenticado");
+        return;
+      }
+  
+      // Verificar expiración del token (ejemplo básico)
+      const tokenExp = user.token.split('.')[3]; // Asumiendo formato JWT estándar
+      if (Date.now() >= tokenExp * 1000) {
+        setError("Sesión expirada, por favor vuelve a iniciar sesión");
+        return;
+      }
+  
+      setIsLoading(true);
+      setError(null);
+  
+      try {
+        const response = await axios.get(`${API_BASE_URL}/bookings/history`, {
+          headers: {
+            'Authorization': `Bearer ${user.token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+  
+        const bookingsData = response.data;
+        console.log(bookingsData);
+        
+        
+        // Resto de tu lógica...
+        setBookings(bookingsData);
+        setFilteredBookings(bookingsData);
+  
+      } catch (err) {
+        console.error("Error detallado:", err.response?.data || err.message);
+        setError(err.response?.data?.message || 
+          "Error al cargar historial. Verifica tu conexión o intenta recargar.");
+        
+        if (err.response?.status === 401) {
+          // Manejar específicamente error de autenticación
+          setError("Sesión expirada o no autorizada. Por favor inicia sesión nuevamente.");
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
+    fetchBookingHistory();
+  }, [user?.token]);
 
-        // Recuperamos las calificaciones, comentarios y nombre del usuario de localStorage
-        const savedRatings = JSON.parse(localStorage.getItem("ratings")) || {};
-        const savedComments =
-          JSON.parse(localStorage.getItem("comments")) || {};
-        const savedUsers = JSON.parse(localStorage.getItem("users")) || {}; // Recuperamos usuarios
-
-        // Actualizamos los estados con la información almacenada en localStorage
-        setCourts(courtsData);
-        setFilteredCourts(courtsData); // Inicialmente, mostramos todas las canchas
-        setRatings(savedRatings);
-        setComments(savedComments);
-        setNameUsers(savedUsers); // Establecemos los usuarios guardados
-      })
-      .catch((err) => {
-        console.error(err.message);
-      });
-  }, []); // Este hook se ejecuta solo una vez al montar el componente
-
-  // Función para filtrar las canchas por nombre
-  const handleSearchChange = (e) => {
-    const query = e.target.value;
-    setSearch(query);
-    if (query) {
-      // Filtramos las canchas cuyo nombre contiene el texto de búsqueda
-      setFilteredCourts(
-        courts.filter((court) =>
-          court.name.toLowerCase().includes(query.toLowerCase())
-        )
-      );
-    } else {
-      // Si el campo de búsqueda está vacío, mostramos todas las canchas
-      setFilteredCourts(courts);
+  useEffect(() => {
+    // Actualizar filteredBookings cuando cambia search o bookings
+    if (!search) {
+      setFilteredBookings(bookings);
+      return;
     }
+    
+    setFilteredBookings(
+      bookings.filter(booking =>
+        booking.countName.toLowerCase().includes(search.toLowerCase())
+      )
+    );
+  }, [search, bookings]);
+
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
   };
 
-  // Función para manejar el clic en una estrella (abrir el modal de reseña)
-  const handleStarClick = (court) => {
-    setCurrentCourt(court);
-    setRating(ratings[court.id] || 0); // Establecer la calificación simulada de la cancha
-    setComment(comments[court.id] || ""); // Establecer el comentario previamente guardado para esta cancha
+  const handleStarClick = (booking) => {
+    setCurrentBooking(booking);
     setIsModalOpen(true);
   };
 
-  // Función para manejar el envío de la reseña
-  const handleSubmitReview = () => {
-    const userName = user.fullName || "Anónimo"; // Obtenemos el nombre del usuario
-    const reviewDate = new Date().toISOString(); // Fecha actual de la reseña
+  const handleSubmitReview = (bookingId, rating, comment) => {
+    const newReview = {
+      rating,
+      comment,
+      userName: user.fullName || "Anónimo",
+      date: new Date().toISOString()
+    };
 
-    // Guardamos la nueva calificación, comentario, nombre del usuario y fecha en los estados
-    const updatedRatings = { ...ratings, [currentCourt.id]: rating };
-    const updatedComments = { ...comments, [currentCourt.id]: comment };
-    const updatedUsers = { ...users, [currentCourt.id]: userName }; // Guardamos el nombre del usuario
-    const updatedDates = { ...dates, [currentCourt.id]: reviewDate }; // Guardamos la fecha
-
-    // Actualizamos los estados con la nueva calificación, comentario, nombre del usuario y fecha
-    setRatings(updatedRatings);
-    setComments(updatedComments);
-    setNameUsers(updatedUsers);
-    setDates(updatedDates); // Estado para almacenar las fechas
-
-    // Guardamos la nueva información en localStorage
-    localStorage.setItem("ratings", JSON.stringify(updatedRatings));
-    localStorage.setItem("comments", JSON.stringify(updatedComments));
-    localStorage.setItem("users", JSON.stringify(updatedUsers)); // Guardamos el nombre del usuario
-    localStorage.setItem("dates", JSON.stringify(updatedDates)); // Guardamos la fecha
-
-    // Cerrar el modal y resetear los valores
+    const updatedReviews = { ...reviews, [bookingId]: newReview };
+    setReviews(updatedReviews);
+    
+    // Guardar en localStorage
+    try {
+      localStorage.setItem("reviews", JSON.stringify(updatedReviews));
+    } catch (err) {
+      console.error("Error saving reviews to localStorage:", err);
+    }
+    
     setIsModalOpen(false);
-    setRating(0);
-    setComment("");
   };
 
   const handleCancelReview = () => {
-    // Resetear los valores y cerrar el modal
     setIsModalOpen(false);
-    setRating(0);
-    setComment("");
+  };
+
+  // Función para formatear la fecha
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString('es-ES', options);
   };
 
   return (
@@ -114,95 +131,76 @@ const UserBookingHistory = () => {
           <h3>HISTORIAL DE RESERVAS</h3>
           <span>Accede aquí al historial de tus reservas</span>
         </div>
-
-        <div className="search-container">
+        <div className="search-div">
+        <div className="search-container-booking">
           <FaSearch className="search-icon" />
           <input
             type="text"
             placeholder="Buscar cancha..."
             value={search}
-            onChange={handleSearchChange} // Se maneja el cambio de texto
+            onChange={handleSearchChange}
           />
         </div>
-
+        </div>
         <table>
           <thead>
             <tr>
-              <th>FECHA</th>
+              <th>FECHA REGISTRO</th>
+              <th>FECHA RESERVA</th>
               <th>HORA</th>
               <th>CANCHA</th>
-              <th></th>
+              <th>VALORAR</th>
             </tr>
           </thead>
           <tbody>
-            {filteredCourts?.map((court) => (
-              <tr key={court.id}>
-                <td>{court.id}</td>
-                <td>{court.name}</td>
-                <td>{court.name}</td>
-                <td>
-                  <button
-                    className="icon-btn"
-                    onClick={() => handleStarClick(court)}
-                  >
-                    {/* Mostrar estrella rellena si la cancha tiene una calificación simulada */}
-                    {ratings[court.id] > 0 ? (
-                      <FaStar color="gold" />
-                    ) : (
-                      <FaRegStar />
-                    )}
-                  </button>
+            {isLoading ? (
+              <tr>
+                <td colSpan="6" className="loading">Cargando historial...</td>
+              </tr>
+            ) : error ? (
+              <tr>
+                <td colSpan="6" className="error">{error}</td>
+              </tr>
+            ) : filteredBookings.length === 0 ? (
+              <tr>
+                <td colSpan="6" className="no-bookings">
+                  {search ? "No se encontraron reservas con ese criterio de búsqueda" : "No tienes reservas en tu historial"}
                 </td>
               </tr>
-            ))}
+            ) : (
+              filteredBookings.map((booking) => (
+                <tr key={booking.idBooking}>
+                  <td>{formatDate(booking.registrationDate)}</td>
+                  <td>{formatDate(booking.bookingDate)}</td>
+                  <td>{booking.bookingTimeRange}</td>
+                  <td>{booking.courtName}</td>
+                  <td>
+                    <button
+                      className="icon-btn"
+                      onClick={() => handleStarClick(booking)}
+                    >
+                      {reviews[booking.idBooking]?.rating > 0 ? (
+                        <FaStar color="gold" />
+                      ) : (
+                        <FaRegStar />
+                      )}
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
 
-      {/* Modal para agregar reseña */}
-      {isModalOpen && (
-        <div className="modal-overlay">
-          <div className="review-modal">
-            <button
-              className="close-modal"
-              onClick={() => setIsModalOpen(false)}
-            >
-              <FaTimes />
-            </button>
-
-            <h3>
-              Deja aquí tu experiencia para la reserva: {currentCourt?.name}
-            </h3>
-
-            <div className="star-rating">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <span
-                  key={star}
-                  onClick={() => setRating(star)} // Cuando se haga clic en una estrella, actualizará la calificación.
-                  style={{ cursor: "pointer" }}
-                >
-                  {star <= rating ? <FaStar color="gold" /> : <FaRegStar />}{" "}
-                </span>
-              ))}
-            </div>
-
-            <textarea
-              placeholder="Escribe tu comentario..."
-              value={comment}
-              onChange={(e) => setComment(e.target.value)} // Aquí actualizamos el comentario
-              rows={4}
-            />
-
-            <div className="review-modal-actions">
-              <button className="submit-review" onClick={handleSubmitReview}>
-                Publicar
-              </button>
-              <button className="cancel-review" onClick={handleCancelReview}>
-                Cancelar
-              </button>
-            </div>
-          </div>
-        </div>
+      {isModalOpen && currentBooking && (
+        <ReviewModal
+          booking={currentBooking}
+          initialRating={reviews[currentBooking.idBooking]?.rating || 0}
+          initialComment={reviews[currentBooking.idBooking]?.comment || ""}
+          onSubmit={handleSubmitReview}
+          onCancel={handleCancelReview}
+        />
       )}
     </div>
   );

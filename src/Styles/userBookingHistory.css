@@ -41,13 +41,19 @@
   font-size: 1.8rem;
 }
 
-  .booking-history-container .search-container {
+.search-div{
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+  .search-container-booking {
+    width: 500px; /* Ancho reducido */
+    height: 35px;
     display: flex;
     align-items: center;
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 5px 10px;
-    margin-left: 40px;
   }
   
   .search-icon {
@@ -55,12 +61,13 @@
     color: #555;
   }
   
-  .search-container input[type="text"] {
+  .search-container-booking input[type="text"] {
     border: none;
     flex: 1; /* Permite que el input ocupe el espacio restante */
     padding: 8px;
     font-size: 16px;
     outline: none;
+    background-color: #f6f6f6;
   }
   
   .booking-history-container table {
