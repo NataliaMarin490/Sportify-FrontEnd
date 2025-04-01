@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { FaSearch, FaStar, FaRegStar} from "react-icons/fa";
+import { FaSearch, FaStar, FaRegStar } from "react-icons/fa";
 import "../Styles/userBookingHistory.css";
 import BackButton from "../components/BackButton";
 import ReviewModal from "../components/ReviewModal";
@@ -8,77 +8,71 @@ import API_BASE_URL from "../config";
 import { useContextGlobal } from "../Context/global.context";
 
 const UserBookingHistory = () => {
-  const [bookings, setBookings] = useState([]);
-  const [filteredBookings, setFilteredBookings] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentBooking, setCurrentBooking] = useState(null);
-  const [search, setSearch] = useState("");
-  const [reviews, setReviews] = useState({});
-  const { user } = useContextGlobal();
+  const [bookings, setBookings] = useState([]); // Lista de reservas
+  const [filteredBookings, setFilteredBookings] = useState([]); // Reservas filtradas
+  const [isLoading, setIsLoading] = useState(true); // Estado de carga
+  const [error, setError] = useState(null); // Manejo de errores
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal de reseña
+  const [currentBooking, setCurrentBooking] = useState(null); // Reserva actual
+  const [search, setSearch] = useState(""); // Término de búsqueda
+  const [reviews, setReviews] = useState({}); // Reseñas y puntuaciones
+  const { user } = useContextGlobal(); // Obtener usuario desde contexto global
 
+  // Cargar reseñas desde localStorage al iniciar
   useEffect(() => {
+    const savedReviews = JSON.parse(localStorage.getItem("reviews")) || {};
+    setReviews(savedReviews);
+
     const fetchBookingHistory = async () => {
-      // Verificar token existe y no está expirado
       if (!user?.token) {
         setError("Usuario no autenticado");
         return;
       }
-  
-      // Verificar expiración del token (ejemplo básico)
-      const tokenExp = user.token.split('.')[3]; // Asumiendo formato JWT estándar
+
+      const tokenExp = user.token.split(".")[3];
       if (Date.now() >= tokenExp * 1000) {
         setError("Sesión expirada, por favor vuelve a iniciar sesión");
         return;
       }
-  
+
       setIsLoading(true);
       setError(null);
-  
+
       try {
         const response = await axios.get(`${API_BASE_URL}/bookings/history`, {
           headers: {
-            'Authorization': `Bearer ${user.token}`,
-            'Content-Type': 'application/json'
-          }
+            Authorization: `Bearer ${user.token}`,
+            "Content-Type": "application/json",
+          },
         });
-  
+
         const bookingsData = response.data;
-        console.log(bookingsData);
-        
-        
-        // Resto de tu lógica...
         setBookings(bookingsData);
         setFilteredBookings(bookingsData);
-  
       } catch (err) {
         console.error("Error detallado:", err.response?.data || err.message);
-        setError(err.response?.data?.message || 
-          "Error al cargar historial. Verifica tu conexión o intenta recargar.");
-        
+        setError(err.response?.data?.message || "Error al cargar historial.");
         if (err.response?.status === 401) {
-          // Manejar específicamente error de autenticación
-          setError("Sesión expirada o no autorizada. Por favor inicia sesión nuevamente.");
+          setError("Sesión expirada o no autorizada.");
         }
       } finally {
         setIsLoading(false);
       }
     };
-  
+
     fetchBookingHistory();
   }, [user?.token]);
 
+  // Función para filtrar reservas por nombre de cancha
   useEffect(() => {
-    // Actualizar filteredBookings cuando cambia search o bookings
     if (!search) {
       setFilteredBookings(bookings);
       return;
     }
-    
+
     setFilteredBookings(
-      bookings.filter(booking =>
-        booking.countName.toLowerCase().includes(search.toLowerCase())
+      bookings.filter((booking) =>
+        booking.courtName.toLowerCase().includes(search.toLowerCase())
       )
     );
   }, [search, bookings]);
@@ -90,26 +84,39 @@ const UserBookingHistory = () => {
   const handleStarClick = (booking) => {
     setCurrentBooking(booking);
     setIsModalOpen(true);
+    console.log(booking);
   };
 
-  const handleSubmitReview = (bookingId, rating, comment) => {
+  const handleSubmitReview = (courtId, idBooking, rating, comment) => {
     const newReview = {
+      courtId,
+      idBooking,
       rating,
       comment,
       userName: user.fullName || "Anónimo",
-      date: new Date().toISOString()
+      date: new Date().toISOString(),
     };
 
-    const updatedReviews = { ...reviews, [bookingId]: newReview };
+    // Crear una copia del objeto de reseñas, asegurando que la estructura esté bien
+    const updatedReviews = { ...reviews };
+    console.log(updatedReviews);
+
+    if (!updatedReviews[courtId]) {
+      updatedReviews[courtId] = {}; // Si no existe, crear el objeto para courtId
+    }
+
+    updatedReviews[courtId][idBooking] = newReview; // Guardar la reseña bajo courtId y bookingId
+
+    // Actualizar el estado local con las reseñas
     setReviews(updatedReviews);
-    
-    // Guardar en localStorage
+
+    // Guardar las reseñas en localStorage usando la misma estructura
     try {
       localStorage.setItem("reviews", JSON.stringify(updatedReviews));
     } catch (err) {
       console.error("Error saving reviews to localStorage:", err);
     }
-    
+
     setIsModalOpen(false);
   };
 
@@ -119,8 +126,8 @@ const UserBookingHistory = () => {
 
   // Función para formatear la fecha
   const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString('es-ES', options);
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    return new Date(dateString).toLocaleDateString("es-ES", options);
   };
 
   return (
@@ -131,17 +138,19 @@ const UserBookingHistory = () => {
           <h3>HISTORIAL DE RESERVAS</h3>
           <span>Accede aquí al historial de tus reservas</span>
         </div>
+
         <div className="search-div">
-        <div className="search-container-booking">
-          <FaSearch className="search-icon" />
-          <input
-            type="text"
-            placeholder="Buscar cancha..."
-            value={search}
-            onChange={handleSearchChange}
-          />
+          <div className="search-container-booking">
+            <FaSearch className="search-icon" />
+            <input
+              type="text"
+              placeholder="Buscar cancha..."
+              value={search}
+              onChange={handleSearchChange}
+            />
+          </div>
         </div>
-        </div>
+
         <table>
           <thead>
             <tr>
@@ -155,16 +164,22 @@ const UserBookingHistory = () => {
           <tbody>
             {isLoading ? (
               <tr>
-                <td colSpan="6" className="loading">Cargando historial...</td>
+                <td colSpan="6" className="loading">
+                  Cargando historial...
+                </td>
               </tr>
             ) : error ? (
               <tr>
-                <td colSpan="6" className="error">{error}</td>
+                <td colSpan="6" className="error">
+                  {error}
+                </td>
               </tr>
             ) : filteredBookings.length === 0 ? (
               <tr>
                 <td colSpan="6" className="no-bookings">
-                  {search ? "No se encontraron reservas con ese criterio de búsqueda" : "No tienes reservas en tu historial"}
+                  {search
+                    ? "No se encontraron reservas con ese criterio de búsqueda"
+                    : "No tienes reservas en tu historial"}
                 </td>
               </tr>
             ) : (
@@ -179,7 +194,9 @@ const UserBookingHistory = () => {
                       className="icon-btn"
                       onClick={() => handleStarClick(booking)}
                     >
-                      {reviews[booking.idBooking]?.rating > 0 ? (
+                      {/* Aquí se corrige la lógica para la estrella */}
+                      {reviews[booking.courtId]?.[booking.idBooking]?.rating >
+                      0 ? (
                         <FaStar color="gold" />
                       ) : (
                         <FaRegStar />
@@ -196,8 +213,14 @@ const UserBookingHistory = () => {
       {isModalOpen && currentBooking && (
         <ReviewModal
           booking={currentBooking}
-          initialRating={reviews[currentBooking.idBooking]?.rating || 0}
-          initialComment={reviews[currentBooking.idBooking]?.comment || ""}
+          initialRating={
+            reviews[currentBooking.courtId]?.[currentBooking.idBooking]
+              ?.rating || 0
+          }
+          initialComment={
+            reviews[currentBooking.courtId]?.[currentBooking.idBooking]
+              ?.comment || ""
+          }
           onSubmit={handleSubmitReview}
           onCancel={handleCancelReview}
         />

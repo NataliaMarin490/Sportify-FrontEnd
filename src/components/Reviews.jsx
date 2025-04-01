@@ -18,12 +18,16 @@ const ReviewStars = ({ rating }) => {
 
 const Reviews = ({ reviews }) => {
   console.log(reviews);
+
+  // Limitar a 4 reseñas máximo
+  const limitedReviews = reviews.slice(0, 2);
+
   return (
     <section className="reviews-container">
       <div className="review-container">
-        {reviews.length > 0 ? (
-          reviews.map((review) => (
-            <div key={review.id} className="review-card">
+        {limitedReviews.length > 0 ? (
+          limitedReviews.map((review) => (
+            <div key={review.idBooking} className="review-card">
               <div className="review-card-calif">
                 <div className="review-data">
                   <h4 className="review2">{review.userName}</h4>

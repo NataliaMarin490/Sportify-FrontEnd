@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { FaStar, FaRegStar, FaTimes } from "react-icons/fa";
 import "../Styles/userBookingHistory.css";
 
@@ -7,8 +7,10 @@ const ReviewModal = ({ booking, initialReview, onSubmit, onCancel }) => {
   const [rating, setRating] = useState(initialReview?.rating || 0);
   const [comment, setComment] = useState(initialReview?.comment || "");
 
+  // Manejar el envío de la reseña
   const handleSubmit = () => {
-    onSubmit(booking.idBooking, rating, comment);
+    // Llamamos a la función onSubmit pasando el courtId, bookingId, rating y comment
+    onSubmit(booking.courtId, booking.idBooking, rating, comment);
   };
 
   return (
@@ -18,7 +20,7 @@ const ReviewModal = ({ booking, initialReview, onSubmit, onCancel }) => {
           <FaTimes />
         </button>
 
-        <h3>Deja aquí tu experiencia para la reserva: {booking?.countName}</h3>
+        <h3>Deja aquí tu experiencia para la reserva: {booking.courtName}</h3>
 
         <div className="star-rating">
           {[1, 2, 3, 4, 5].map((star) => (
@@ -52,5 +54,4 @@ const ReviewModal = ({ booking, initialReview, onSubmit, onCancel }) => {
   );
 };
 
-
-export default ReviewModal
+export default ReviewModal;

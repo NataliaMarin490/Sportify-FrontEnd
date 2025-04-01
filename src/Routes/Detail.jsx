@@ -13,6 +13,7 @@ import FavoriteButton from "../components/FavoriteButton.jsx";
 import axios from "axios";
 import API_BASE_URL from "../config.js";
 import Reviews from "../components/Reviews.jsx";
+import WhatsAppFloatButton from "../components/WhatsappFloatButton.jsx";
 
 const Detail = () => {
   const [product, setProduct] = useState({
@@ -64,30 +65,23 @@ const Detail = () => {
 
   useEffect(() => {
     // Recuperar las calificaciones, comentarios y fechas desde localStorage
-    const storedRatings = JSON.parse(localStorage.getItem("ratings")) || {};
-    const storedComments = JSON.parse(localStorage.getItem("comments")) || {};
-    const storedDates = JSON.parse(localStorage.getItem("dates")) || {}; // Recuperamos las fechas
+    const storedReviews = JSON.parse(localStorage.getItem("reviews")) || {};
 
-    // Recuperar el nombre del usuario desde localStorage (en formato JSON), con valor predeterminado "Usuario desconocido"
-    const storedUserName =
-      JSON.parse(localStorage.getItem("users")) || "Usuario desconocido";
+    // Filtrar las reseñas basadas en el `id` de la cancha actual
+    if (storedReviews && storedReviews[id]) {
+      const currentCourtReviews = Object.keys(storedReviews[id]).map(
+        (bookingId) => ({
+          courtId: id,
+          idBooking: bookingId,
+          ...storedReviews[id][bookingId],
+        })
+      );
 
-    // Establecer las calificaciones, comentarios y fechas en el estado
-    setRatings(storedRatings);
-    setComments(storedComments);
-    setDates(storedDates); // Aseguramos de establecer las fechas
-
-    // Filtrar las reseñas basadas en el `id` y prepararlas para mostrarlas
-    const currentCourtReviews = Object.keys(storedRatings).map((courtId) => ({
-      courtId,
-      rating: storedRatings[courtId],
-      comment: storedComments[courtId] || "",
-      userName: storedUserName[courtId] || "Usuario desconocido", // Asegurando que el nombre del usuario también sea por cancha
-      date: storedDates[courtId] || "No disponible", // Asegurando que la fecha sea también por cancha
-    }));
-
-    // Filtrar las reseñas por el `id` de la cancha actual
-    setReviews(currentCourtReviews.filter((review) => review.courtId === id));
+      // Establecer las reseñas en el estado
+      setReviews(currentCourtReviews);
+    } else {
+      setReviews([]);
+    }
   }, [id]);
 
   if (error || !product) {
@@ -112,7 +106,6 @@ const Detail = () => {
         <div className="detail">
           <div className="detail-buttons">
             <FavoriteButton product={product} />
-
             <button
               className="court-button"
               onClick={() => setIsShareModalOpen(true)}
@@ -143,9 +136,15 @@ const Detail = () => {
                       <span className="fa fa-star checked"></span>
                       <span>
                         {reviews.length > 0 ? (
-                          reviews.map((review) => (
-                            <p>{review.rating} Estrellas</p>
-                          ))
+                          // Calculamos el rating promedio
+                          <p>
+                            {(
+                              reviews.reduce(
+                                (sum, review) => sum + review.rating,
+                                0
+                              ) / reviews.length
+                            ).toFixed(1)}{" "}
+                          </p>
                         ) : (
                           <p>No hay reseñas para esta cancha.</p>
                         )}
@@ -224,7 +223,7 @@ const Detail = () => {
                   </div>
                 </div>
               </div>
-              <div>
+              <div className="reviews-main-container">
                 {/* Mostramos las reseñas aquí */}
                 <Reviews reviews={reviews} />
               </div>
@@ -251,6 +250,7 @@ const Detail = () => {
         product={product}
         currentUrl={currentUrl}
       />
+      <WhatsAppFloatButton />
     </>
   );
 };
