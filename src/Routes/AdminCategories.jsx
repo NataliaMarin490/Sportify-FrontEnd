@@ -102,7 +102,7 @@ const AdminCategories = () => {
                   </button>
                   <button
                     onClick={() => handleDelete(sport.id)}
-                    className="icon-btn"
+                   className="icon-btn"
                   >
                     <FaTrash />
                   </button>

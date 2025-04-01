@@ -63,6 +63,10 @@ const AdminCourts = () => {
     }
   };
 
+  const goToDetail = (idCourt) => {
+    navigate(`/detail/${idCourt}`);
+  };
+
   const handleEdit = (id) => {
     navigate(`/edit-court/${id}`);
   };
@@ -105,7 +109,15 @@ const AdminCourts = () => {
           {courts?.map((court) => (
             <tr key={court.id}>
               <td>{court.id}</td>
-              <td>{court.name}</td>
+              <td>
+  <span
+    onClick={() => goToDetail(court.id)}
+    className="court-link"
+  >
+    {court.name}
+  </span>
+</td>
+
               <td>
                 <button
                   onClick={() => handleEdit(court.id)}

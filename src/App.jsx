@@ -57,15 +57,24 @@ function App() {
   }, [user]);
 
   // Manejar login
+  const [pendingRedirect, setPendingRedirect] = useState(null);
+
   const handleLogin = (userData) => {
     console.log("Usuario autenticado:", userData);
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
-    // Redirigir al usuario a la ruta previa o al inicio si no hay ruta previa
-    const redirectTo = location.state?.from || "/";
-    /* navigate(redirectTo, { replace: true }); */
-    navigate(redirectTo);
+
+    // Guardamos la ruta a la que se debe redirigir
+    setPendingRedirect(location.state?.from || "/");
   };
+
+  // Ejecutamos la redirección cuando el usuario esté completamente actualizado
+  useEffect(() => {
+    if (user && pendingRedirect) {
+      navigate(pendingRedirect, { replace: true });
+      setPendingRedirect(null); // Limpiamos la variable para evitar re-redirecciones
+    }
+  }, [user, pendingRedirect, navigate]);
 
   // Manejar logout
   const handleLogout = () => {

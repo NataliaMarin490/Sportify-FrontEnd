@@ -167,3 +167,16 @@ body{
   font-size: 24px;
   padding: 2px;
 }
+
+.court-link {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.court-link:hover {
+  /* color: #28a745; */
+  text-decoration: underline;
+}
+
+

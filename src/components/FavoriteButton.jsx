@@ -6,20 +6,23 @@ import API_BASE_URL from "../config";
 const FavoriteButton = ({ product }) => {
   // Estado para saber si el producto está en favoritos
   const [isFavorite, setIsFavorite] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // Efecto para recuperar el estado de favoritos desde localStorage cuando el componente se monta
   useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    const user = storedUser ? JSON.parse(storedUser) : null;
+    const token = user?.token;
+  
+    if (token) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+
+    if (token && product?.id) {
     const fetchFavorites = async () => {
       try {
-        const storedUser = localStorage.getItem("user");
-        const user = storedUser ? JSON.parse(storedUser) : null;
-        const token = user?.token;
-  
-        if (!token) {
-          console.error("No hay token disponible");
-          return;
-        }
-  
         const response = await fetch(`${API_BASE_URL}/favorites/all`, {
           method: "GET",
           headers: {
@@ -45,12 +48,18 @@ const FavoriteButton = ({ product }) => {
     if (product?.id) {
       fetchFavorites();
     }
+  }
   }, [product]);
   
   
 
   // Función para manejar la acción de agregar o quitar de favoritos
   const toggleFavorite = async () => {
+    if (!isLoggedIn) {
+      alert("Debes iniciar sesión para marcar favoritos.");
+      return;
+    }
+
     try {
       const storedUser = localStorage.getItem("user");
       const user = storedUser ? JSON.parse(storedUser) : null;
