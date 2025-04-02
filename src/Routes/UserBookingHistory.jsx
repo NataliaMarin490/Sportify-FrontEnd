@@ -6,6 +6,7 @@ import BackButton from "../components/BackButton";
 import ReviewModal from "../components/ReviewModal";
 import API_BASE_URL from "../config";
 import { useContextGlobal } from "../Context/global.context";
+import { Link } from "react-router-dom";
 
 const UserBookingHistory = () => {
   const [bookings, setBookings] = useState([]); // Lista de reservas
@@ -133,14 +134,14 @@ const UserBookingHistory = () => {
   };
 
   const formatDate = (dateString) => {
-    const [year, month, day] = dateString.split('T')[0].split('-');
+    const [year, month, day] = dateString.split("T")[0].split("-");
     return `${day}/${month}/${year}`;
   };
 
   const formatTimeRange = (timeRange) => {
-    return timeRange.replace(/:\d{2}(?= - |$)/g, '');
+    return timeRange.replace(/:\d{2}(?= - |$)/g, "");
   };
-  
+
   return (
     <div className="background-container">
       <BackButton />
@@ -199,7 +200,15 @@ const UserBookingHistory = () => {
                   <td>{formatRegistrationDate(booking.registrationDate)}</td>
                   <td>{formatDate(booking.bookingDate)}</td>
                   <td>{formatTimeRange(booking.bookingTimeRange)}</td>
-                  <td>{booking.courtName}</td>
+                  <td>
+                    <Link
+                      to={`/detail/${booking.courtId}`}
+                      className="court-name-link"
+                    >
+                      {booking.courtName}
+                    </Link>
+                  </td>
+
                   <td>
                     <button
                       className="icon-btn"
