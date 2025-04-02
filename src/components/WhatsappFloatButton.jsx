@@ -53,7 +53,7 @@ const WhatsAppFloatButton = () => {
               >
                 Más información
               </button>
-              <button onClick={() => sendMessage("Quiero hacer una compra")}>
+              <button onClick={() => sendMessage("Quiero hacer una reserva")}>
                 Reservar
               </button>
               <button

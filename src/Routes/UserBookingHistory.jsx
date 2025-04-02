@@ -122,6 +122,12 @@ const UserBookingHistory = () => {
     }
 
     setIsModalOpen(false);
+
+    // Alerta de éxito con opción de redirección
+    const redirect = window.confirm("✅ Review publicada con éxito. ¿Quieres ver la review?");
+    if (redirect) {
+      window.location.href = `/detail/${courtId}`;
+    }
   };
 
   const handleCancelReview = () => {
