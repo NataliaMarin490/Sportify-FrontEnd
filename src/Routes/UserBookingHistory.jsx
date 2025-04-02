@@ -217,7 +217,7 @@ const UserBookingHistory = () => {
                       {/* Aquí se corrige la lógica para la estrella */}
                       {reviews[booking.courtId]?.[booking.idBooking]?.rating >
                       0 ? (
-                        <FaStar color="gold" />
+                        <FaStar color="white" />
                       ) : (
                         <FaRegStar />
                       )}

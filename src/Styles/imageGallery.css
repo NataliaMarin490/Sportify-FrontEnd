@@ -42,7 +42,6 @@
   font-size: 14px;
   transition: background-color 0.3s ease;
   width: 100px;
-  cursor: pointer;
   transition: transform 0.3s ease;
   position: absolute;
   bottom: -125px;

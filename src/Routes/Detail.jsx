@@ -169,7 +169,7 @@ const Detail = () => {
                         )}
                       </span>
                     </div>
-                    <span>| # Reseñas: {reviews.length} </span>
+                    <span>| Reseñas: {reviews.length} </span>
                   </div>
                 </div>
                 <div className="detail-content">

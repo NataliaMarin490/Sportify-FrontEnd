@@ -13,6 +13,7 @@
   gap: 1rem;
   width: 100%;
   justify-content: center;
+  align-items: center;
 }
 
 .review-card {
@@ -23,13 +24,14 @@
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   color: #161616;
   font-size: 10px;
-  width: 40%;
+  width: 45%;
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  min-height: 120px;
 }
 
 .review-card-calif {
@@ -39,6 +41,11 @@
   width: 100%;
   align-items: center;
 }
+
+.review-msg {
+  font-size: 12px;
+}
+
 
 .rating {
   display: flex;
@@ -74,11 +81,23 @@
 
 .review-data {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.review-data h4 {
+  margin: 0;
+  font-size: 16px;
+  color: #457d58;
+  white-space: nowrap;
 }
 
 .review-data p {
   margin: 0;
+  font-size: 12px;
+  color: #666;
+  white-space: nowrap;
 }
 
 .review {
@@ -106,6 +125,159 @@
   color: gray;
 }
 
+.review-card {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.review-card:last-child {
+  border-bottom: none;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 25px;
+  width: 50%;
+  max-width: 800px;
+  max-height: 85vh;
+  overflow-y: auto;
+  border-radius: 12px;
+  position: relative;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.close-modal {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #121312;
+}
+
+.btn-view-all {
+  font-family: "Poppins", serif;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 8px 16px;
+  background-color: #f0592a;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.5);
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.btn-view-all:hover {
+  background-color: #ef400b;
+  transform: scale(1.1);
+}
+
+.modal-reviews {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.modal-reviews .review-card {
+  width: 100%;
+  padding: 15px;
+  background: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.modal-reviews .review-card p {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #333;
+}
+
+.modal-reviews .review-card-calif {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.modal-reviews .review-data {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  color: #161616;
+}
+
+.modal-review-data {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.modal-review-data h4 {
+  margin: 0;
+  font-size: 16px;
+  color: #457d58;
+  white-space: nowrap;
+}
+
+.modal-review-data p {
+  margin: 0;
+  font-size: 12px;
+  color: #666;
+  white-space: nowrap;
+}
+
+
+.modal-reviews .review2 {
+  font-size: 16px;
+  color: #457d58;
+  font-weight: bold;
+}
+
+.modal-reviews .rating {
+  font-size: 14px;
+  font-weight: bold;
+  color: #457d58;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.modal-reviews .stars {
+  display: flex;
+  gap: 3px;
+}
+
+
+
+
 /* ...existing code... */
 
 @media (max-width: 890px) {
@@ -131,6 +303,18 @@
   }
 }
 
+@media (max-width: 768px) {
+  .modal-content {
+    width: 90%;
+    max-height: 75vh;
+  }
+
+  .modal-reviews .review-card {
+    font-size: 12px;
+    padding: 10px;
+  }
+}
+
 @media (max-width: 480px) {
   .reviews-container {
     max-width: 95%;
@@ -153,5 +337,19 @@
 
   .stars {
     gap: 3px;
+  }
+
+  .modal-content {
+    width: 95%;
+    padding: 15px;
+  }
+
+  .modal-reviews .review-card {
+    font-size: 11px;
+    padding: 8px;
+  }
+
+  .close-modal {
+    font-size: 20px;
   }
 }
