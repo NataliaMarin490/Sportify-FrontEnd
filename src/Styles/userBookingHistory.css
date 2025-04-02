@@ -104,6 +104,12 @@
   font-size: 15px;
 }
 
+
+.court-name-link:hover {
+  color: #333; 
+  text-decoration: underline; 
+}
+
 .booking-history-container td button {
   margin: 5px;
   gap: 30px;
