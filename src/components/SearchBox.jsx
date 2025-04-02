@@ -149,28 +149,14 @@ const SearchBox = ({ onSearch }) => {
   // Manejo global para que se abran y cierren inputs
 
   const handleInputClick = (inputType) => {
-    if (inputType === "city") {
-      setShowCitiesDropdown((prev) => !prev);
-      setShowSportsDropdown(false);
-      setShowCalendar(false);
-      setShowTimePicker(false);
-    } else if (inputType === "sport") {
-      setShowSportsDropdown((prev) => !prev);
-      setShowCitiesDropdown(false);
-      setShowCalendar(false);
-      setShowTimePicker(false);
-    } else if (inputType === "date") {
-      setShowCalendar(true);
-      setShowCitiesDropdown(false);
-      setShowSportsDropdown(false);
-      setShowTimePicker(false);
-    } else if (inputType === "hour") {
-      setShowTimePicker(true);
-      setShowCitiesDropdown(false);
-      setShowSportsDropdown(false);
-      setShowCalendar(false);
-    }
-  };
+    setActiveDropdown(inputType);
+  
+    setShowCitiesDropdown(inputType === "city" ? !showCitiesDropdown : false);
+    setShowSportsDropdown(inputType === "sport" ? !showSportsDropdown : false);
+    setShowCalendar(inputType === "date" ? !showCalendar : false);
+    setShowTimePicker(inputType === "hour" ? !showTimePicker : false);
+  };  
+  
 
   return (
     <div className="searcher">
