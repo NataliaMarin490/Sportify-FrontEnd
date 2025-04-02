@@ -8,22 +8,30 @@
     url("/images/crearCuenta/Fondo.jpg");
   background-size: cover;
   background-position: center;
-  min-height: 100vh;
+  min-height: 90vh;
   font-family: "Poppins", serif;
 }
 
 .back-button-profile {
   align-self: self-end;
   margin-right: 5%;
-  margin-top: 5%;
+  margin-top: 1%;
+}
+
+.div-container-profile{
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 30px;
 }
 
 .container-profile {
   display: flex;
-  height: 80%;
-  margin: 5%;
+  justify-content: center;
   background-color: white;
   gap: 3%;
+  width: 70%;
+  align-items: center;
 }
 
 .title-account {
@@ -44,11 +52,11 @@
 .subContainer-profile {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 50%;
   align-items: center;
-  margin-top: 5%;
-  margin-bottom: 3%;
+  padding: 10px;
 }
+
 
 /* Estilos para ocultar el Header en la página de perfil o creación de cuenta */
 .hidden {

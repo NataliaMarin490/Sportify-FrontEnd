@@ -127,12 +127,20 @@ const UserBookingHistory = () => {
     setIsModalOpen(false);
   };
 
-  // Función para formatear la fecha
-  const formatDate = (dateString) => {
-    const options = { year: "numeric", month: "long", day: "numeric" };
+  const formatRegistrationDate = (dateString) => {
+    const options = { year: "numeric", month: "numeric", day: "numeric" };
     return new Date(dateString).toLocaleDateString("es-ES", options);
   };
 
+  const formatDate = (dateString) => {
+    const [year, month, day] = dateString.split('T')[0].split('-');
+    return `${day}/${month}/${year}`;
+  };
+
+  const formatTimeRange = (timeRange) => {
+    return timeRange.replace(/:\d{2}(?= - |$)/g, '');
+  };
+  
   return (
     <div className="background-container">
       <BackButton />
@@ -188,9 +196,9 @@ const UserBookingHistory = () => {
             ) : (
               filteredBookings.map((booking) => (
                 <tr key={booking.idBooking}>
-                  <td>{formatDate(booking.registrationDate)}</td>
+                  <td>{formatRegistrationDate(booking.registrationDate)}</td>
                   <td>{formatDate(booking.bookingDate)}</td>
-                  <td>{booking.bookingTimeRange}</td>
+                  <td>{formatTimeRange(booking.bookingTimeRange)}</td>
                   <td>{booking.courtName}</td>
                   <td>
                     <button

@@ -39,9 +39,7 @@ const Detail = () => {
   const { id } = useParams();
   const currentUrl = window.location.href;
   const [reviews, setReviews] = useState([]); // Estado para almacenar las reseñas
-  const [ratings, setRatings] = useState({}); // Estado para almacenar las calificaciones
-  const [comments, setComments] = useState({}); // Estado para almacenar los comentarios
-  const [dates, setDates] = useState({}); // Estado para almacenar las fechas de las reseñas
+
 
   const handleDateTimeChange = (date, time) => {
     setSelectedDate(date);
@@ -82,7 +80,7 @@ const Detail = () => {
       localStorage.removeItem("selectedDate");
       localStorage.removeItem("selectedTime");
     }
-  }, [url]);
+  }, []);
 
   useEffect(() => {
     // Recuperar las calificaciones, comentarios y fechas desde localStorage

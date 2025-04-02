@@ -16,14 +16,13 @@
 }
 
 .background-container .backButton {
-  margin-right: 120px;
-  margin-bottom: 50px;
-  margin-top: 50px;
+  margin-right: 100px;
+  margin-bottom: 20px;
 }
 
 .booking-history-container {
-  width: 70%;
-  height: 90%;
+  width: 75%;
+  height: 90vh;
   background-color: #f6f6f6;
   margin: 0 auto; /* Centra el contenido horizontalmente */
   margin-bottom: 20px;
@@ -72,7 +71,7 @@
   }
   
   .booking-history-container table {
-    width: 95%;
+    width: 90%;
     border-collapse: collapse;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin: auto;
