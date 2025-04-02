@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
 import BookingForm from "../components/BookingForm";
 import Map from "../components/Map";
 import "../Styles/detail.css";
@@ -11,7 +11,9 @@ import { Share2 } from "lucide-react";
 import ShareCourtModal from "../components/ShareCourtModal.jsx";
 import FavoriteButton from "../components/FavoriteButton.jsx";
 import axios from "axios";
-import API_BASE_URL from "../config.js"
+import API_BASE_URL from "../config.js";
+import Reviews from "../components/Reviews.jsx";
+import WhatsAppFloatButton from "../components/WhatsappFloatButton.jsx";
 
 const Detail = () => {
   const { user } = useContextGlobal();
@@ -36,6 +38,8 @@ const Detail = () => {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const { id } = useParams();
   const currentUrl = window.location.href;
+  const [reviews, setReviews] = useState([]); // Estado para almacenar las reseñas
+
 
   const handleDateTimeChange = (date, time) => {
     setSelectedDate(date);
@@ -54,7 +58,6 @@ const Detail = () => {
         setProduct(res.data);
       })
       .catch((err) => {
-        // console.log(err);
         setError(err.message);
       });
   }, [id]);
@@ -79,22 +82,41 @@ const Detail = () => {
     }
   }, []);
 
+  useEffect(() => {
+    // Recuperar las calificaciones, comentarios y fechas desde localStorage
+    const storedReviews = JSON.parse(localStorage.getItem("reviews")) || {};
+
+    // Filtrar las reseñas basadas en el `id` de la cancha actual
+    if (storedReviews && storedReviews[id]) {
+      const currentCourtReviews = Object.keys(storedReviews[id]).map(
+        (bookingId) => ({
+          courtId: id,
+          idBooking: bookingId,
+          ...storedReviews[id][bookingId],
+        })
+      );
+
+      // Establecer las reseñas en el estado
+      setReviews(currentCourtReviews);
+    } else {
+      setReviews([]);
+    }
+  }, [id]);
+
   if (error || !product) {
     return (
       <div className="not-found-container">
         <BackButton />
         <div className="not-found-message">
           <h2>Producto no encontrado</h2>
-          <p>Lo sentimos, el producto que está buscando no existe o ha sido eliminado.</p>
+          <p>
+            Lo sentimos, el producto que está buscando no existe o ha sido
+            eliminado.
+          </p>
         </div>
       </div>
     );
   }
-
-  // product =
-  //   state?.courts?.data && Array.isArray(state?.courts?.data)
-  //     ? state?.courts?.data?.find((item) => item.id === parseInt(id))
-  //     : null;
 
   return (
     <>
@@ -103,7 +125,6 @@ const Detail = () => {
         <div className="detail">
           <div className="detail-buttons">
             <FavoriteButton product={product} />
-
             <button
               className="court-button"
               onClick={() => setIsShareModalOpen(true)}
@@ -115,7 +136,10 @@ const Detail = () => {
             <div className="gallery">
               <img
                 className="image-detail"
-                src={product.imageUrl?.[product.imageUrl.length-4] || "default-image-url"}
+                src={
+                  product.imageUrl?.[product.imageUrl.length - 4] ||
+                  "default-image-url"
+                }
                 alt={product.name || "Court image"}
               />
               <ImageGallery images={product.imageUrl || []} />
@@ -126,15 +150,45 @@ const Detail = () => {
               <div className="detail-product-container">
                 <div className="detail-header">
                   <h4 className="title-product"> {product.name} </h4>
-                  <div className="rating">
-                    <span className="fa fa-star checked"></span><span>4.5 Estrellas | 450 Reseñas</span>
+                  <div className="rating1">
+                    <div className="rating-prom">
+                      <span className="fa fa-star checked"></span>
+                      <span>
+                        {reviews.length > 0 ? (
+                          // Calculamos el rating promedio
+                          <p>
+                            {(
+                              reviews.reduce(
+                                (sum, review) => sum + review.rating,
+                                0
+                              ) / reviews.length
+                            ).toFixed(1)}{" "}
+                          </p>
+                        ) : (
+                          <p>No hay reseñas para esta cancha.</p>
+                        )}
+                      </span>
+                    </div>
+                    <span>| # Reseñas: {reviews.length} </span>
                   </div>
                 </div>
                 <div className="detail-content">
-                  <span><strong>Precio: </strong>{product.pricePerHour}</span>
-                  <span><strong>Ciudad: </strong>{product.city}</span>
-                  <span><strong>Deporte: </strong>{product.sport}</span>
-                  <span><strong>Estado: </strong>{product.status}</span>
+                  <span>
+                    <strong>Precio: </strong>
+                    {product.pricePerHour}
+                  </span>
+                  <span>
+                    <strong>Ciudad: </strong>
+                    {product.city}
+                  </span>
+                  <span>
+                    <strong>Deporte: </strong>
+                    {product.sport}
+                  </span>
+                  <span>
+                    <strong>Estado: </strong>
+                    {product.status}
+                  </span>
                 </div>
               </div>
               <div className="detail-product-container">
@@ -188,7 +242,10 @@ const Detail = () => {
                   </div>
                 </div>
               </div>
-              <div>Reseñas y puntuación</div>
+              <div className="reviews-main-container">
+                {/* Mostramos las reseñas aquí */}
+                <Reviews reviews={reviews} />
+              </div>
             </div>
             <div className="container-booking-calendar">
               <Calendar
@@ -217,6 +274,7 @@ const Detail = () => {
         product={product}
         currentUrl={currentUrl}
       />
+      <WhatsAppFloatButton />
     </>
   );
 };

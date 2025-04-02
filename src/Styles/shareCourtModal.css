@@ -82,6 +82,7 @@
 }
 
 .custom-message textarea {
+  font-family: "Poppins";
   color: black;
   width: 98%;
   min-height: 100px;

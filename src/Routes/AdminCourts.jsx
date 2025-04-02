@@ -110,13 +110,13 @@ const AdminCourts = () => {
             <tr key={court.id}>
               <td>{court.id}</td>
               <td>
-  <span
-    onClick={() => goToDetail(court.id)}
-    className="court-link"
-  >
-    {court.name}
-  </span>
-</td>
+                <span
+                  onClick={() => goToDetail(court.id)}
+                  className="court-link"
+                >
+                  {court.name}
+                </span>
+              </td>
 
               <td>
                 <button

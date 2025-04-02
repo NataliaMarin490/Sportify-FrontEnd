@@ -63,6 +63,7 @@ const UserProfile = () => {
       <div className="back-button-profile">
         <BackButton />
       </div>
+      <div className="div-container-profile">
       <div className="container-profile">
         <img
           className="image-account"
@@ -76,6 +77,8 @@ const UserProfile = () => {
           <FormsUser user={user} onSubmit={handleUpdateUser} />
         </div>
       </div>
+      </div>
+      
     </div>
   );
 };

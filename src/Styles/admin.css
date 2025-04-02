@@ -12,8 +12,8 @@
   margin-bottom: 15px;
 }
 
-body {
-  color: #333;
+body{
+  color: #333
 }
 
 .admin-view table {
@@ -156,8 +156,7 @@ body {
 }
 
 .category-icon-admin {
-  width: 40px;
-  height: 40px;
+  width: 35px;
   margin: 10px 0;
   font-size: 40px;
   color: black;
@@ -166,7 +165,6 @@ body {
 /* ícono de cambio de usuario */
 .admin-view .access-icon {
   font-size: 24px;
-  padding-top: 3px;
   padding: 2px;
 }
 

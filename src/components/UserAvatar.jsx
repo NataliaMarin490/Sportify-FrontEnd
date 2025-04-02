@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef} from "react";
 import "../Styles/userAvatar.css"; // Estilos personalizados para el componente
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { useContextGlobal } from "../Context/global.context";
 
 const UserAvatar = ({ userName, onLogout }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { user } = useContextGlobal(); 
+  const { user } = useContextGlobal();
+  const navigate = useNavigate();
+  const avatarRef = useRef(null);
+  const menuRef = useRef(null);
 
   // Función para obtener las iniciales del usuario con validación
   const getInitials = (name) => {
@@ -17,47 +20,101 @@ const UserAvatar = ({ userName, onLogout }) => {
       .join("");
   };
 
-  const handleAvatarClick = () => {
-    setIsMenuOpen(!isMenuOpen); // Alterna el estado del menú
+  const handleAvatarClick = (e) => {
+    e.stopPropagation();
+    setIsMenuOpen(!isMenuOpen);
   };
+
+  const handleLinkClick = (path) => {
+    setIsMenuOpen(false);
+    navigate(path);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        menuRef.current && 
+        !menuRef.current.contains(event.target) &&
+        avatarRef.current &&
+        !avatarRef.current.contains(event.target)
+      ) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    const handleGlobalClick = () => {
+      if (isMenuOpen) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    if (isMenuOpen) {
+      document.addEventListener("click", handleClickOutside);
+      window.addEventListener("click", handleGlobalClick);
+    }
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+      window.removeEventListener("click", handleGlobalClick);
+    };
+  }, [isMenuOpen]);
+
 
   return (
     <div className="user-avatar-container">
-      {/* Avatar con iniciales */}
-      <div className="user-avatar" onClick={handleAvatarClick}>
-        {getInitials(userName)}
-      </div>
+    {/* Avatar con iniciales */}
+    <div 
+      className="user-avatar" 
+      onClick={handleAvatarClick}
+      ref={avatarRef}
+    >
+      {getInitials(userName)}
+    </div>
 
-      {/* Menú desplegable */}
-      {isMenuOpen && (
-        <div className="dropdown-menu">
-          <div>
-            <div className="detail-menu">
-              <Link className="link" to="/profile">
-                <img src="/icons/user-perfil-icon-2.svg" alt="perfil" />
-                <span>Ver Perfil</span>
-              </Link>
+    {/* Menú desplegable */}
+    {isMenuOpen && (
+      <div className="dropdown-menu" ref={menuRef}>
+        <div>
+          <div className="detail-menu">
+            <div className="link" onClick={() => handleLinkClick("/profile")}>
+              <img src="/icons/user-perfil-icon-2.svg" alt="perfil" />
+              <span>Ver Perfil</span>
             </div>
-            {/* Mostrar solo si el usuario es ADMIN */}
-            {(user?.role === "ROLE_ADMIN" || user?.role === "ROLE_SUPER_ADMIN") && (
-              <div className="detail-menu">
-                <Link className="link" to="/administracion">
-                  <img src="/icons/panel-admin-icon-2.svg" alt="perfil" />
-                  <span>Panel Admin</span>
-                </Link>
+          </div>
+          
+          {(user?.role === "ROLE_ADMIN" || user?.role === "ROLE_SUPER_ADMIN") && (
+            <div className="detail-menu">
+              <div className="link" onClick={() => handleLinkClick("/administracion")}>
+                <img src="/icons/panel-admin-icon-2.svg" alt="perfil" />
+                <span>Panel Admin</span>
               </div>
-            )}
-            <div className="detail-menu" onClick={onLogout}>
-              <Link className="link" to="/">
-                <img src="/icons/log-out-icon-2.svg" alt="cerrar sesión" />
-                <span>Cerrar sesión</span>
-              </Link>
+            </div>
+          )}
+          
+          <div className="detail-menu">
+            <div className="link" onClick={() => handleLinkClick("/user-booking-history")}>
+              <img src="/icons/list.svg" alt="perfil" />
+              <span>Mis Reservas</span>
+            </div>
+          </div>
+          
+          <div className="detail-menu">
+            <div 
+              className="link" 
+              onClick={() => {
+                setIsMenuOpen(false);
+                onLogout();
+              }}
+            >
+              <img src="/icons/log-out-icon-2.svg" alt="cerrar sesión" />
+              <span>Cerrar sesión</span>
             </div>
           </div>
         </div>
-      )}
-    </div>
-  );
+      </div>
+    )}
+  </div>
+);
 };
 
 

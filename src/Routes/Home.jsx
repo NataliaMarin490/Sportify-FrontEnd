@@ -10,6 +10,7 @@ import "slick-carousel/slick/slick-theme.css";
 import axios from "axios";
 import API_BASE_URL from "../config";
 import SearchBox from "../components/SearchBox";
+import WhatsAppFloatButton from "../components/WhatsappFloatButton.jsx";
 
 const Home = () => {
   const { state } = useContextGlobal();
@@ -41,7 +42,7 @@ const Home = () => {
 
   useEffect(() => {
     let dataToPaginate = [];
-  
+
     if (isSearchActive && filteredCourts.length > 0) {
       dataToPaginate = filteredCourts;
     } else if (selectedCategory && filteredCourts.length > 0) {
@@ -49,19 +50,19 @@ const Home = () => {
     } else if (state?.courts?.data?.length > 0) {
       dataToPaginate = state.courts.data;
     }
-  
+
     if (dataToPaginate.length > 0) {
       // Usar el totalPages del backend solo si no es una búsqueda o filtro
       const calculatedPages =
         isSearchActive || selectedCategory
           ? Math.ceil(dataToPaginate.length / itemsPerPage)
           : state?.courts?.totalPages || 1;
-  
+
       setTotalPages(calculatedPages);
     } else {
       setTotalPages(1);
     }
-  
+
     /* console.log(
       "📌 Total de páginas actualizado:",
       totalPages,
@@ -77,7 +78,6 @@ const Home = () => {
     isSearchActive,
     selectedCategory,
   ]);
-  
 
   const fetchCourts = async (filters) => {
     setLoading(true);
@@ -85,12 +85,9 @@ const Home = () => {
     try {
       const params = { ...filters, page: currentPage, size: itemsPerPage };
 
-      const response = await axios.get(
-        `${API_BASE_URL}/bookings/search`,
-        {
-          params,
-        }
-      );
+      const response = await axios.get(`${API_BASE_URL}/bookings/search`, {
+        params,
+      });
 
       const data = response.data;
 
@@ -112,8 +109,6 @@ const Home = () => {
       setLoading(false);
     }
   };
-
-  
 
   useEffect(() => {
     axios
@@ -197,7 +192,6 @@ const Home = () => {
 
   // Limpiar la categoría seleccionada al refrescar la página
   useEffect(() => {
-    
     localStorage.removeItem("selectedCategory");
     setSelectedCategory(null);
     setFilteredCourts([]);
@@ -363,7 +357,7 @@ const Home = () => {
   // useEffect para paginar los datos
   useEffect(() => {
     let dataToPaginate = [];
-  
+
     if (isSearchActive && filteredCourts.length > 0) {
       dataToPaginate = filteredCourts;
     } else if (selectedCategory && filteredCourts.length > 0) {
@@ -371,14 +365,17 @@ const Home = () => {
     } else if (state?.courts?.data?.length > 0) {
       dataToPaginate = state.courts.data;
     }
-  
+
     if (dataToPaginate.length === 0) return;
-  
+
     const indexOfLastCourt = currentPage * itemsPerPage;
     const indexOfFirstCourt = indexOfLastCourt - itemsPerPage;
-  
-    const paginatedCourts = dataToPaginate.slice(indexOfFirstCourt, indexOfLastCourt);
-  
+
+    const paginatedCourts = dataToPaginate.slice(
+      indexOfFirstCourt,
+      indexOfLastCourt
+    );
+
     /* console.log("📌 Mostrando canchas de", indexOfFirstCourt, "a", indexOfLastCourt, "Total páginas:", totalPages); */
     setCurrentCourts(paginatedCourts);
   }, [
@@ -390,50 +387,47 @@ const Home = () => {
     selectedCategory,
     totalPages,
   ]);
-  
-  
-  
 
   const handleFetchNextPage = () => {
-     const nextPage = Math.min(currentPage + 1, totalPages);
-     axios
-       .get(`${API_BASE_URL}/courts/search?page=${nextPage}&size=10`)
-       .then((response) => {
-         const court = {
-           data: response.data.data,
-           totalPages: response.data.totalPages,
-           pageSize: response.data.pageSize,
-           currentPage: response.data.currentPage,
-         };
- 
-         setCurrentCourts(court.data);
-       })
-       .catch((error) => {
-         console.error("Error al traer la siguiente página ", error);
-       });
- 
-     setCurrentPage(nextPage);
+    const nextPage = Math.min(currentPage + 1, totalPages);
+    axios
+      .get(`${API_BASE_URL}/courts/search?page=${nextPage}&size=10`)
+      .then((response) => {
+        const court = {
+          data: response.data.data,
+          totalPages: response.data.totalPages,
+          pageSize: response.data.pageSize,
+          currentPage: response.data.currentPage,
+        };
+
+        setCurrentCourts(court.data);
+      })
+      .catch((error) => {
+        console.error("Error al traer la siguiente página ", error);
+      });
+
+    setCurrentPage(nextPage);
   };
 
   const handleFetchPrevPage = () => {
     const prevPage = Math.min(currentPage - 1, totalPages);
-     axios
-       .get(`${API_BASE_URL}/courts/search?page=${prevPage}&size=10`)
-       .then((response) => {
-         const court = {
-           data: response.data.data,
-           totalPages: response.data.totalPages,
-           pageSize: response.data.pageSize,
-           currentPage: response.data.currentPage,
-         };
- 
-         setCurrentCourts(court.data);
-       })
-       .catch((error) => {
-         console.error("Error al traer la anterior página ", error);
-       });
- 
-     setCurrentPage(prevPage);
+    axios
+      .get(`${API_BASE_URL}/courts/search?page=${prevPage}&size=10`)
+      .then((response) => {
+        const court = {
+          data: response.data.data,
+          totalPages: response.data.totalPages,
+          pageSize: response.data.pageSize,
+          currentPage: response.data.currentPage,
+        };
+
+        setCurrentCourts(court.data);
+      })
+      .catch((error) => {
+        console.error("Error al traer la anterior página ", error);
+      });
+
+    setCurrentPage(prevPage);
   };
 
   const settings = {
@@ -582,6 +576,7 @@ const Home = () => {
           </p>
           <Recommendations courts={state.recommendedCourts} />
         </div>
+        <WhatsAppFloatButton />
       </main>
     </>
   );

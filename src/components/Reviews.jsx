@@ -1,26 +1,6 @@
+import React from "react";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import "../Styles/reviews.css";
-
-const reviews = [
-  {
-    id: 1,
-    name: "Carlos Pérez",
-    rating: 5,
-    comment: "¡Excelente servicio! Muy recomendado.",
-  },
-  {
-    id: 2,
-    name: "María Gómez",
-    rating: 4,
-    comment: "Muy buena experiencia, pero se puede mejorar.",
-  },
-  {
-    id: 3,
-    name: "Juan López",
-    rating: 3,
-    comment: "El servicio estuvo bien, pero esperaba más.",
-  },
-];
 
 const ReviewStars = ({ rating }) => {
   return (
@@ -36,19 +16,38 @@ const ReviewStars = ({ rating }) => {
   );
 };
 
-const Reviews = () => {
+const Reviews = ({ reviews }) => {
+  console.log(reviews);
+
+  // Limitar a 4 reseñas máximo
+  const limitedReviews = reviews.slice(0, 2);
+
   return (
     <section className="reviews-container">
-      <h2  className="review">Opiniones de Nuestros Clientes</h2>
       <div className="review-container">
-        {reviews.map((review) => (
-          <div key={review.id} className="review-card">
-            <h4  className="review2">{review.name}</h4>
-            <ReviewStars rating={review.rating} />
-            <p>Calificación: {review.rating}/5</p>
-            <p>{review.comment}</p>
-          </div>
-        ))}
+        {limitedReviews.length > 0 ? (
+          limitedReviews.map((review) => (
+            <div key={review.idBooking} className="review-card">
+              <div className="review-card-calif">
+                <div className="review-data">
+                  <h4 className="review2">{review.userName}</h4>
+                  <p>
+                    {review.date
+                      ? new Date(review.date).toLocaleDateString("es-ES") // Esto formatea la fecha en formato "dd/mm/yyyy"
+                      : "No disponible"}
+                  </p>
+                </div>
+                <div className="rating">
+                  <p>{review.rating}</p>
+                  <ReviewStars rating={review.rating} />
+                </div>
+              </div>
+              <p>{review.comment}</p>
+            </div>
+          ))
+        ) : (
+          <p>No hay reseñas para esta cancha.</p>
+        )}
       </div>
     </section>
   );
