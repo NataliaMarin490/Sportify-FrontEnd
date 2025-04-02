@@ -21,7 +21,7 @@
 .container-profile {
   display: flex;
   width: 90%;
-  height: 80%;
+  height: 65%;
   margin: 5%;
   background-color: white;
   gap: 3%;
@@ -39,13 +39,13 @@
 }
 
 .image-account {
-  width: 50%;
+  width: 60%;
 }
 
 .subContainer-profile {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 60%;
   align-items: center;
   margin-top: 5%;
   margin-bottom: 3%;

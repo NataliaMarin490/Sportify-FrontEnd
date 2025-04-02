@@ -189,7 +189,7 @@ const BookingForm = ({
     if (!regexEmail.test(reserva.email)) {
       newErrors.push("Debe ingresar un email válido.");
     }
-    if (!regexNum.test(reserva.phoneNumber)) {
+    if (reserva.phoneNumber.trim() !== "" && !regexNum.test(reserva.phoneNumber)) {
       newErrors.push("El número de contacto debe contener solo números.");
     }
     if (!regexNum.test(reserva.number) || reserva.number <= 0) {
