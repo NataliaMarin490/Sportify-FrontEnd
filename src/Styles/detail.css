@@ -53,6 +53,11 @@
   gap: 5px;
 }
 
+.reviews-main-container{
+  display: flex;
+  width: 100%;
+}
+
 .court-button {
   background-color: #457d58;
   border-radius: 20%;

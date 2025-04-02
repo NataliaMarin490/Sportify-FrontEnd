@@ -27,6 +27,7 @@ import AdminLayout from "./Layouts/AdminLayout.jsx";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ErrorBoundary from "./components/ErrorBoundary";
 import FavoritesPage from "./Routes/FavoritesPage.jsx";
+import UserBookingHistory from "./Routes/UserBookingHistory.jsx";
 
 function App() {
   const navigate = useNavigate();
@@ -107,6 +108,7 @@ function App() {
           <Route path="/create-court" element={<CreateCourt />} />
           <Route path="/create-feature" element={<CreateFeatures />} />
           <Route path="/create-categories" element={<CreateCategories />} />
+          <Route path="/user-booking-history" element={<UserBookingHistory />} />
 
           {/* Ruta protegida para perfil de usuario */}
           <Route
@@ -120,6 +122,8 @@ function App() {
               </ProtectedRoute>
             }
           />
+           {/* Ruta protegida para perfil de usuario */}
+           
 
           {/* Ruta protegida para favoritos */}
           <Route

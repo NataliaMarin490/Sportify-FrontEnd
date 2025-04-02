@@ -3,7 +3,7 @@ FROM node:20-alpine
 WORKDIR /app
 
 COPY package.json .
-RUN npm i
+RUN npm i esbuild@0.25.1
 RUN npm i react-icons
 
 COPY . .
