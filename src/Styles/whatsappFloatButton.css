@@ -82,6 +82,7 @@
 }
 
 .chat-options button {
+  font-family: "Poppins";
   margin-top: 10px;
   padding: 10px;
   background-color: #25d366;
@@ -107,6 +108,7 @@
 }
 
 .user-message input {
+  font-family: "Poppins";
   width: 70%;
   padding: 8px;
   border: none;
@@ -115,6 +117,7 @@
 }
 
 .user-message button {
+  font-family: "Poppins";
   width: 20%;
   padding: 8px;
   background-color: #25d366;
