@@ -105,22 +105,38 @@ const SearchBox = ({ onSearch }) => {
     setActiveDropdown(null);
   };
 
-  // Función para manejar el cambio de hora
-  const [selectedHour, setSelectedHour] = useState("");
-  const [selectedPeriod, setSelectedPeriod] = useState("");
-
-  const handleTimeChange = (newHour, newPeriod) => {
-    if (newHour && newPeriod) {
-      // Solo actualiza y cierra el dropdown cuando ambos (hora y periodo) están disponibles
-      const formattedTime = `${newHour}:00 ${newPeriod}`;
-      setHour(formattedTime);  // Actualiza el estado de la hora
-      setShowTimePicker(false);  // Cierra el dropdown
-      setActiveDropdown(null);  // Opcional: Cierra el dropdown activo
-    } else {
-      // Si no ambos, solo actualiza los valores por separado
-      if (newHour) setSelectedHour(newHour);
-      if (newPeriod) setSelectedPeriod(newPeriod);
+  // Convertir hora a formato de 24 horas
+  const convertTo24HourFormat = (time) => {
+    if (!time || typeof time !== "string") return null; // Validación inicial
+  
+    const parts = time.split(" ");
+    if (parts.length !== 2) return null; // Asegura que tiene la estructura "HH:MM AM/PM"
+  
+    const [hourMinute, period] = parts;
+    const [hour, minute] = hourMinute.split(":");
+  
+    if (!hour || !minute || !period) return null; // Validación adicional
+  
+    let hour24 = parseInt(hour);
+    if (period.toUpperCase() === "PM" && hour24 !== 12) {
+      hour24 += 12;
+    } else if (period.toUpperCase() === "AM" && hour24 === 12) {
+      hour24 = 0;
     }
+  
+    return `${String(hour24).padStart(2, "0")}:${minute.padStart(2, "0")}:00`;
+  };
+  
+  // Función para manejar el cambio de hora
+  const handleTimeChange = (selectedTime) => {
+    console.log("Valor recibido en handleTimeChange:", selectedTime); // Depuración
+  
+    if (!selectedTime) return;
+  
+    setHour(selectedTime); // Se espera que selectedTime ya esté en formato de 24 horas
+  
+    setShowTimePicker(false);
+    setActiveDropdown(null);
   };
   
 
@@ -133,28 +149,14 @@ const SearchBox = ({ onSearch }) => {
   // Manejo global para que se abran y cierren inputs
 
   const handleInputClick = (inputType) => {
-    if (inputType === "city") {
-      setShowCitiesDropdown((prev) => !prev);
-      setShowSportsDropdown(false);
-      setShowCalendar(false);
-      setShowTimePicker(false);
-    } else if (inputType === "sport") {
-      setShowSportsDropdown((prev) => !prev);
-      setShowCitiesDropdown(false);
-      setShowCalendar(false);
-      setShowTimePicker(false);
-    } else if (inputType === "date") {
-      setShowCalendar(true);
-      setShowCitiesDropdown(false);
-      setShowSportsDropdown(false);
-      setShowTimePicker(false);
-    } else if (inputType === "hour") {
-      setShowTimePicker(true);
-      setShowCitiesDropdown(false);
-      setShowSportsDropdown(false);
-      setShowCalendar(false);
-    }
-  };
+    setActiveDropdown(inputType);
+  
+    setShowCitiesDropdown(inputType === "city" ? !showCitiesDropdown : false);
+    setShowSportsDropdown(inputType === "sport" ? !showSportsDropdown : false);
+    setShowCalendar(inputType === "date" ? !showCalendar : false);
+    setShowTimePicker(inputType === "hour" ? !showTimePicker : false);
+  };  
+  
 
   return (
     <div className="searcher">
@@ -283,7 +285,7 @@ const SearchBox = ({ onSearch }) => {
         <input
           type="text"
           className="searcher-input"
-          value={hour || (selectedHour && selectedPeriod ? `${selectedHour}:00 ${selectedPeriod}` : "")}
+          value={hour || ""}
           placeholder="Hora"
           readOnly
           onClick={() => handleInputClick("hour")}
@@ -303,8 +305,11 @@ const SearchBox = ({ onSearch }) => {
           <div className="custom-timepicker">
             <TimePicker onTimeChange={handleTimeChange} />
           </div>
+
+          
         )}
       </div>
+      
       <button className="searcher-button" onClick={handleSearch}>
         Buscar
       </button>
