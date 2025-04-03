@@ -1,6 +1,5 @@
 import "../Styles/cards.css";
 import { Link } from "react-router-dom";
-import "../Styles/cards.css";
 import PropTypes from "prop-types";
 import FavoriteButton from "./FavoriteButton.jsx";
 import { useState, useEffect } from "react";

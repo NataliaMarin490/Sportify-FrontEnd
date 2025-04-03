@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FaFutbol,
   FaBasketballBall,
@@ -21,6 +21,7 @@ import {
   FaSnowboarding,
 } from "react-icons/fa";
 import "../Styles/addCategory.css";
+import { useParams, useNavigate } from "react-router-dom";
 import BackButton from "../components/BackButton";
 import API_BASE_URL from "../config";
 
@@ -83,10 +84,29 @@ const sportsIcons = [
 ];
 
 const CreateCategory = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [selectedIcon, setSelectedIcon] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (id) {
+      fetch(`${API_BASE_URL}/public/sports/${id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setName(data.name);
+          setDescription(data.description);
+          const icon = sportsIcons.find((icon) => icon.iconName === data.icon);
+          setSelectedIcon(icon || null);
+        })
+        .catch((error) => {
+          console.error("Error al cargar el deporte:", error);
+          alert("No se pudo cargar la información del deporte.");
+        });
+    }
+  }, [id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -105,18 +125,23 @@ const CreateCategory = () => {
     };
 
     try {
-      const response = await fetch(`${API_BASE_URL}/public/sports/add`, {
-        method: "POST",
+      const url = id
+        ? `${API_BASE_URL}/public/sports/update/${id}`
+        : `${API_BASE_URL}/public/sports/add`;
+      const method = id ? "PUT" : "POST";
+
+      const response = await fetch(url, {
+        method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
       if (!response.ok) throw new Error("Error al guardar el deporte");
 
-      alert("Deporte creado con éxito!");
-      setName("");
-      setDescription("");
-      setSelectedIcon(null);
+      alert(
+        id ? "Deporte actualizado con éxito!" : "Deporte creado con éxito!"
+      );
+      navigate("/administracion/categories");
     } catch (error) {
       alert(error.message);
     } finally {

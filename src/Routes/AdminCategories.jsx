@@ -47,7 +47,7 @@ const AdminCategories = () => {
   };
 
   const handleEdit = (id) => {
-    navigate(`/edit-category/${id}`);
+    navigate(`/edit-categories/${id}`);
   };
 
   const filteredSports = sports.filter((sport) =>
@@ -96,13 +96,15 @@ const AdminCategories = () => {
                 </td>
                 <td>{sport.description}</td>
                 <td>
-                  <button onClick={() => handleEdit(sport.id)}
-                    className="icon-btn">
+                  <button
+                    onClick={() => handleEdit(sport.id)}
+                    className="icon-btn"
+                  >
                     <FaEdit />
                   </button>
                   <button
                     onClick={() => handleDelete(sport.id)}
-                   className="icon-btn"
+                    className="icon-btn"
                   >
                     <FaTrash />
                   </button>
