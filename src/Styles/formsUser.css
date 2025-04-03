@@ -92,6 +92,7 @@
   font-family: "Poppins", serif;
   border-radius: 0.5rem;
   cursor: pointer;
+  padding: 5px;
 }
 
 .button-account:hover {

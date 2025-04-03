@@ -122,6 +122,12 @@ const UserBookingHistory = () => {
     }
 
     setIsModalOpen(false);
+
+    // Alerta de éxito con opción de redirección
+    const redirect = window.confirm("✅ Review publicada con éxito. ¿Quieres ver la review?");
+    if (redirect) {
+      window.location.href = `/detail/${courtId}`;
+    }
   };
 
   const handleCancelReview = () => {
@@ -217,7 +223,7 @@ const UserBookingHistory = () => {
                       {/* Aquí se corrige la lógica para la estrella */}
                       {reviews[booking.courtId]?.[booking.idBooking]?.rating >
                       0 ? (
-                        <FaStar color="gold" />
+                        <FaStar color="white" />
                       ) : (
                         <FaRegStar />
                       )}

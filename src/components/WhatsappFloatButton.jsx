@@ -53,14 +53,19 @@ const WhatsAppFloatButton = () => {
               >
                 Más información
               </button>
-              <button onClick={() => sendMessage("Quiero hacer una compra")}>
+              <button onClick={() => sendMessage("Quiero hacer una reserva")}>
                 Reservar
               </button>
               <button
-                onClick={() => sendMessage("Quiero hablar con un agente")}
+                onClick={() => {
+                  const phoneNumber = "59894630330"; // Reemplaza con el número de WhatsApp del agente (con código de país)
+                  const message = encodeURIComponent("Hola, necesito hablar con un agente sobre Sportify.");
+                  window.open(`https://wa.me/${phoneNumber}?text=${message}`, "_blank");
+                }}
               >
                 Hablar con un agente
               </button>
+
             </div>
             <div className="user-message">
               <input

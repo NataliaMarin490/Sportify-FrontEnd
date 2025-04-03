@@ -118,6 +118,45 @@ body{
   background-color: var(--header-color);
 }
 
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.pagination button {
+  background-color: var(--secondary-color);
+  color: white;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 15px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s ease;
+  margin-bottom: 5px;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #d94d1f; /* Color más oscuro manualmente */
+  transform: scale(1.05);
+}
+
+.pagination button:disabled {
+  background-color: grey;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  font-size: 14px;
+  color: #333;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+}
+
+
 .search-container {
   width: 500px; /* Ancho reducido */
   height: 35px;
