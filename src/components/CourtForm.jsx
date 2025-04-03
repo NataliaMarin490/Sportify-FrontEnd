@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import "../Styles/createCourt.css";
 import API_BASE_URL from "../config";
 
 const CourtForm = ({ onSubmit, courtId, isEditing }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     sport: "",
@@ -17,6 +19,7 @@ const CourtForm = ({ onSubmit, courtId, isEditing }) => {
     images: [],
   });
 
+  const { id } = useParams();
   const [sports, setSports] = useState([]);
   const [countries, setCountries] = useState([]);
   const [regions, setRegions] = useState([]);
@@ -62,12 +65,33 @@ const CourtForm = ({ onSubmit, courtId, isEditing }) => {
     }
   }, [formData.region]);
 
+  useEffect(() => {
+    if (isEditing && courtId) {
+      fetch(`${API_BASE_URL}/public/courts/search/${courtId}`)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Datos de la cancha:", data); // <-- Verifica qué llega aquí
+          setFormData((prevFormData) => ({
+            ...prevFormData,
+            images: data.imageUrl || [],
+          }));
+        })
+        .catch((error) => console.error("Error fetching court:", error));
+    }
+  }, [courtId, isEditing]);
+
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
 
     if (type === "file") {
-      const newImages = [...formData.images, ...Array.from(files)];
-      setFormData({ ...formData, images: newImages });
+      const newFiles = Array.from(files);
+      setFormData((prev) => ({
+        ...prev,
+        images: [
+          ...prev.images.filter((img) => typeof img === "string"),
+          ...newFiles,
+        ],
+      }));
     } else {
       setFormData({ ...formData, [name]: value });
     }
@@ -111,22 +135,21 @@ const CourtForm = ({ onSubmit, courtId, isEditing }) => {
       return;
     }
 
-    setIsLoading(true); // Activar el estado de carga
+    setIsLoading(true);
 
     const formDataToSend = new FormData();
 
-    // Crear el objeto JSON para la cancha con el formato requerido
     const courtData = {
       name: formData.name,
       description: formData.description,
-      capacity: formData.capacity,
-      pricePerHour: formData.price,
+      capacity: Number(formData.capacity),
+      pricePerHour: Number(formData.price),
       address: formData.address,
       neighborhood: formData.neighborhood,
-      sportId: formData.sport,
-      cityId: formData.city,
+      sportId: Number(formData.sport),
+      cityId: Number(formData.city),
       statusId: 1,
-      featureIds: selectedFeatures,
+      featureIds: selectedFeatures.map((feature) => Number(feature)), // Convertir a número
     };
 
     formDataToSend.append("court", JSON.stringify(courtData));
@@ -137,8 +160,12 @@ const CourtForm = ({ onSubmit, courtId, isEditing }) => {
     });
 
     try {
-      const response = await fetch(`${API_BASE_URL}/public/courts/add`, {
-        method: "POST",
+      const url = isEditing
+        ? `${API_BASE_URL}/public/courts/update/${courtId}`
+        : `${API_BASE_URL}/public/courts/add`;
+
+      const response = await fetch(url, {
+        method: isEditing ? "PUT" : "POST",
         body: formDataToSend,
       });
 
@@ -146,29 +173,15 @@ const CourtForm = ({ onSubmit, courtId, isEditing }) => {
         throw new Error("Error al guardar la cancha");
       }
 
-      const result = await response.json();
-      alert("Cancha creada con éxito!");
-
-      // Limpiar el formulario
-      setFormData({
-        name: "",
-        sport: "",
-        country: "",
-        address: "",
-        capacity: "",
-        description: "",
-        price: "",
-        city: "",
-        region: "",
-        neighborhood: "",
-        images: [],
-      });
-      setSelectedFeatures([]);
+      alert(
+        isEditing ? "Cancha actualizada con éxito!" : "Cancha creada con éxito!"
+      );
+      navigate("/administracion");
     } catch (error) {
       console.error("Error:", error);
-      alert("Hubo un error al crear la cancha.");
+      alert("Hubo un error al procesar la solicitud.");
     } finally {
-      setIsLoading(false); // Desactivar el estado de carga
+      setIsLoading(false);
     }
   };
 
@@ -177,9 +190,11 @@ const CourtForm = ({ onSubmit, courtId, isEditing }) => {
     setFormData({ ...formData, images: newImages });
   };
 
+  const isValidFile = (file) => file instanceof File || file instanceof Blob;
+
   return (
     <form className="court" onSubmit={handleSubmit}>
-      <h1>Agregar cancha</h1>
+      <h1>{isEditing ? "Editar cancha" : "Agregar cancha"}</h1>
       <h3>Datos de la cancha</h3>
       <div className="court-form">
         <div className="form-section left">
@@ -356,8 +371,10 @@ const CourtForm = ({ onSubmit, courtId, isEditing }) => {
             {formData.images.map((image, index) => (
               <div key={index} className="image-box">
                 <img
-                  src={URL.createObjectURL(image)}
-                  alt={`Imagen ${index + 1}`}
+                  src={
+                    image instanceof File ? URL.createObjectURL(image) : image
+                  }
+                  alt="Vista previa"
                 />
                 <button type="button" onClick={() => removeImage(index)}>
                   X
@@ -368,7 +385,7 @@ const CourtForm = ({ onSubmit, courtId, isEditing }) => {
         </div>
         <div className="button-container">
           <button type="submit" disabled={isLoading}>
-            {isLoading ? "Guardando..." : "Guardar Cancha"}
+            {isLoading ? "Guardando..." : isEditing ? "Actualizar" : "Guardar"}
           </button>
         </div>
       </div>

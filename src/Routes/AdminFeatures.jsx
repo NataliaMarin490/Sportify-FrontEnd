@@ -47,7 +47,7 @@ const AdminFeatures = () => {
     }
   };
 
-  // Editar una característica (redirección a la vista de edición)
+  
   const handleEdit = (id) => {
     navigate(`/edit-feature/${id}`);
   };

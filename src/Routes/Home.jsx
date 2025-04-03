@@ -25,6 +25,10 @@ const Home = () => {
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [courts, setCourts] = useState([]);
   const [cities, setCities] = useState([]);
+  const [bookings, setBookings] = useState([]);
+  const [filteredBookings, setFilteredBookings] = useState([]);
+  const [currentPageBookings, setCurrentPageBookings] = useState(1);
+  const [totalPagesBookings, setTotalPagesBookings] = useState(1);
 
   const [selectedCity, setSelectedCity] = useState(null);
   const [selectedSport, setSelectedSport] = useState(null);
@@ -79,28 +83,26 @@ const Home = () => {
     selectedCategory,
   ]);
 
-  const fetchCourts = async (filters) => {
+  const fetchCourts = async (filters = {}) => {
     setLoading(true);
-
     try {
-      const params = { ...filters, page: currentPage, size: itemsPerPage };
-
-      const response = await axios.get(`${API_BASE_URL}/bookings/search`, {
+      const params = { page: currentPageBookings, size: itemsPerPage };
+      const response = await axios.get(`${API_BASE_URL}/public/courts/search`, {
         params,
       });
-
       const data = response.data;
 
-      if (!data.data.length) {
+      if (!data.data || data.data.length === 0) {
         setError("No se encontraron canchas para los filtros aplicados.");
         setFilteredCourts([]);
+        setTotalPages(1);
         return;
       }
 
       setCourts(data.data);
       setFilteredCourts(data.data);
+      setTotalPages(data.totalPages || 1);
       setError(null);
-      setTotalPages(data.totalPages);
     } catch (error) {
       console.error("Error fetching canchas:", error);
       setError("Error al obtener canchas. Intenta nuevamente.");
@@ -109,6 +111,57 @@ const Home = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    setTotalPages(state?.courts?.totalPages || 1);
+  }, [state?.courts?.totalPages]);
+
+  useEffect(() => {
+    setTotalPagesBookings(state?.bookings?.totalPages || 1);
+  }, [state?.bookings?.totalPages]);
+
+  const fetchBookings = async (filters = {}) => {
+    setLoading(true);
+    try {
+      const params = {
+        ...filters,
+        page: currentPageBookings,
+        size: itemsPerPage,
+      };
+      const response = await axios.get(`${API_BASE_URL}/bookings/search`, {
+        params,
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const data = response.data;
+      console.log("Respuesta de la API:", data); // Verificar estructura
+
+      if (!data.data || data.data.length === 0) {
+        setError("No se encontraron reservas para los filtros aplicados.");
+        setFilteredBookings([]);
+        setTotalPagesBookings(1);
+        return;
+      }
+
+      setBookings(data.data);
+      setFilteredBookings(data.data);
+      setTotalPagesBookings(data.totalPages || 1);
+      console.log("Total páginas (bookings):", data.totalPages);
+      console.log("Cantidad de bookings recibidos:", data.data.length);
+
+      setError(null);
+    } catch (error) {
+      console.error("Error fetching reservas:", error);
+      setError("Error al obtener reservas. Intenta nuevamente.");
+      setFilteredBookings([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchBookings();
+  }, [currentPage, itemsPerPage]);
 
   useEffect(() => {
     axios
@@ -132,7 +185,6 @@ const Home = () => {
       });
   }, []);
 
-  // useEffect para manejar la categoría seleccionada y la carga de canchas
   useEffect(() => {
     if (selectedCategory) {
       fetchCourts({ sportId: selectedCategory });
@@ -141,7 +193,6 @@ const Home = () => {
     }
   }, [selectedCategory, currentPage]);
 
-  // useEffect para manejar la búsqueda con filtros
   useEffect(() => {
     if (isSearchActive) {
       const filters = {
@@ -150,18 +201,9 @@ const Home = () => {
         date: selectedDate,
         hour: selectedHour,
       };
-
-      setCurrentPage(1);
       fetchCourts(filters);
     }
-  }, [
-    isSearchActive,
-    selectedCity,
-    selectedSport,
-    selectedDate,
-    selectedHour,
-    currentPage,
-  ]);
+  }, [isSearchActive, selectedCity, selectedSport, selectedDate, selectedHour]);
 
   useEffect(() => {
     const storedCategory = localStorage.getItem("selectedCategory");
@@ -180,6 +222,28 @@ const Home = () => {
       container.scrollIntoView({ behavior: "smooth" });
     }
   }, [currentPage]);
+
+  useEffect(() => {
+    console.log("Items per page:", itemsPerPage); // Verifica que tenga un valor válido
+
+    fetch(
+      `${API_BASE_URL}/public/courts/search?page=${currentPage}&size=${itemsPerPage}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Respuesta completa del backend:", data); // Verifica qué llega aquí
+        if (data.data && Array.isArray(data.data)) {
+          setCurrentCourts(data.data); // Asegura que estás guardando un array
+        } else {
+          console.error(
+            "Error: La respuesta del backend no tiene la estructura esperada"
+          );
+          setCurrentCourts([]); // Evita que el estado quede indefinido
+        }
+        setTotalPages(data.totalPages || 1); // Previene errores si totalPages viene undefined
+      })
+      .catch((error) => console.error("Error al obtener las canchas:", error));
+  }, [currentPage, itemsPerPage]);
 
   const handleCategorySelect = (categoryName, sportId) => {
     setSelectedCategory(sportId);
@@ -229,8 +293,6 @@ const Home = () => {
     return `${String(hour24).padStart(2, "0")}:${minute}`;
   };
 
-  
-
   const handleSearch = ({ city, sport, date, hour }) => {
     setIsSearchActive(true);
     setCurrentPage(1);
@@ -242,29 +304,46 @@ const Home = () => {
 
     // Verificar si la hora seleccionada está dentro de un rango válido
     const isValidHour = (hour) => {
-    const availableHours = ["07:00:00", "08:00:00", "09:00:00", "10:00:00", "11:00:00", "12:00:00", "13:00:00", "14:00:00", "15:00:00", "16:00:00", "17:00:00", "18:00:00", "19:00:00", "20:00:00", "21:00:00"];
+      const availableHours = [
+        "07:00:00",
+        "08:00:00",
+        "09:00:00",
+        "10:00:00",
+        "11:00:00",
+        "12:00:00",
+        "13:00:00",
+        "14:00:00",
+        "15:00:00",
+        "16:00:00",
+        "17:00:00",
+        "18:00:00",
+        "19:00:00",
+        "20:00:00",
+        "21:00:00",
+      ];
 
-    if (!hour) return false; // Verifica que hour no sea null o undefined
+      if (!hour) return false; // Verifica que hour no sea null o undefined
 
-    // Normaliza la hora a formato HH:MM
-    const [h, m] = hour.split(":"); 
-    const formattedHour = `${h.padStart(2, "0")}:${m.padStart(2, "0")}:00`;
-    //const formattedHour = convertTo24HourFormat(hour);
-    
+      // Normaliza la hora a formato HH:MM
+      const [h, m] = hour.split(":");
+      const formattedHour = `${h.padStart(2, "0")}:${m.padStart(2, "0")}:00`;
+      //const formattedHour = convertTo24HourFormat(hour);
 
-    console.log("Hora normalizada:", formattedHour); 
-    return availableHours.includes(formattedHour);
+      console.log("Hora normalizada:", formattedHour);
+      return availableHours.includes(formattedHour);
     };
 
-  // Si la hora no es válida, mostramos el error
-  if (normalizedHour && !isValidHour(normalizedHour)) {
-    setError("La hora seleccionada no está disponible. Por favor elige una hora dentro del rango disponible.");
-    setFilteredCourts([]);
-    return;
-  }
+    // Si la hora no es válida, mostramos el error
+    if (normalizedHour && !isValidHour(normalizedHour)) {
+      setError(
+        "La hora seleccionada no está disponible. Por favor elige una hora dentro del rango disponible."
+      );
+      setFilteredCourts([]);
+      return;
+    }
 
-  // Si la hora es válida, continuar con la búsqueda
-  setError(null); // Limpiar el error si la hora es válida
+    // Si la hora es válida, continuar con la búsqueda
+    setError(null); // Limpiar el error si la hora es válida
 
     // Comprobar si los filtros tienen los valores correctos
     let searchParams = new URLSearchParams();
@@ -327,33 +406,33 @@ const Home = () => {
   // Función para normalizar la hora a formato HH:mm:ss
   const normalizeHour = (hour) => {
     if (!hour) return null;
-  
+
     // Verificar si la hora tiene formato AM/PM
     const amPmMatch = hour.match(/(\d+):(\d+) (AM|PM)/);
-  
+
     if (amPmMatch) {
       let [_, h, m, period] = amPmMatch;
       h = parseInt(h, 10);
-  
+
       if (period === "PM" && h !== 12) {
         h += 12;
       } else if (period === "AM" && h === 12) {
         h = 0;
       }
-  
+
       return `${String(h).padStart(2, "0")}:${m.padStart(2, "0")}:00`;
     }
-  
+
     // Si ya está en formato 24 horas, simplemente agregar ":00" si falta
     const hourMatch = hour.match(/(\d+):(\d+)/);
     if (hourMatch) {
       let [_, h, m] = hourMatch;
       return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:00`;
     }
-  
+
     return hour; // Si no coincide con ningún formato, devolver como está
   };
-  
+
   // useEffect para paginar los datos
   useEffect(() => {
     let dataToPaginate = [];
@@ -390,43 +469,11 @@ const Home = () => {
 
   const handleFetchNextPage = () => {
     const nextPage = Math.min(currentPage + 1, totalPages);
-    axios
-      .get(`${API_BASE_URL}/courts/search?page=${nextPage}&size=10`)
-      .then((response) => {
-        const court = {
-          data: response.data.data,
-          totalPages: response.data.totalPages,
-          pageSize: response.data.pageSize,
-          currentPage: response.data.currentPage,
-        };
-
-        setCurrentCourts(court.data);
-      })
-      .catch((error) => {
-        console.error("Error al traer la siguiente página ", error);
-      });
-
     setCurrentPage(nextPage);
   };
 
   const handleFetchPrevPage = () => {
-    const prevPage = Math.min(currentPage - 1, totalPages);
-    axios
-      .get(`${API_BASE_URL}/courts/search?page=${prevPage}&size=10`)
-      .then((response) => {
-        const court = {
-          data: response.data.data,
-          totalPages: response.data.totalPages,
-          pageSize: response.data.pageSize,
-          currentPage: response.data.currentPage,
-        };
-
-        setCurrentCourts(court.data);
-      })
-      .catch((error) => {
-        console.error("Error al traer la anterior página ", error);
-      });
-
+    const prevPage = Math.max(currentPage - 1, 1);
     setCurrentPage(prevPage);
   };
 
