@@ -61,8 +61,7 @@ const ContextProvider = ({ children }) => {
 
     // Limpiar estado de usuario
     setUser(null);
-};
-
+  };
 
   const toggleSidebar = useCallback(
     (show) => {
@@ -85,7 +84,7 @@ const ContextProvider = ({ children }) => {
     const fetchCourts = async () => {
       try {
         const response = await axios.get(
-          `${API_BASE_URL}/public/courts/search?page=1&size=10`
+          `${API_BASE_URL}/bookings/search?page=1&size=10`
         );
 
         const modifiedData = response.data.data.map((court) => ({
@@ -141,7 +140,14 @@ const ContextProvider = ({ children }) => {
         imageUrl: transformImageUrls(court.imageUrl),
       }));
 
-      dispatch({ type: "GET_COURTS_BY_CATEGORY", payload: modifiedData });
+      const courtByCategory = {
+        data: modifiedData,
+        totalPages: response.data.totalPages,
+        pageSize: response.data.pageSize,
+        currentPage: response.data.currentPage,
+      };
+
+      dispatch({ type: "GET_COURTS_BY_CATEGORY", payload: courtByCategory });
     } catch (error) {
       console.error(
         `Error al obtener las canchas de la categoría ${sportId}:`,
