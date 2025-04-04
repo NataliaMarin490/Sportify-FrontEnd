@@ -55,6 +55,7 @@ const AdminCourts = () => {
         .then(() => {
           dispatch({ type: "DELETE_COURT", payload: id });
           alert("La cancha ha sido eliminada exitosamente.");
+          navigate("/administracion");
         })
         .catch((error) => {
           console.error("Error al eliminar la cancha:", error);

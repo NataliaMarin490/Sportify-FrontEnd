@@ -65,21 +65,6 @@ const CourtForm = ({ onSubmit, courtId, isEditing }) => {
     }
   }, [formData.region]);
 
-  useEffect(() => {
-    if (isEditing && courtId) {
-      fetch(`${API_BASE_URL}/public/courts/search/${courtId}`)
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Datos de la cancha:", data); // <-- Verifica qué llega aquí
-          setFormData((prevFormData) => ({
-            ...prevFormData,
-            images: data.imageUrl || [],
-          }));
-        })
-        .catch((error) => console.error("Error fetching court:", error));
-    }
-  }, [courtId, isEditing]);
-
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
 
@@ -97,35 +82,101 @@ const CourtForm = ({ onSubmit, courtId, isEditing }) => {
     }
   };
 
+  // Cargar características
   useEffect(() => {
     fetch(`${API_BASE_URL}/public/features`)
       .then((response) => response.json())
-      .then((data) => setFeatures(data))
+      .then((data) => {
+        setFeatures(data);
+      })
       .catch((error) => console.error("Error fetching features:", error));
   }, []);
+
+  const [courtData, setCourtData] = useState(null);
 
   useEffect(() => {
     if (isEditing && courtId) {
       fetch(`${API_BASE_URL}/public/courts/search/${courtId}`)
-        .then((response) => response.json())
-        .then((data) => {
-          setFormData({
-            ...formData,
-            name: data.name,
-            sport: data.sport,
-            city: data.city,
-            address: data.address,
-            description: data.description,
-            price: data.pricePerHour,
-            capacity: data.capacity,
-            neighborhood: data.neighborhood,
-          });
-          // Convertir características activas en IDs
-          setSelectedFeatures(data.features);
-        })
-        .catch((error) => console.error("Error fetching court:", error));
+        .then((res) => res.json())
+        .then((data) => setCourtData(data))
+        .catch((err) => console.error(err));
     }
-  }, [courtId, isEditing]);
+  }, [isEditing, courtId]);
+
+  useEffect(() => {
+    const preloadData = async () => {
+      if (courtData && features.length > 0) {
+        const normalize = (str) =>
+          str
+            ?.toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .trim()
+            .replace(/\s+/g, " ");
+
+        const selectedIds = features
+          .filter((feature) =>
+            courtData.features?.some(
+              (f) => normalize(f) === normalize(feature.feature)
+            )
+          )
+          .map((feature) => feature.idFeature);
+
+        setSelectedFeatures(selectedIds);
+
+        const sportMatch = sports.find(
+          (s) => normalize(s.name) === normalize(courtData.sport)
+        );
+
+        // Primero cargamos regiones del país
+        const countryRes = await fetch(
+          `${API_BASE_URL}/public/countries/search`
+        );
+        const countriesData = await countryRes.json();
+        const countryMatch = countriesData.find(
+          (c) => normalize(c.countryName) === normalize(courtData.country)
+        );
+        setCountries(countriesData);
+
+        const regionRes = await fetch(
+          `${API_BASE_URL}/public/regions/by-country/${countryMatch?.idCountry}`
+        );
+        const regionData = await regionRes.json();
+        setRegions(regionData);
+
+        const regionMatch = regionData.find(
+          (r) => normalize(r.name) === normalize(courtData.region)
+        );
+
+        const cityRes = await fetch(
+          `${API_BASE_URL}/public/cities/by-region/${regionMatch?.id}`
+        );
+        const cityData = await cityRes.json();
+        setCities(cityData);
+
+        const cityMatch = cityData.find(
+          (c) => normalize(c.name) === normalize(courtData.city)
+        );
+
+        setFormData((prev) => ({
+          ...prev,
+          name: courtData.name,
+          description: courtData.description,
+          capacity: courtData.capacity,
+          price: courtData.pricePerHour,
+          address: courtData.address,
+          neighborhood: courtData.neighborhood,
+          images: courtData.imageUrl || [],
+          sport: sportMatch?.id || "",
+          country: countryMatch?.idCountry || "",
+          region: regionMatch?.id || "",
+          city: cityMatch?.id || "",
+        }));
+      }
+    };
+
+    preloadData();
+  }, [courtData, features, sports]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -232,7 +283,7 @@ const CourtForm = ({ onSubmit, courtId, isEditing }) => {
             País:
             <select
               name="country"
-              value={formData.countryName}
+              value={formData.country}
               onChange={handleChange}
               required
             >
@@ -329,31 +380,34 @@ const CourtForm = ({ onSubmit, courtId, isEditing }) => {
         </div>
         <div className="features-section">
           <h3>Características</h3>
-          <div className="features-grid">
+          <div className="features-list">
             {features.map((feature) => (
               <label key={feature.idFeature} className="feature-item">
                 <input
                   type="checkbox"
+                  value={feature.idFeature}
                   checked={selectedFeatures.includes(feature.idFeature)}
                   onChange={(e) => {
-                    if (e.target.checked) {
-                      setSelectedFeatures([
-                        ...selectedFeatures,
-                        feature.idFeature,
-                      ]);
-                    } else {
-                      setSelectedFeatures(
-                        selectedFeatures.filter((f) => f !== feature.idFeature)
-                      );
-                    }
+                    const value = Number(e.target.value);
+                    setSelectedFeatures((prev) =>
+                      prev.includes(value)
+                        ? prev.filter((id) => id !== value)
+                        : [...prev, value]
+                    );
                   }}
                 />
-                <img src={feature.imageUrl} alt={feature.feature} />
-                {feature.feature}
+                <img
+                  src={feature.imageUrl}
+                  alt={feature.feature}
+                  width="40"
+                  height="40"
+                />
+                <span>{feature.feature}</span>
               </label>
             ))}
           </div>
         </div>
+
         <div className="image-section">
           <label>Seleccionar imagen</label>
           <label className="image-upload">
@@ -372,9 +426,11 @@ const CourtForm = ({ onSubmit, courtId, isEditing }) => {
               <div key={index} className="image-box">
                 <img
                   src={
-                    image instanceof File ? URL.createObjectURL(image) : image
+                    typeof image === "string"
+                      ? image
+                      : URL.createObjectURL(image)
                   }
-                  alt="Vista previa"
+                  alt={`Imagen ${index + 1}`}
                 />
                 <button type="button" onClick={() => removeImage(index)}>
                   X
