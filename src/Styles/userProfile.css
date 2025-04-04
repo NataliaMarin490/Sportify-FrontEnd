@@ -81,3 +81,13 @@
 .hide-nav header nav {
   display: none;
 }
+
+@media screen and (max-width: 890px) {
+.subContainer-profile{
+  width: 90%;
+}
+
+  .image-account{
+  display: none;
+}
+}

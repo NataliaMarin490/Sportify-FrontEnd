@@ -131,3 +131,14 @@
 .cards-container:hover {
   transform: scale(1.05);
 }
+
+@media (max-width: 480px) {
+  .cards-container {
+    min-width: 100px;
+    max-width: 270px;
+    transform: translatex(-35px) translatey(0px);
+  }
+  .cards-container:hover {
+    transform: scale(1.00);
+  }
+}

@@ -101,6 +101,7 @@ footer {
   .footerContainer {
     padding: 5px 0;
     justify-content: space-between;
+    transform:scale(0.80);
   }
 
   .footerLogo {

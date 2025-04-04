@@ -71,9 +71,9 @@
   margin: 0;
 }
 
-
 /* responsive */
-@media screen and (max-width: 768px) {
+
+@media screen and (max-width: 1120px) {
   .details-register-subcontainer {
     flex-direction: column;
     gap: 20px;
@@ -85,6 +85,31 @@
 
   .details-register-subcontainer .forms-title {
     width: 100%;
+  }
+
+  .details-register-container {
+    transform:scale(0.90);
+
+  }
+}
+
+@media screen and (max-width: 890px) {
+  .details-register-subcontainer {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .details-register-subcontainer .imagen-account {
+    display: none;
+  }
+
+  .details-register-subcontainer .forms-title {
+    width: 100%;
+  }
+
+  .details-register-container {
+    transform:scale(0.90);
+
   }
 }
 

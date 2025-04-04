@@ -186,3 +186,67 @@ select {
     padding: 10px;
   }
  */
+
+@media (max-width: 890px) {
+  .searcher {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px; /* Espaciado uniforme entre los elementos */
+    width: 90%;
+    max-width: 400px;
+    height: auto;
+    padding: 20px;
+    margin: 0 auto;
+    border-radius: 10px;
+    box-sizing: border-box;
+  }
+
+  .searcher-input-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column; /* Asegura que los inputs se apilen verticalmente */
+    align-items: center; /* Centra los inputs horizontalmente */
+    gap: 15px; /* Espaciado entre los inputs */
+  }
+
+  .searcher-input-container input,
+  .searcher select {
+    width: 100%; /* Ocupa todo el ancho del contenedor */
+    max-width: 350px; /* Limita el ancho máximo */
+    font-size: 16px;
+    padding: 12px;
+    box-sizing: border-box;
+    text-align: left;
+  }
+
+  .reset-icon {
+    width: 30px;
+    margin: 0 auto 15px auto; /* Centra el ícono y añade espacio inferior */
+  }
+
+  .searcher-button {
+    width: 100%; /* Ocupa todo el ancho del contenedor */
+    max-width: 350px; /* Limita el ancho máximo */
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 20px; /* Añade espacio superior para separarlo de los inputs */
+    padding: 12px;
+    text-align: center;
+  }
+
+  .dropdown {
+    max-height: 120px;
+  }
+  .searcher .search-calendar-container input[type=text]{
+    max-width:350px;
+    width:320px;
+    transform:translatex(0px) translatey(0px);
+   }
+   
+   /* Input */
+   .searcher .time-container input[type=text]{
+    width:320px;
+    max-width:350px;
+    transform:translatex(5px) translatey(0px);
+   }
+}
