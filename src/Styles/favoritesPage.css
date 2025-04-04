@@ -127,3 +127,32 @@ th {
   width: 20px;
   height: 100%;
 }
+
+@media screen and (max-width: 890px) {
+  .subcontainer-fav {
+    width: 90%;
+  }
+
+  .search-container{
+    width: 90%;
+  }
+
+}
+@media (max-width:680px){
+
+  /* Back button */
+  #root .backButton{
+   position:relative;
+   left:-120px;
+  }
+  
+ }
+@media screen and (max-width: 480px) {
+  .subcontainer-fav {
+    width: 90%;
+  }
+
+  .search-container{
+    width: 70%;
+  }
+}

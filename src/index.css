@@ -19,8 +19,11 @@
 
 html, body {
   height: 100%;
+  width: 100%;
+  min-height: 100vh;
   margin: 0;
   padding: 0;
+  overflow-x: hidden; /* 🔹 Evita el margen negro lateral */
   display: flex;
   flex-direction: column;
 }
@@ -43,33 +46,31 @@ footer {
   margin-top: auto;  /* El footer se empuja al fondo */
 }
 
-/* Estilos generales para pantallas pequeñas */
+/* 🔹 Estilos responsive */
+@media (max-width: 890px) {
+  #root main {
+    flex: 1;
+    height: auto ; /* Evita que el contenido colapse */
+    transform: none; /* Elimina cualquier desplazamiento no deseado */
+  }
+
+}
+
+
+@media (max-width: 720px) {
+  #root main {
+    flex: 1;
+    height: auto ; /* Evita que el contenido colapse */
+    transform: none; /* Elimina cualquier desplazamiento no deseado */
+  }
+
+}
+
 @media (max-width: 480px) {
-  html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    /* display: flex;
-    flex-direction: column; */
-  }
-
-  #root {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-
-  main {
-    flex: 1;  /* El contenido ocupa el espacio restante */
-    padding: 20px;
-  }
-
-  footer {
-    background-color: var(--footer-color);
-    padding: 10px 0;  /* Ajusta el padding */
-    width: 100%;
-    /* text-align: center; */
-    margin-top: auto;
+  #root main {
+    flex: 1; 
+    height: auto !important; /* Evita que el contenido colapse */
+    transform: none; /* Elimina cualquier desplazamiento no deseado */
   }
 }
 
